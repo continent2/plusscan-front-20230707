@@ -57,8 +57,10 @@ const GlobalStyle = createGlobalStyle`
     cursor: pointer;
   }
 
-  .logo{
-    color: #000;
+  .inner {
+    padding: 2px 4px;
+    background: #ececec;
+    border-radius: 2px;
   }
 `;
 

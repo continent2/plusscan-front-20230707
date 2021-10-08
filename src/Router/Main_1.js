@@ -169,8 +169,8 @@ function Home({ store }) {
             <img src={I_hoverPolygon} alt="" />
           </div>
         )}
+        <Footer />
       </HomeBox>
-      <Footer />
     </>
   );
 }
@@ -178,7 +178,9 @@ function Home({ store }) {
 const HomeBox = styled.div`
   padding-top: 80px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: inherit;
 
   & > .innerBox {
     display: flex;

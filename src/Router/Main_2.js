@@ -7,6 +7,7 @@ import I_rightArrowMauve from "../Img/Icon/I_rightArrowMauve.svg";
 import I_3dot from "../Img/Icon/I_3dot.svg";
 import E_chart1 from "../Img/example/E_chart1.png";
 import E_chart2 from "../Img/example/E_chart2.png";
+import LeftBar from "../Components/LeftBar";
 
 function Maine_2({ store, setHeaderKinds }) {
   useEffect(() => {
@@ -15,13 +16,7 @@ function Maine_2({ store, setHeaderKinds }) {
 
   return (
     <>
-      <LeftBar className="leftBar">
-        <div className="settingBox">
-          <button className="settingBtn" onClick={() => {}}>
-            설정
-          </button>
-        </div>
-      </LeftBar>
+      <LeftBar/>
       <Maine_2Box>
         <div className="explorerBox">
           <div className="innerBox">
@@ -107,35 +102,7 @@ function Maine_2({ store, setHeaderKinds }) {
     </>
   );
 }
-const LeftBar = styled.div`
-  display: flex;
-  align-items: flex-end;
-  width: 80px;
-  position: fixed;
-  top: 100px;
-  bottom: 0;
-  left: 0;
-  border-right: 2px solid #efefef;
-  background: #fff;
 
-  .settingBox {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: inherit;
-    height: 90px;
-    border-top: 2px solid #efefef;
-
-    .settingBtn {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      font-size: 15px;
-      color: #fff;
-      background: #c4c4c4;
-    }
-  }
-`;
 
 const Maine_2Box = styled.div`
   padding: 100px 0 0 80px;

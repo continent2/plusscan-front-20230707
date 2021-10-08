@@ -12,6 +12,17 @@ import { connect } from "react-redux";
 import { setHeaderKinds } from "./Util/store";
 import DailyPrice from "./Router/DailyPrice";
 import Transactions from "./Router/Transactions";
+import Gas from "./Router/Gas";
+import Mine from "./Router/Mine";
+import HashRate from "./Router/HashRate";
+import TransactionsChart from "./Router/TransactionsChart";
+import Blocks from "./Router/Blocks";
+import Block from "./Router/Block";
+import TransactionsList from "./Router/TransactionsList";
+import TransactionDetails from "./Router/TransactionDetails";
+import Adress from "./Router/adress/Adress";
+import Tokens from "./Router/Tokens";
+import Contract from "./Router/Contract";
 
 function App({ store, setHeaderKinds }) {
   return (
@@ -35,12 +46,27 @@ function App({ store, setHeaderKinds }) {
         <RouterListen setHeaderKinds={setHeaderKinds} />
         <TopBar />
         <Switch>
-          <Route exact path="/index" component={IndexPage} />
-          <Route exact path="/" component={Landing} />
+          <Route exact path="/" component={IndexPage} />
+          <Route exact path="/landing" component={Landing} />
           <Route exact path="/main_1" component={Main_1} />
           <Route exact path="/main_2" component={Main_2} />
           <Route exact path="/dailyprice" component={DailyPrice} />
           <Route exact path="/transactions" component={Transactions} />
+          <Route exact path="/gas" component={Gas} />
+          <Route exact path="/mine" component={Mine} />
+          <Route exact path="/hashrate" component={HashRate} />
+          <Route exact path="/transactionshart" component={TransactionsChart} />
+          <Route exact path="/blocks" component={Blocks} />
+          <Route exact path="/block" component={Block} />
+          <Route exact path="/transactionslist" component={TransactionsList} />
+          <Route
+            exact
+            path="/transactiondetails"
+            component={TransactionDetails}
+          />
+          <Route exact path="/adress" component={Adress} />
+          <Route exact path="/tokens" component={Tokens} />
+          <Route exact path="/contract" component={Contract} />
         </Switch>
       </HashRouter>
     </AppBox>
@@ -49,6 +75,7 @@ function App({ store, setHeaderKinds }) {
 
 const AppBox = styled.div`
   background: #fff;
+  display: flex;
 `;
 
 function mapStateToProps(state) {

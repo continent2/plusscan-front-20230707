@@ -9,7 +9,7 @@ function RouterListen({ history, setHeaderKinds }) {
       let hrefArray = document.location.hash.split("/");
       let href = hrefArray[hrefArray.length - 1];
 
-      if (href === "main_2") setHeaderKinds(2);
+      if (href === "main_2" || href === "tokens") setHeaderKinds(2);
       else if (href === "index") setHeaderKinds(0);
       else setHeaderKinds(1);
     });

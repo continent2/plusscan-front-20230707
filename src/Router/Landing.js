@@ -50,8 +50,8 @@ function Landing({ store }) {
             </div>
           </div>
         </div>
+        <Footer />
       </LandingBox>
-      <Footer />
     </>
   );
 }

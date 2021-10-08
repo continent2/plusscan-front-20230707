@@ -3,12 +3,13 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import Footer from "./Footer";
 import E_chart1B from "../Img/example/E_chart1B.png";
+import E_bell from "../Img/Icon/E_bell.png";
 
-function DailyPrice({ store }) {
+function TransactionsChart({ store }) {
   const [chartPopup, setChartPopup] = useState(false);
 
   function onChartPopupMove(e) {
-    let x = e.screenX +20;
+    let x = e.screenX + 20;
     let y = e.screenY - 124;
 
     let chartPopup;
@@ -21,13 +22,21 @@ function DailyPrice({ store }) {
 
   return (
     <>
-      <DailyPriceBox onMouseMove={(e) => onChartPopupMove(e)}>
+      <TransactionsChartBox onMouseMove={(e) => onChartPopupMove(e)}>
         <div className="contBox">
           <div className="textBox">
-            <p className="title">Price</p>
-            <p className="subText">
-              현재 test token 가격 $32,590.03 @0.06387 BTC/ETH
-            </p>
+            <p className="title">Transactions</p>
+            <span className="subText">
+              <p>
+                <img src={E_bell} alt="" />
+                2021년 5월 20일 목요일에 8,166.911 TH의 최고 평균 난이도가
+                기록되었습니다.
+              </p>
+              <p>
+                2015년 7월 30일 목요일에 0.121 TH의 최저 평균 난이도가
+                기록되었습니다.
+              </p>
+            </span>
           </div>
 
           <div className="chartBox">
@@ -47,13 +56,13 @@ function DailyPrice({ store }) {
             <p>test token Price : $201.53</p>
           </div>
         )}
-      <Footer />
-      </DailyPriceBox>
+        <Footer />
+      </TransactionsChartBox>
     </>
   );
 }
 
-const DailyPriceBox = styled.div`
+const TransactionsChartBox = styled.div`
   padding-top: 80px;
   display: flex;
   flex-direction: column;
@@ -71,8 +80,22 @@ const DailyPriceBox = styled.div`
       }
 
       .subText {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
         margin-top: 20px;
         font-size: 20px;
+        line-height: 20px;
+
+        p {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+
+          &:nth-of-type(n + 2) {
+            margin-left: 23px;
+          }
+        }
       }
     }
 
@@ -118,4 +141,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DailyPrice);
+export default connect(mapStateToProps, mapDispatchToProps)(TransactionsChart);

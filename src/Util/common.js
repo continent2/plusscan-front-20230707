@@ -10,7 +10,7 @@ function timeByLocation(time) {
 function putCommaAtPrice(data) {
   let str;
 
-  if (data) {
+  if (data !== null) {
     data = Number(data);
 
     // if (data < 1000)

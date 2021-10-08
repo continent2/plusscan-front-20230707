@@ -5,7 +5,7 @@ import I_leftArrow from "../Img/Icon/I_leftArrow.svg";
 import I_rightArrow from "../Img/Icon/I_rightArrow.svg";
 import { strDot } from "../Util/common";
 
-function Transactions({ store }) {
+function TransactionsList({ store }) {
   const [pageNum, setPageNum] = useState(1);
 
   function onClickPagePre() {
@@ -16,13 +16,13 @@ function Transactions({ store }) {
   }
 
   return (
-    <TransactionsBox>
+    <TransactionsListBox>
       <div className="innerBox">
         <strong className="title">Transactions</strong>
         <ul className="transactionList">
           <li className="header">
-            {headerList.map((header) => (
-              <span className={header}>{header}</span>
+            {headerList.map((header, index) => (
+              <span className={header} key={index}>{header}</span>
             ))}
           </li>
           {transactionList.map((cont, index) => {
@@ -59,11 +59,11 @@ function Transactions({ store }) {
           </div>
         </ul>
       </div>
-    </TransactionsBox>
+    </TransactionsListBox>
   );
 }
 
-const TransactionsBox = styled.div`
+const TransactionsListBox = styled.div`
   padding-top: 80px;
   display: flex;
   flex-direction: column;
@@ -196,7 +196,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Transactions);
+export default connect(mapStateToProps, mapDispatchToProps)(TransactionsList);
 
 const headerList = [
   "txHash",

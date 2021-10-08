@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 import styled from "styled-components";
-import { useHistory, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   overCoinPopup,
@@ -8,10 +8,12 @@ import {
   setCoinPopup,
   setLogin,
   setProfPopup,
+  stretchLeftBar,
 } from "../Util/store";
 import CoinPopup from "../Components/header/CoinPopup";
 import PopupBg from "../Components/PopupBg";
 import I_hamburger from "../Img/Icon/I_hamburger.svg";
+import I_stetchHamburger from "../Img/Icon/I_stetchHamburger.svg";
 import { strDot } from "../Util/common";
 import ProfPopup from "../Components/header/ProfPopup";
 
@@ -22,14 +24,13 @@ function TopBar({
   setCoinPopup,
   overCoinPopup,
   setLogin,
+  stretchLeftBar,
 }) {
-  let history = useHistory();
   const [search, setSearch] = useState("");
 
   switch (store.headerkinds) {
     case 0:
       return <Fragment></Fragment>;
-      break;
     case 1:
       return (
         <TopBarBox>
@@ -97,7 +98,12 @@ function TopBar({
       return (
         <TopBarBox2>
           <span className="leftBox">
-            <img src={I_hamburger} alt="" />
+            <img
+              className="hamburgerBtn"
+              src={store.leftBar ? I_stetchHamburger : I_hamburger}
+              alt=""
+              onClick={() => stretchLeftBar(!store.leftBar)}
+            />
             <span className="logoBox">
               <span className="logoImg" />
               <p className="logoName">LOGO</p>
@@ -114,7 +120,6 @@ function TopBar({
       );
     default:
       return <Fragment></Fragment>;
-      break;
   }
 }
 
@@ -127,6 +132,8 @@ const TopBarBox = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 120px;
+  border-bottom: 2px solid #efefef;
+  z-index: 4;
 
   .leftBox {
     display: flex;
@@ -218,11 +225,17 @@ const TopBarBox2 = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 30px;
+  z-index: 4;
 
   .leftBox {
     display: flex;
+    width: 162px;
+    justify-content: space-between;
     align-items: center;
-    gap: 40px;
+
+    .hamburgerBtn {
+      cursor: pointer;
+    }
 
     .logoBox {
       display: flex;
@@ -282,6 +295,7 @@ function mapDispatchToProps(dispatch) {
     setCoinPopup: () => dispatch(setCoinPopup()),
     overCoinPopup: (toggle) => dispatch(overCoinPopup(toggle)),
     setLogin: () => dispatch(setLogin()),
+    stretchLeftBar: (toggle) => dispatch(stretchLeftBar(toggle)),
   };
 }
 

@@ -7,9 +7,14 @@ const store = createSlice({
     overProfPopup: false,
     coinPopup: false,
     overCoinPopup: false,
+    languagePopup: false,
+
     isLogin: false,
     headerkinds: 1,
     chain: "Mainnet",
+    leftBar: false,
+    language: "EN",
+    slideKinds: 3,
   },
   reducers: {
     closePopupAll: (state, action) => {
@@ -17,6 +22,7 @@ const store = createSlice({
         ...state,
         profPopup: false,
         coinPopup: false,
+        languagePopup: false,
       };
     },
 
@@ -27,7 +33,6 @@ const store = createSlice({
       };
     },
     overProfPopup: (state, action) => {
-      console.log(action.payload);
       return {
         ...state,
         overProfPopup: action.payload,
@@ -43,6 +48,12 @@ const store = createSlice({
       return {
         ...state,
         overCoinPopup: action.payload,
+      };
+    },
+    setLanguagePopup: (state, action) => {
+      return {
+        ...state,
+        languagePopup: true,
       };
     },
 
@@ -68,6 +79,24 @@ const store = createSlice({
         chain: action.payload,
       };
     },
+    stretchLeftBar: (state, action) => {
+      return {
+        ...state,
+        leftBar: action.payload,
+      };
+    },
+    setLanguage: (state, action) => {
+      return {
+        ...state,
+        language: action.payload,
+      };
+    },
+    setSlideKinds: (state, action) => {
+      return {
+        ...state,
+        slideKinds: action.payload,
+      };
+    },
   },
 });
 
@@ -77,8 +106,13 @@ export const {
   overProfPopup,
   setCoinPopup,
   overCoinPopup,
+  setLanguagePopup,
+
   setLogin,
   setHeaderKinds,
   setChain,
+  stretchLeftBar,
+  setLanguage,
+  setSlideKinds,
 } = store.actions;
 export default configureStore({ reducer: store.reducer });
