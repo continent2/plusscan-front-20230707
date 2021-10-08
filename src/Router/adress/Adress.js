@@ -45,9 +45,10 @@ function Adress({ store }) {
               </li>
               <li>
                 <p className="key">값</p>
-                <p className="value">
-                  Less Than $0.01 @ ${putCommaAtPrice(2094.64)}/ETH
-                </p>
+                <span className="value">
+                  Less Than $0.01
+                  <p className="smallLetter">@ ${putCommaAtPrice(2094.64)}/ETH</p>
+                </span>
               </li>
             </ul>
           </div>
@@ -172,6 +173,15 @@ const AdressBox = styled.div`
 
               .key {
                 width: 200px;
+              }
+
+              .value{
+                display: flex;
+                align-items: flex-end;
+                
+                .smallLetter{
+                  font-size: 10px;
+                }
               }
             }
           }
