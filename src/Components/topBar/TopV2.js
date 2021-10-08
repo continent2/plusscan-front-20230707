@@ -5,10 +5,26 @@ import { connect } from "react-redux";
 import I_hamburger from "../../Img/Icon/I_hamburger.svg";
 import I_stetchHamburger from "../../Img/Icon/I_stetchHamburger.svg";
 import I_search from "../../Img/Icon/I_search.svg";
-import { stretchLeftBar } from "../../Util/store";
+import {
+  overCoinPopup,
+  overProfPopup,
+  setCoinPopup,
+  setProfPopup,
+  stretchLeftBar,
+} from "../../Util/store";
 import { strDot } from "../../Util/common";
+import CoinPopup from "../header/CoinPopup";
+import ProfPopup from "../header/ProfPopup";
+import PopupBg from "../PopupBg";
 
-function TopBar2({ store, stretchLeftBar }) {
+function TopBar2({
+  store,
+  stretchLeftBar,
+  setProfPopup,
+  overProfPopup,
+  setCoinPopup,
+  overCoinPopup,
+}) {
   const [search, setSearch] = useState("");
   return (
     <TopBar2Box>
@@ -37,10 +53,39 @@ function TopBar2({ store, stretchLeftBar }) {
       </span>
 
       <span className="rightBox">
-        <button className="userBtn" onClick={() => {}}>
-          {strDot("0x3eaaaaa0087", 4, 4)}
-        </button>
-        <span className="profImg" />
+        <div className="btnBox">
+          <button
+            className="profBtn"
+            onMouseEnter={() => overProfPopup(true)}
+            onMouseLeave={() => overProfPopup(false)}
+            onClick={setProfPopup}
+          >
+            {strDot("0x3eaaaa0087", 4, 4)}
+          </button>
+          <span
+            className="profImg"
+            onMouseEnter={() => overCoinPopup(true)}
+            onMouseLeave={() => overCoinPopup(false)}
+            onClick={setCoinPopup}
+          />
+          {store.overProfPopup && <ProfPopup />}
+
+          {store.profPopup && (
+            <>
+              <ProfPopup />
+              <PopupBg />
+            </>
+          )}
+
+          {store.overCoinPopup && <CoinPopup />}
+
+          {store.CoinPopup && (
+            <>
+              <CoinPopup />
+              <PopupBg />
+            </>
+          )}
+        </div>
       </span>
     </TopBar2Box>
   );
@@ -125,27 +170,30 @@ const TopBar2Box = styled.div`
   }
 
   .rightBox {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    position: relative;
+    .btnBox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
 
-    .userBtn {
-      width: 130px;
-      height: 40px;
-      border-radius: 25px;
-      font-weight: 700;
-      font-size: 18px;
-      line-height: 18px;
-      color: #373737;
-      background: #e9e9e9;
-      border-radius: 25px;
-    }
+      .profBtn {
+        width: 130px;
+        height: 40px;
+        color: #373737;
+        background: #e9e9e9;
+        border-radius: 25px;
+        font-size: 18px;
+        font-weight: 700;
+      }
 
-    .profImg {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: #e9e9e9;
+      .profImg {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        background: #e9e9e9;
+        border-radius: 50%;
+        cursor: pointer;
+      }
     }
   }
 `;
@@ -156,6 +204,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    setProfPopup: () => dispatch(setProfPopup()),
+    overProfPopup: (toggle) => dispatch(overProfPopup(toggle)),
+    setCoinPopup: () => dispatch(setCoinPopup()),
+    overCoinPopup: (toggle) => dispatch(overCoinPopup(toggle)),
     stretchLeftBar: (toggle) => dispatch(stretchLeftBar(toggle)),
   };
 }
