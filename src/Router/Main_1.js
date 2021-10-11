@@ -1,19 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import Footer from "./Footer";
 import E_chart3 from "../Img/example/E_chart3.png";
 import I_3dotWhite from "../Img/Icon/I_3dotWhite.svg";
 import I_hoverPolygon from "../Img/Icon/I_hoverPolygon.svg";
-import { strDot } from "../Util/common";
-
+import { strDot, generaterandomnumber } from "../Util/common"
+import {generaterandomstr_charset	, generaterandomint
+} from '../Util/common'
+const RAND_TIME_OFFSET=3
 function Home({ store }) {
-  const [chartPopup, setChartPopup] = useState(false);
-
+	const [chartPopup, setChartPopup] = useState(false)	
+	let [blockList,setblockList]=useState( [] )
+	let [txlist , settxlist]=useState( [] )
+	useEffect(_=>{
+		setblockList( initblocks() )
+		settxlist( inittxlist() )
+	} , [] )
   function onChartPopupMove(e) {
     let x = e.screenX - 30;
     let y = e.screenY - 184;
-
     let chartPopup;
     if (document.querySelector("#chartPopupBox")) {
       chartPopup = document.querySelector("#chartPopupBox");
@@ -100,7 +106,8 @@ function Home({ store }) {
                           </span>
                         </span>
                         <span className="reward">
-                          {strDot(cont.reward.toString(), 8, 0)}
+													{cont.reward}
+                          {/**  strDot(cont.reward.toString(), 8, 0) */}
                         </span>
                       </li>
                     );
@@ -124,24 +131,24 @@ function Home({ store }) {
                   <span className="from">FROM</span>
                   <span className="to">TO</span>
                 </li>
-                {blockList.map((cont, index) => {
+                {txlist.map(( elem , index) => {
                   if (index < 10)
                     return (
                       <li key={index}>
                         <span className="txHash">
                           <span className="inner">
-                            {strDot(cont.proposer, 6, 6)}
+                            {strDot(elem.txhash, 6, 6)}
                           </span>
                         </span>
-                        <span className="time">{cont.time}</span>
+                        <span className="time">{ `${RAND_TIME_OFFSET} secs ago` }</span>
                         <span className="from">
                           <span className="inner">
-                            {strDot(cont.proposer, 6, 6)}
+                            {strDot(elem.from , 6, 6)}
                           </span>
                         </span>
                         <span className="to">
                           <span className="inner">
-                            {strDot(cont.proposer, 6, 6)}
+                            {strDot(elem.to, 6, 6)}
                           </span>
                         </span>
                       </li>
@@ -405,10 +412,36 @@ function mapDispatchToProps(dispatch) {
     // SetTopBar: toggle => dispatch(setTopBar(toggle)),
   };
 }
-
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
 
-const blockList = [
+const inittxlist=_=>{const N_ENTRIES=10
+	let txlist=[]
+	for (let i=0;i<N_ENTRIES;i++){
+		txlist[i]={
+			txhash : '0x'+generaterandomstr_charset(40 , 'hex')
+			, from:  '0x'+generaterandomstr_charset(40 , 'hex')
+			, to : '0x'+generaterandomstr_charset(40 , 'hex')
+		}
+	}
+	return txlist
+}
+const BLOCKNUM=33186 
+const BLOCKPERIOD=30
+const initblocks=_=>{const N_ENTRIES=10
+	let blockList=[]
+	for (let i=0; i<N_ENTRIES;i++){
+		blockList[i]={
+			block : BLOCKNUM-i
+			, time : `${RAND_TIME_OFFSET + BLOCKPERIOD * i} secs ago`
+			, total : generaterandomint(0, 10)
+			, proposer: '0x'+generaterandomstr_charset( 40 , 'hex' )
+			, reward : generaterandomnumber(3,10).toFixed(3)
+		}
+	}
+	return blockList
+}
+
+let blockList = [
   {
     block: 64080901,
     time: "2secs ago",

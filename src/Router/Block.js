@@ -40,7 +40,7 @@ function Blocks({ store }) {
             </li>
 
             <li>
-              <p className="key">업무</p>
+              <p className="key">가격</p>
               <p className="value">
                 ${putCommaAtPrice(51022.31)} &#40;24.34 Test Token&#41;
               </p>
