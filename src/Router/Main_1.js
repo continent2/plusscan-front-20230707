@@ -5,17 +5,38 @@ import Footer from "./Footer";
 import E_chart3 from "../Img/example/E_chart3.png";
 import I_3dotWhite from "../Img/Icon/I_3dotWhite.svg";
 import I_hoverPolygon from "../Img/Icon/I_hoverPolygon.svg";
-import { strDot, generaterandomnumber } from "../Util/common"
+import { strDot, generaterandomnumber
+, LOGGER } from "../Util/common"
 import {generaterandomstr_charset	, generaterandomint
 } from '../Util/common'
+import {API} from '../Config/api'
+import axios from "axios";
+
 const RAND_TIME_OFFSET=3
 function Home({ store }) {
 	const [chartPopup, setChartPopup] = useState(false)	
 	let [blockList,setblockList]=useState( [] )
 	let [txlist , settxlist]=useState( [] )
+	const fetchlists=_=>{
+		axios.get(`${API.API_BLOCKS}/0/10`).then(resp=>{LOGGER('vsiRhGy2pA' , resp.data )
+			if(resp.data.status=='OK'){
+				setblockList(resp.data.list)
+			}			
+		})
+		axios.get(`${API.API_TXS}/0/10`).then(resp=>{LOGGER('nvsgfeVB2c',resp.data)
+			if(resp.data.status=='OK'){
+				settxlist(resp.data.list)
+			}			
+		})
+	}
 	useEffect(_=>{
-		setblockList( initblocks() )
-		settxlist( inittxlist() )
+//		setblockList( initblocks() )
+	//	settxlist( inittxlist() )
+		fetchlists()
+		setInterval(_=>{
+			fetchlists()
+		} , 30*1000 )
+	
 	} , [] )
   function onChartPopupMove(e) {
     let x = e.screenX - 30;
@@ -27,7 +48,6 @@ function Home({ store }) {
       chartPopup.style.top = y + "px";
     }
   }
-
   return (
     <>
       <HomeBox onMouseMove={(e) => onChartPopupMove(e)}>
@@ -90,23 +110,23 @@ function Home({ store }) {
                   <span className="block">BLOCK</span>
                   <span className="time">TIME</span>
                   <span className="total">TOTAL TXS</span>
-                  <span className="proposer">BLOCK PROPOSER</span>
+                  <span className="proposer">HASH</span>
                   <span className="reward">REWARD</span>
                 </li>
                 {blockList.map((cont, index) => {
                   if (index < 10)
                     return (
                       <li key={index}>
-                        <span className="block">{cont.block}</span>
-                        <span className="time">{cont.time}</span>
-                        <span className="total">{cont.total}</span>
+                        <span className="block">{cont.number}</span>
+                        <span className="time">{cont.timestamp}</span>
+                        <span className="total">{cont.gasUsed}</span>
                         <span className="proposer">
                           <span className="inner">
-                            {strDot(cont.proposer, 6, 6)}
+                            {strDot(cont.hash, 6, 6)}
                           </span>
                         </span>
                         <span className="reward">
-													{cont.reward}
+													{cont.gasLimit}
                           {/**  strDot(cont.reward.toString(), 8, 0) */}
                         </span>
                       </li>
@@ -137,10 +157,10 @@ function Home({ store }) {
                       <li key={index}>
                         <span className="txHash">
                           <span className="inner">
-                            {strDot(elem.txhash, 6, 6)}
+                            {strDot(elem.hash, 6, 6)}
                           </span>
                         </span>
-                        <span className="time">{ `${RAND_TIME_OFFSET} secs ago` }</span>
+                        <span className="time">{ elem.createdat }</span> {/** `${RAND_TIME_OFFSET} secs ago` */}
                         <span className="from">
                           <span className="inner">
                             {strDot(elem.from , 6, 6)}
