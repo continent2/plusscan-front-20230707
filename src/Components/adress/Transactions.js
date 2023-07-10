@@ -3,8 +3,11 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import I_leftArrow from "../../Img/Icon/I_leftArrow.svg";
 import I_rightArrow from "../../Img/Icon/I_rightArrow.svg";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function Transactions() {
+  const history = useHistory();
+
   const [pageNum, setPageNum] = useState(1);
 
   function onClickPagePre() {
@@ -27,7 +30,9 @@ function Transactions() {
           return (
             <li key={index}>
               <span className="rank">{cont.rank}</span>
-              <span className="address">{cont.address}</span>
+              <span className="address">
+                <p onClick={() => history.push("/transactiondetails")}>{cont.address}</p>
+              </span>
               <span className="feeslast3hrs">{cont.feeslast3hrs}</span>
               <span className="used3hrs">
                 {cont.used3hrs}

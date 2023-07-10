@@ -6,8 +6,11 @@ import I_rightArrow from "../Img/Icon/I_rightArrow.svg";
 import { putCommaAtPrice, strDot } from "../Util/common";
 import { setHeaderKinds, setSlideKinds } from "../Util/store";
 import LeftBar from "../Components/LeftBar";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function Tokens({ store, setHeaderKinds, setSlideKinds }) {
+  const history = useHistory();
+
   const [pageNum, setPageNum] = useState(1);
 
   useEffect(() => {
@@ -43,7 +46,10 @@ function Tokens({ store, setHeaderKinds, setSlideKinds }) {
 
             {tokenList.map((cont, index) => (
               <li key={index}>
-                <span className="token">
+                <span
+                  className="token"
+                  onClick={() => history.push("/transfer")}
+                >
                   <span className="tokenImg" />
                   {cont.token}
                 </span>

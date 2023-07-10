@@ -4,8 +4,11 @@ import { connect } from "react-redux";
 import I_leftArrow from "../Img/Icon/I_leftArrow.svg";
 import I_rightArrow from "../Img/Icon/I_rightArrow.svg";
 import { strDot } from "../Util/common";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function Transactions({ store }) {
+  const history = useHistory();
+
   const [pageNum, setPageNum] = useState(1);
 
   function onClickPagePre() {
@@ -29,7 +32,12 @@ function Transactions({ store }) {
             return (
               <li key={index}>
                 <span className="txHash">
-                  <span className="inner">{strDot(cont.txHash, 6, 6)}</span>
+                  <span
+                    className="inner"
+                    onClick={() => history.push("/transactiondetails")}
+                  >
+                    {strDot(cont.txHash, 6, 6)}
+                  </span>
                 </span>
                 <span className="block">{cont.block}</span>
                 <span className="time">{cont.time}</span>
