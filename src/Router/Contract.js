@@ -6,11 +6,8 @@ import I_rightArrow from "../Img/Icon/I_rightArrow.svg";
 import { strDot } from "../Util/common";
 import { setHeaderKinds, setSlideKinds } from "../Util/store";
 import LeftBar from "../Components/LeftBar";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function Contract({ store, setHeaderKinds, setSlideKinds }) {
-  const history = useHistory();
-
   const [pageNum, setPageNum] = useState(1);
 
   useEffect(() => {
@@ -39,22 +36,15 @@ function Contract({ store, setHeaderKinds, setSlideKinds }) {
 
           <ul className="contractList">
             <li className="header">
-              {headerList.map((header, index) => (
-                <span className={header} key={index}>
-                  {header}
-                </span>
+              {headerList.map((header,index) => (
+                <span className={header} key={index}>{header}</span>
               ))}
             </li>
 
             {contractList.map((cont, index) => (
               <li key={index}>
                 <span className="adress">
-                  <span
-                    className="inner"
-                    onClick={() => history.push("/transactiondetails")}
-                  >
-                    {strDot(cont.adress, 6, 6)}
-                  </span>
+                  <span className="inner">{strDot(cont.adress, 6, 6)}</span>
                 </span>
                 <span className="contractName">{cont.contractName}</span>
                 <span className="compiler">{cont.compiler}</span>

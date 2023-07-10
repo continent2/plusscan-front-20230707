@@ -5,41 +5,39 @@ import Footer from "./Footer";
 import E_chart3 from "../Img/example/E_chart3.png";
 import I_3dotWhite from "../Img/Icon/I_3dotWhite.svg";
 import I_hoverPolygon from "../Img/Icon/I_hoverPolygon.svg";
-import { strDot, generaterandomnumber, LOGGER } from "../Util/common";
-import { generaterandomstr_charset, generaterandomint } from "../Util/common";
-import { API } from "../Config/api";
+import { strDot, generaterandomnumber
+, LOGGER } from "../Util/common"
+import {generaterandomstr_charset	, generaterandomint
+} from '../Util/common'
+import {API} from '../Config/api'
 import axios from "axios";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
-const RAND_TIME_OFFSET = 3;
+const RAND_TIME_OFFSET=3
 function Home({ store }) {
-  const history = useHistory();
-
-  const [chartPopup, setChartPopup] = useState(false);
-  let [blockList, setblockList] = useState([]);
-  let [txlist, settxlist] = useState([]);
-  const fetchlists = (_) => {
-    axios.get(`${API.API_BLOCKS}/0/10`).then((resp) => {
-      LOGGER("vsiRhGy2pA", resp.data);
-      if (resp.data.status == "OK") {
-        setblockList(resp.data.list);
-      }
-    });
-    axios.get(`${API.API_TXS}/0/10`).then((resp) => {
-      LOGGER("nvsgfeVB2c", resp.data);
-      if (resp.data.status == "OK") {
-        settxlist(resp.data.list);
-      }
-    });
-  };
-  useEffect((_) => {
-    //		setblockList( initblocks() )
-    //	settxlist( inittxlist() )
-    fetchlists();
-    setInterval((_) => {
-      fetchlists();
-    }, 30 * 1000);
-  }, []);
+	const [chartPopup, setChartPopup] = useState(false)	
+	let [blockList,setblockList]=useState( [] )
+	let [txlist , settxlist]=useState( [] )
+	const fetchlists=_=>{
+		axios.get(`${API.API_BLOCKS}/0/10`).then(resp=>{LOGGER('vsiRhGy2pA' , resp.data )
+			if(resp.data.status=='OK'){
+				setblockList(resp.data.list)
+			}			
+		})
+		axios.get(`${API.API_TXS}/0/10`).then(resp=>{LOGGER('nvsgfeVB2c',resp.data)
+			if(resp.data.status=='OK'){
+				settxlist(resp.data.list)
+			}			
+		})
+	}
+	useEffect(_=>{
+//		setblockList( initblocks() )
+	//	settxlist( inittxlist() )
+		fetchlists()
+		setInterval(_=>{
+			fetchlists()
+		} , 30*1000 )
+	
+	} , [] )
   function onChartPopupMove(e) {
     let x = e.screenX - 30;
     let y = e.screenY - 184;
@@ -58,30 +56,31 @@ function Home({ store }) {
             <li className="priceBox">
               <div className="innerBox">
                 <p className="title">Price</p>
-                <p className="data" onClick={() => history.push("/dailyprice")}>
-                  $2,131.46 &#40;-5.49%&#41;
-                </p>
+                <p className="data">$2,131.46 &#40;-5.49%&#41;</p>
               </div>
             </li>
 
             <li className="transaction_n_gasBox">
               <div className="innerBox">
                 <p className="title">Transactions</p>
-                <p
-                  className="data"
-                  onClick={() => history.push("/transactionshart")}
-                >
-                  1,201.60M &#40;14.6TPS&#41;
-                </p>
+                <p className="data">1,201.60M &#40;14.6TPS&#41;</p>
+              </div>
+
+              <div className="innerBox">
+                <p className="title">GAS Price</p>
+                <p className="data">31Gwei &#40;$1.39&#41;</p>
               </div>
             </li>
 
             <li className="difficulty_n_hashBox">
               <div className="innerBox">
+                <p className="title">Difficulty</p>
+                <p className="data">6,543.50TH</p>
+              </div>
+
+              <div className="innerBox">
                 <p className="title">GAS Price</p>
-                <p className="data" onClick={() => history.push("/gas")}>
-                  31Gwei &#40;$1.39&#41;
-                </p>
+                <p className="data">31Gwei &#40;$1.39&#41;</p>
               </div>
             </li>
 
@@ -97,7 +96,6 @@ function Home({ store }) {
                 className="imgBox"
                 onMouseEnter={() => setChartPopup(true)}
                 onMouseLeave={() => setChartPopup(false)}
-                onClick={() => history.push("/transactions")}
               >
                 <img className="chart" src={E_chart3} alt="" />
               </div>
@@ -128,7 +126,7 @@ function Home({ store }) {
                           </span>
                         </span>
                         <span className="reward">
-                          {cont.gasLimit}
+													{cont.gasLimit}
                           {/**  strDot(cont.reward.toString(), 8, 0) */}
                         </span>
                       </li>
@@ -138,10 +136,7 @@ function Home({ store }) {
               </ul>
 
               <div className="btnBox">
-                <button
-                  className="allBtn"
-                  onClick={() => history.push("/blocks")}
-                >
+                <button className="allBtn" onClick={() => {}}>
                   view all
                 </button>
               </div>
@@ -156,7 +151,7 @@ function Home({ store }) {
                   <span className="from">FROM</span>
                   <span className="to">TO</span>
                 </li>
-                {txlist.map((elem, index) => {
+                {txlist.map(( elem , index) => {
                   if (index < 10)
                     return (
                       <li key={index}>
@@ -165,15 +160,16 @@ function Home({ store }) {
                             {strDot(elem.hash, 6, 6)}
                           </span>
                         </span>
-                        <span className="time">{elem.createdat}</span>{" "}
-                        {/** `${RAND_TIME_OFFSET} secs ago` */}
+                        <span className="time">{ elem.createdat }</span> {/** `${RAND_TIME_OFFSET} secs ago` */}
                         <span className="from">
                           <span className="inner">
-                            {strDot(elem.from, 6, 6)}
+                            {strDot(elem.from , 6, 6)}
                           </span>
                         </span>
                         <span className="to">
-                          <span className="inner">{strDot(elem.to, 6, 6)}</span>
+                          <span className="inner">
+                            {strDot(elem.to, 6, 6)}
+                          </span>
                         </span>
                       </li>
                     );
@@ -182,10 +178,7 @@ function Home({ store }) {
               </ul>
 
               <div className="btnBox">
-                <button
-                  className="allBtn"
-                  onClick={() => history.push("/transactions")}
-                >
+                <button className="allBtn" onClick={() => {}}>
                   view all
                 </button>
               </div>
@@ -250,10 +243,12 @@ const HomeBox = styled.div`
         .innerBox {
           display: flex;
           flex-direction: column;
-          justify-content: center;
-          align-items: center;
           height: inherit;
           gap: 5px;
+
+          &:nth-of-type(n + 2) {
+            justify-content: flex-end;
+          }
         }
       }
 
@@ -267,10 +262,12 @@ const HomeBox = styled.div`
 
       .transaction_n_gasBox {
         width: 270px;
+        padding-left: 50px;
       }
 
       .difficulty_n_hashBox {
         width: 270px;
+        padding-left: 74px;
       }
 
       .chartBox {
@@ -437,34 +434,32 @@ function mapDispatchToProps(dispatch) {
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
 
-const inittxlist = (_) => {
-  const N_ENTRIES = 10;
-  let txlist = [];
-  for (let i = 0; i < N_ENTRIES; i++) {
-    txlist[i] = {
-      txhash: "0x" + generaterandomstr_charset(40, "hex"),
-      from: "0x" + generaterandomstr_charset(40, "hex"),
-      to: "0x" + generaterandomstr_charset(40, "hex"),
-    };
-  }
-  return txlist;
-};
-const BLOCKNUM = 33186;
-const BLOCKPERIOD = 30;
-const initblocks = (_) => {
-  const N_ENTRIES = 10;
-  let blockList = [];
-  for (let i = 0; i < N_ENTRIES; i++) {
-    blockList[i] = {
-      block: BLOCKNUM - i,
-      time: `${RAND_TIME_OFFSET + BLOCKPERIOD * i} secs ago`,
-      total: generaterandomint(0, 10),
-      proposer: "0x" + generaterandomstr_charset(40, "hex"),
-      reward: generaterandomnumber(3, 10).toFixed(3),
-    };
-  }
-  return blockList;
-};
+const inittxlist=_=>{const N_ENTRIES=10
+	let txlist=[]
+	for (let i=0;i<N_ENTRIES;i++){
+		txlist[i]={
+			txhash : '0x'+generaterandomstr_charset(40 , 'hex')
+			, from:  '0x'+generaterandomstr_charset(40 , 'hex')
+			, to : '0x'+generaterandomstr_charset(40 , 'hex')
+		}
+	}
+	return txlist
+}
+const BLOCKNUM=33186 
+const BLOCKPERIOD=30
+const initblocks=_=>{const N_ENTRIES=10
+	let blockList=[]
+	for (let i=0; i<N_ENTRIES;i++){
+		blockList[i]={
+			block : BLOCKNUM-i
+			, time : `${RAND_TIME_OFFSET + BLOCKPERIOD * i} secs ago`
+			, total : generaterandomint(0, 10)
+			, proposer: '0x'+generaterandomstr_charset( 40 , 'hex' )
+			, reward : generaterandomnumber(3,10).toFixed(3)
+		}
+	}
+	return blockList
+}
 
 let blockList = [
   {

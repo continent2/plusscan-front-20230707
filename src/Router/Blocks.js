@@ -4,11 +4,8 @@ import { connect } from "react-redux";
 import I_leftArrow from "../Img/Icon/I_leftArrow.svg";
 import I_rightArrow from "../Img/Icon/I_rightArrow.svg";
 import { strDot } from "../Util/common";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function Blocks({ store }) {
-  const history = useHistory();
-
   const [pageNum, setPageNum] = useState(1);
 
   function onClickPagePre() {
@@ -32,28 +29,16 @@ function Blocks({ store }) {
 
           {blockList.map((cont, index) => (
             <li key={index}>
-              <span className="block">
-                <p onClick={() => history.push("/block")}>{cont.block}</p>
-              </span>
-              <span className="time">
-                <p>{cont.time}</p>
-              </span>
-              <span className="totalTxs">
-                <p>{cont.totalTxs}</p>
-              </span>
+              <span className="block">{cont.block}</span>
+              <span className="time">{cont.time}</span>
+              <span className="totalTxs">{cont.totalTxs}</span>
               <span className="blockPropo">
-                <span className="inner" onClick={() => history.push("/adress")}>
-                  {strDot(cont.blockPropo, 6, 6)}
-                </span>
+                <span className="inner">{strDot(cont.blockPropo, 6, 6)}</span>
               </span>
 
-              <span className="reward">
-                <p>{cont.reward}</p>
-              </span>
+              <span className="reward">{cont.reward}</span>
 
-              <span className="size(byte)">
-                <p>{cont.size}</p>
-              </span>
+              <span className="size(byte)">{cont.size}</span>
             </li>
           ))}
 

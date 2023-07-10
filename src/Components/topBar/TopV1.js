@@ -15,9 +15,6 @@ import PopupBg from "../../Components/PopupBg";
 import I_search from "../../Img/Icon/I_search.svg";
 import ProfPopup from "../../Components/header/ProfPopup";
 import { strDot } from "../../Util/common";
-import LogoImg from "../../Img/logo/LogoImg.svg";
-import LogoText from "../../Img/logo/LogoText.svg";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function TopBar({
   store,
@@ -27,19 +24,12 @@ function TopBar({
   overCoinPopup,
   setLogin,
 }) {
-  const history = useHistory();
-
   const [search, setSearch] = useState("");
 
   return (
     <TopBarBox>
       <span className="leftBox">
-        <div className="logoBox" onClick={() => history.push("/main_1")}>
-          <img src={LogoImg} alt="" />
-
-          <img src={LogoText} alt="" />
-        </div>
-
+        <span className="logoImg" />
         <div className="searchBox">
           <input
             value={search}
@@ -52,10 +42,8 @@ function TopBar({
 
       <span className="rightBox">
         <ul className="categoryList">
-          {categoryList.map((v, index) => (
-            <li key={index} onClick={() => history.push(v.url)}>
-              {v.label}
-            </li>
+          {categoryList.map((category, index) => (
+            <li key={index}>{category}</li>
           ))}
         </ul>
 
@@ -105,43 +93,42 @@ function TopBar({
 }
 
 const TopBarBox = styled.div`
+  position: fixed;
+  background: #fff;
+  width: inherit;
+  height: 80px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 100px;
-  padding: 0 90px;
-  background: #fff;
+  padding: 0 120px;
   border-bottom: 2px solid #efefef;
-  top: 0;
-  right: 0;
-  left: 0;
-  position: fixed;
-  z-index: 30;
+  z-index: 4;
 
   .leftBox {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 40px;
 
-    .logoBox {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
+    .logoImg {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      background: #101730;
+      border-radius: 5px;
     }
 
     .searchBox {
       display: flex;
       align-items: center;
-      gap: 6px;
       width: 540px;
       height: 40px;
-      overflow: hidden;
-      padding: 0 20px;
-      font-size: 14px;
-      line-height: 14px;
       border: 1px solid #c4c4c4;
       border-radius: 25px;
+      font-size: 14px;
+      line-height: 14px;
+      padding: 0 20px;
+      overflow: hidden;
+      gap: 6px;
 
       input {
         width: 100%;
@@ -163,18 +150,14 @@ const TopBarBox = styled.div`
   .rightBox {
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 20px;
     position: relative;
 
     .categoryList {
       display: flex;
-      gap: 30px;
-
-      li {
-        font-size: 20px;
-        line-height: 20px;
-        cursor: pointer;
-      }
+      gap: 20px;
+      font-size: 20px;
+      line-height: 20px;
     }
 
     .chainBtn {
@@ -231,9 +214,4 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(TopBar));
 
-const categoryList = [
-  { label: "Home", url: "/main_1" },
-  { label: "Blocks", url: "/blocks" },
-  { label: "Tokens", url: "/tokens" },
-  { label: "Transactions", url: "/transactions" },
-];
+const categoryList = ["Home", "Blocks", "Tokens", "Transactions"];

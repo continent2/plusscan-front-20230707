@@ -3,11 +3,8 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import { putCommaAtPrice } from "../Util/common";
 import I_paste from "../Img/Icon/I_paste.svg";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function Blocks({ store }) {
-  const history = useHistory();
-
   const [listCategory, setListCategory] = useState(0);
   const [data, setData] = useState("");
   const [secret, setSecret] = useState("");
@@ -45,9 +42,7 @@ function Blocks({ store }) {
             </li>
             <li>
               <p className="key">블록</p>
-              <p className="value" onClick={() => history.push("/block")}>
-                12792739
-              </p>
+              <p className="value">12792739</p>
             </li>
             <li>
               <p className="key">타임스탬프</p>
@@ -58,14 +53,14 @@ function Blocks({ store }) {
             </li>
             <li>
               <p className="key">From</p>
-              <p className="value" onClick={() => history.push("/adress")}>
+              <p className="value">
                 0x9db0ddb5016a1d34fdf8df4c7a1671d25c60c116
                 <img src={I_paste} alt="" />
               </p>
             </li>
             <li>
               <p className="key">To</p>
-              <p className="value" onClick={() => history.push("/contract")}>
+              <p className="value">
                 0x690862fdc01a64a3e1e47a2aafaa3e9da326ae8b
                 <img src={I_paste} alt="" />
               </p>
