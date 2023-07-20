@@ -29,8 +29,6 @@ function TopBar({
   overCoinPopup,
   setLogin,
 }) {
-  const history = useHistory();
-
   const [search, setSearch] = useState("");
   const [placeHolder, setPlaceHolder] = useState("TxHash/주소/블록/토큰 검색");
   const [connectStatus, setConnectStatus] = useState(false);
@@ -66,12 +64,12 @@ function TopBar({
     <TopBarBox>
       <div className="topBarBox">
       <span className="leftBox">
+
         <div className="logoBox" onClick={() => window.location.replace("/")}>
           <img src={LogoImg} alt="" />
 
           <img src={LogoText} alt="" />
         </div>
-
         <div className="searchBox">
           <input
             value={search}
@@ -183,6 +181,7 @@ const TopBarBox = styled.div`
   position: fixed;
   z-index: 30;
 
+
   .topBarBox{
     display: flex;
     justify-content: space-between;
@@ -196,29 +195,29 @@ const TopBarBox = styled.div`
 
   .leftBox {
     display: flex;
-    align-items: center;
-    
+    align-items: center; 
     gap: 20px;
 
-    .logoBox {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
+    .logoImg {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      background: #101730;
+      border-radius: 5px;
     }
 
     .searchBox {
       display: flex;
       align-items: center;
-      gap: 6px;
       width: 540px;
       height: 40px;
-      overflow: hidden;
-      padding: 0 20px;
-      font-size: 14px;
-      line-height: 14px;
       border: 1px solid #c4c4c4;
       border-radius: 25px;
+      font-size: 14px;
+      line-height: 14px;
+      padding: 0 20px;
+      overflow: hidden;
+      gap: 6px;
 
       input {
         width: 100%;
@@ -240,18 +239,14 @@ const TopBarBox = styled.div`
   .rightBox {
     display: flex;
     align-items: center;
-    gap: 30px;
+    gap: 20px;
     position: relative;
 
     .categoryList {
       display: flex;
-      gap: 30px;
-
-      li {
-        font-size: 20px;
-        line-height: 20px;
-        cursor: pointer;
-      }
+      gap: 20px;
+      font-size: 20px;
+      line-height: 20px;
     }
 
     .chainBtn {
@@ -315,3 +310,4 @@ const categoryList = [
   { label: "Transactions", url: "/transactions" },
   { label: "dot"},
 ];
+

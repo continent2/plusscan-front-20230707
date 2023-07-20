@@ -2,11 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { putCommaAtPrice } from "../Util/common";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function Blocks({ store }) {
-  const history = useHistory();
-
   const [listCategory, setListCategory] = useState(0);
 
   return (
@@ -116,7 +113,7 @@ function Blocks({ store }) {
             <li>
               <p className="key">상위 Hash</p>
               <span className="value">
-                <p onClick={() => history.push("/adress")}>
+                <p>
                   0x68cd2fb49c47499588fe9f9e4ca46eb0a59635e4d037921c163eeee12fc2119f
                 </p>
               </span>
@@ -257,3 +254,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(Blocks);
 
 const categoryList = ["overview"];
+

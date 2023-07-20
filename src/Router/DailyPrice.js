@@ -1,22 +1,27 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import Footer from "./Footer";
-import * as echarts from "echarts";
+import E_chart1B from "../Img/example/E_chart1B.png";
 
 function DailyPrice({ store }) {
-  const chartRef = useRef();
+  const [chartPopup, setChartPopup] = useState(false);
 
-  useEffect(() => {
-    if (!chartRef.current) return;
+  function onChartPopupMove(e) {
+    let x = e.screenX +20;
+    let y = e.screenY - 124;
 
-    const chart = echarts.init(chartRef.current);
-    chart.setOption(chartOpt);
-  }, [chartRef]);
+    let chartPopup;
+    if (document.querySelector("#ChartPopup")) {
+      chartPopup = document.querySelector("#ChartPopup");
+      chartPopup.style.left = x + "px";
+      chartPopup.style.top = y + "px";
+    }
+  }
 
   return (
     <>
-      <DailyPriceBox>
+      <DailyPriceBox onMouseMove={(e) => onChartPopupMove(e)}>
         <div className="contBox">
           <div className="textBox">
             <p className="title">Price</p>
@@ -25,14 +30,24 @@ function DailyPrice({ store }) {
             </p>
           </div>
 
-          <div className="chartCont">
+          <div className="chartBox">
             <p className="title">Test Token Daily Price Chart &#40;USD&#41;</p>
-
-            <div className="chartBox" ref={chartRef}></div>
+            <img
+              src={E_chart1B}
+              alt=""
+              onMouseEnter={() => setChartPopup(true)}
+              onMouseLeave={() => setChartPopup(false)}
+            />
           </div>
         </div>
 
-        <Footer />
+        {chartPopup && (
+          <div id="ChartPopup" className="chartPopup">
+            <p>2021-07-09 금요일</p>
+            <p>test token Price : $201.53</p>
+          </div>
+        )}
+      <Footer />
       </DailyPriceBox>
     </>
   );
@@ -61,7 +76,7 @@ const DailyPriceBox = styled.div`
       }
     }
 
-    .chartCont {
+    .chartBox {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -76,12 +91,20 @@ const DailyPriceBox = styled.div`
       .title {
         font-size: 30px;
       }
-
-      .chartBox {
-        width: 880px;
-        height: 440px;
-      }
     }
+  }
+
+  .chartPopup {
+    position: fixed;
+    background: #ffffff;
+    border: 1px solid #f7f7f7;
+    box-sizing: border-box;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    font-size: 10px;
+    padding: 10px 13px;
+    text-align: center;
+    z-index: 4;
   }
 `;
 
@@ -96,58 +119,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DailyPrice);
-
-const chartOpt = {
-  xAxis: {
-    type: "category",
-    boundaryGap: false,
-    data: [
-      "27",
-      "02",
-      "08",
-      "13",
-      "18",
-      "23",
-      "28",
-      "02",
-      "08",
-      "13",
-      "18",
-      "23",
-      "28",
-      "03",
-      "09",
-    ],
-  },
-  yAxis: {
-    type: "value",
-    position: "right",
-  },
-  series: [
-    {
-      smooth: true,
-      data: [
-        500, 800, 900, 700, 600, 400, 900, 500, 300, 500, 900, 300, 500, 800,
-        900, 700, 600,
-      ],
-      type: "line",
-      lineStyle: {
-        color: "#6F47D1",
-        width: 3,
-      },
-      areaStyle: {
-        opacity: 0.8,
-        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          {
-            offset: 0,
-            color: "rgba(241, 238, 248,1)",
-          },
-          {
-            offset: 1,
-            color: "rgba(241, 238, 248,0.4)",
-          },
-        ]),
-      },
-    },
-  ],
-};

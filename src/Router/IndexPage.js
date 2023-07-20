@@ -29,7 +29,6 @@ function IndexPage({ store, setHeaderKinds }) {
       <li onClick={() => history.push("/adress")}>주소</li>
       <li onClick={() => history.push("/tokens")}>블록_1</li>
       <li onClick={() => history.push("/contract")}>블록_1</li>
-      <li onClick={() => history.push("/transfer")}>transfer</li>
     </IndexPageBox>
   );
 }
