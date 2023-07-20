@@ -717,7 +717,7 @@ const chartOpt = {
     },
     data: new Array(100).fill("").map((v, i) => {
       const date = new Date().setDate(new Date("2023,05,27").getDate() + i);
-      console.log(new Date(date).getDate());
+      // console.log(new Date(date).getDate());
       return new Date(date);
     }),
   },

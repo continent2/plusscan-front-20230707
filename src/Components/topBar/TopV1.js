@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
@@ -17,6 +17,8 @@ import ProfPopup from "../../Components/header/ProfPopup";
 import { strDot } from "../../Util/common";
 import LogoImg from "../../Img/logo/LogoImg.svg";
 import LogoText from "../../Img/logo/LogoText.svg";
+import axios from "axios";
+import { API } from "../../Config/api";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function TopBar({
@@ -30,11 +32,41 @@ function TopBar({
   const history = useHistory();
 
   const [search, setSearch] = useState("");
+  const [placeHolder, setPlaceHolder] = useState("TxHash/주소/블록/토큰 검색");
+  const [connectStatus, setConnectStatus] = useState(false);
+
+  const getConnection = () => {
+    axios.post(`https://plus8.co`, {
+      headers: {
+        "Content-Type" : "application/json; charset=utf-8"
+      },
+      data: JSON.stringify(
+        {
+          jsonrpc: "2.0",
+          method: "eth_getBlockByNumber",
+          params: ["latest", false],
+          id: 1
+        }
+      )
+    }).then((resp) => {
+      setConnectStatus(true);
+    }).catch((err)=>{
+      setConnectStatus(false);
+    })
+  }
+
+  useEffect((_) => {
+    getConnection();
+    setInterval((_) => {
+      getConnection();
+    }, 30 * 1000);
+  }, []);
 
   return (
     <TopBarBox>
+      <div className="topBarBox">
       <span className="leftBox">
-        <div className="logoBox" onClick={() => history.push("/main_1")}>
+        <div className="logoBox" onClick={() => window.location.replace("/")}>
           <img src={LogoImg} alt="" />
 
           <img src={LogoText} alt="" />
@@ -43,20 +75,59 @@ function TopBar({
         <div className="searchBox">
           <input
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="TxHash/주소/블록/토큰 검색"
+            onChange={(e) => {
+              setSearch(e.target.value.toString());
+            }}
+            placeholder={placeHolder}
           />
-          <img src={I_search} alt="" />
+          <img src={I_search} alt="" onClick={()=>{
+            // 검색 조회       
+            axios.get(`${API.API_SEARCH + search}`).then((resp) => {
+              if (resp.data.status === "ERR") {
+                setPlaceHolder("검색결과가 없습니다");
+              }else{
+                switch (resp.data.datatype) {
+                  case 'block':
+                    history.push(`/block?number=${search}`);
+                    break;
+                  case 'transaction':
+                    history.push(`/transactiondetails?hash=${search}`);
+                    break;
+                  case 'token':
+                    history.push(`/token?token=${search}`);
+                    break;
+                  default:
+                    break;
+                }
+              }
+            });
+          }} />
         </div>
       </span>
 
       <span className="rightBox">
         <ul className="categoryList">
-          {categoryList.map((v, index) => (
-            <li key={index} onClick={() => history.push(v.url)}>
-              {v.label}
-            </li>
-          ))}
+          {categoryList.map((v, index) => {
+              if(v.label === 'dot'){
+                return (              
+                  <li key={index} style={{
+                    width:'20px',
+                    height:'20px',
+                    borderRadius:"50%",
+                    backgroundColor: `${connectStatus ? 'green': 'red'}`
+                    }}>
+                  </li>
+                  )
+              }
+              else{
+                return (              
+                  <li key={index} onClick={() => history.push(v.url)}>
+                    {v.label}
+                  </li>
+                  )
+              }
+            }
+          )}
         </ul>
 
         {store.isLogin ? (
@@ -100,27 +171,33 @@ function TopBar({
           </>
         )}
       </span>
+      </div>
     </TopBarBox>
   );
 }
 
 const TopBarBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 100px;
-  padding: 0 90px;
-  background: #fff;
-  border-bottom: 2px solid #efefef;
   top: 0;
   right: 0;
   left: 0;
   position: fixed;
   z-index: 30;
 
+  .topBarBox{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    width: 1400px;
+    height: 100px;
+    background: #fff;
+    border-bottom: 2px solid #efefef;
+  }
+
   .leftBox {
     display: flex;
     align-items: center;
+    
     gap: 20px;
 
     .logoBox {
@@ -232,8 +309,9 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(TopBar));
 
 const categoryList = [
-  { label: "Home", url: "/main_1" },
+  { label: "Home", url: "/" },
   { label: "Blocks", url: "/blocks" },
   { label: "Tokens", url: "/tokens" },
   { label: "Transactions", url: "/transactions" },
+  { label: "dot"},
 ];

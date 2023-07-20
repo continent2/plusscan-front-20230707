@@ -4,10 +4,10 @@ import styled from "styled-components";
 import GlobalStyle from "./Components/globalStyle";
 import TopBar from "./Router/TobBar";
 import RouterListen from "./Util/RouterListen";
-import Landing from "./Router/Landing";
+// import Landing from "./Router/Landing";
 import Main_1 from "./Router/Main_1";
-import IndexPage from "./Router/IndexPage";
-import Main_2 from "./Router/Main_2";
+// import IndexPage from "./Router/IndexPage";
+// import Main_2 from "./Router/Main_2";
 import { connect } from "react-redux";
 import { setHeaderKinds } from "./Util/store";
 import DailyPrice from "./Router/DailyPrice";
@@ -52,10 +52,10 @@ function App({ store, setHeaderKinds }) {
         <RouterListen setHeaderKinds={setHeaderKinds} />
         <TopBar />
         <Switch>
-          <Route exact path="/" component={IndexPage} />
-          <Route exact path="/landing" component={Landing} />
+          <Route exact path="/" component={Main_1} />
+          {/* <Route exact path="/landing" component={Landing} /> */}
           <Route exact path="/main_1" component={Main_1} />
-          <Route exact path="/main_2" component={Main_2} />
+          {/* <Route exact path="/main_2" component={Main_2} /> */}
           <Route exact path="/dailyprice" component={DailyPrice} />
           <Route exact path="/transactions" component={Transactions} />
           <Route exact path="/gas" component={Gas} />

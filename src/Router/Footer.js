@@ -43,7 +43,7 @@ const FooterBox = styled.div`
   display: flex;
   justify-content: space-between;
   width: 1400px;
-  margin: 0 auto;
+  margin: auto auto 0 auto;
   padding: 35px 0;
   border-top: 1px solid #d1d1d1;
   font-size: 14px;

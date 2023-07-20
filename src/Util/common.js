@@ -1,10 +1,10 @@
 const trimtimestr = (str) => str.split(/\./)[0];
 
 const generaterandomstr_charset=(length,charsetcode)=>{let characters
-	if(charsetcode=='base58') {characters='123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ'}
-	else if (charsetcode=='numbers'){characters='0123456789'}
-	else if (charsetcode=='lower'){characters='abcdefghijklmnopqrstuvwxyz'}
-	else if (charsetcode=='hex')  {characters='abcdef0123456789ABCDEF0123456789'}
+	if(charsetcode==='base58') {characters='123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ'}
+	else if (charsetcode==='numbers'){characters='0123456789'}
+	else if (charsetcode==='lower'){characters='abcdefghijklmnopqrstuvwxyz'}
+	else if (charsetcode==='hex')  {characters='abcdef0123456789ABCDEF0123456789'}
 	else {characters='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'}
 	var charactersLength = characters.length;let result=''
 	for ( var i = 0; i < length; i++ ) {		 result += characters.charAt(Math.floor(Math.random() * charactersLength))	}
