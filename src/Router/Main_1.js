@@ -5,6 +5,9 @@ import Footer from "./Footer";
 import E_chart3 from "../Img/example/E_chart3.png";
 import I_3dotWhite from "../Img/Icon/I_3dotWhite.svg";
 import I_hoverPolygon from "../Img/Icon/I_hoverPolygon.svg";
+import { strDot } from "../Util/common";
+// import { generaterandomstr_charset, generaterandomint } from "../Util/common";
+import { API } from "../Config/api";
 import { strDot, generaterandomnumber
 , LOGGER } from "../Util/common"
 import {generaterandomstr_charset	, generaterandomint
@@ -12,32 +15,49 @@ import {generaterandomstr_charset	, generaterandomint
 import {API} from '../Config/api'
 import axios from "axios";
 
-const RAND_TIME_OFFSET=3
+// const RAND_TIME_OFFSET = 3;
 function Home({ store }) {
-	const [chartPopup, setChartPopup] = useState(false)	
-	let [blockList,setblockList]=useState( [] )
-	let [txlist , settxlist]=useState( [] )
-	const fetchlists=_=>{
-		axios.get(`${API.API_BLOCKS}/0/10`).then(resp=>{LOGGER('vsiRhGy2pA' , resp.data )
-			if(resp.data.status=='OK'){
-				setblockList(resp.data.list)
-			}			
-		})
-		axios.get(`${API.API_TXS}/0/10`).then(resp=>{LOGGER('nvsgfeVB2c',resp.data)
-			if(resp.data.status=='OK'){
-				settxlist(resp.data.list)
-			}			
-		})
-	}
-	useEffect(_=>{
-//		setblockList( initblocks() )
-	//	settxlist( inittxlist() )
-		fetchlists()
-		setInterval(_=>{
-			fetchlists()
-		} , 30*1000 )
-	
-	} , [] )
+  const history = useHistory();
+
+  const [chartPopup, setChartPopup] = useState(false);
+  const [stats, setStats] = useState({});
+  const [blockList, setBlockList] = useState([]);
+  const [txlist, setTxlist] = useState([]);
+  const fetchLists = (_) => {
+
+    // 최신 정보 조회
+    axios.get(`${API.API_STATS}`).then((resp) => {
+      // LOGGER("vsiRhGy2pA", resp.data);
+      if (resp.data.status === "OK") {
+        setStats(resp.data);
+      }
+    });
+
+    // 최신 블럭 리스트 조회
+    axios.get(`${API.API_LATEST_BLOCKS}`).then((resp) => {
+      // LOGGER("vsiRhGy2pA", resp.data);
+      if (resp.data.status === "OK") {
+        setBlockList(resp.data.list);
+      }
+    });
+
+    // 최신 트랜잭션 리스트 조회
+    axios.get(`${API.API_LATEST_TXS}`).then((resp) => {
+      // LOGGER("nvsgfeVB2c", resp.data);
+      if (resp.data.status === "OK") {
+        setTxlist(resp.data.list);
+      }
+    });
+  };
+  useEffect((_) => {
+    //  setBlockList( initblocks() )
+    //	setTxlist( inittxlist() )
+    fetchLists();
+    setInterval((_) => {
+      fetchLists();
+    }, 30 * 1000);
+  }, []);
+
   function onChartPopupMove(e) {
     let x = e.screenX - 30;
     let y = e.screenY - 184;
@@ -55,32 +75,47 @@ function Home({ store }) {
           <ul className="headerBox">
             <li className="priceBox">
               <div className="innerBox">
-                <p className="title">Price</p>
-                <p className="data">$2,131.46 &#40;-5.49%&#41;</p>
+                <p className="title">PRICE</p>
+                <p className="data" onClick={() => history.push("/dailyprice")}>
+                  {stats.priceunitsymbol + String(stats.price)}
+                </p>
               </div>
             </li>
 
             <li className="transaction_n_gasBox">
               <div className="innerBox">
-                <p className="title">Transactions</p>
-                <p className="data">1,201.60M &#40;14.6TPS&#41;</p>
+                <p className="title">TRANSACTIONS</p>
+                <p
+                  className="data"
+                  onClick={() => history.push("/transactionshart")}
+                >
+                  {stats.counttx}
+                </p>
               </div>
-
               <div className="innerBox">
-                <p className="title">GAS Price</p>
-                <p className="data">31Gwei &#40;$1.39&#41;</p>
+                <p className="title">GAS PRICE</p>
+                <p className="data" onClick={() => history.push("/gas")}>
+                {stats.gasprice}
+                </p>
               </div>
             </li>
 
             <li className="difficulty_n_hashBox">
-              <div className="innerBox">
-                <p className="title">Difficulty</p>
-                <p className="data">6,543.50TH</p>
+            <div className="innerBox">
+                <p className="title">DIFFICULTY</p>
+                <p
+                  className="data"
+                  onClick={() => history.push("/transactionshart")}
+                >
+                  {stats.difficulty}
+                </p>
               </div>
 
               <div className="innerBox">
-                <p className="title">GAS Price</p>
-                <p className="data">31Gwei &#40;$1.39&#41;</p>
+                <p className="title">GAS PRICE</p>
+                <p className="data" onClick={() => history.push("/gas")}>
+                {stats.gasprice}
+                </p>
               </div>
             </li>
 
@@ -163,13 +198,11 @@ function Home({ store }) {
                         <span className="time">{ elem.createdat }</span> {/** `${RAND_TIME_OFFSET} secs ago` */}
                         <span className="from">
                           <span className="inner">
-                            {strDot(elem.from , 6, 6)}
+                            {strDot(elem.from_, 6, 6)}
                           </span>
                         </span>
                         <span className="to">
-                          <span className="inner">
-                            {strDot(elem.to, 6, 6)}
-                          </span>
+                          <span className="inner">{strDot(elem.to_, 6, 6)}</span>
                         </span>
                       </li>
                     );
@@ -203,11 +236,12 @@ function Home({ store }) {
 }
 
 const HomeBox = styled.div`
-  padding-top: 80px;
+  padding-top: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: inherit;
+  height: 100vh;
 
   & > .innerBox {
     display: flex;
@@ -434,123 +468,125 @@ function mapDispatchToProps(dispatch) {
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
 
-const inittxlist=_=>{const N_ENTRIES=10
-	let txlist=[]
-	for (let i=0;i<N_ENTRIES;i++){
-		txlist[i]={
-			txhash : '0x'+generaterandomstr_charset(40 , 'hex')
-			, from:  '0x'+generaterandomstr_charset(40 , 'hex')
-			, to : '0x'+generaterandomstr_charset(40 , 'hex')
-		}
-	}
-	return txlist
-}
-const BLOCKNUM=33186 
-const BLOCKPERIOD=30
-const initblocks=_=>{const N_ENTRIES=10
-	let blockList=[]
-	for (let i=0; i<N_ENTRIES;i++){
-		blockList[i]={
-			block : BLOCKNUM-i
-			, time : `${RAND_TIME_OFFSET + BLOCKPERIOD * i} secs ago`
-			, total : generaterandomint(0, 10)
-			, proposer: '0x'+generaterandomstr_charset( 40 , 'hex' )
-			, reward : generaterandomnumber(3,10).toFixed(3)
-		}
-	}
-	return blockList
-}
+// const inittxlist = (_) => {
+//   const N_ENTRIES = 10;
+//   let txlist = [];
+//   for (let i = 0; i < N_ENTRIES; i++) {
+//     txlist[i] = {
+//       txhash: "0x" + generaterandomstr_charset(40, "hex"),
+//       from: "0x" + generaterandomstr_charset(40, "hex"),
+//       to: "0x" + generaterandomstr_charset(40, "hex"),
+//     };
+//   }
+//   return txlist;
+// };
+// const BLOCKNUM = 33186;
+// const BLOCKPERIOD = 30;
+// const initblocks = (_) => {
+//   const N_ENTRIES = 10;
+//   let blockList = [];
+//   for (let i = 0; i < N_ENTRIES; i++) {
+//     blockList[i] = {
+//       block: BLOCKNUM - i,
+//       time: `${RAND_TIME_OFFSET + BLOCKPERIOD * i} secs ago`,
+//       total: generaterandomint(0, 10),
+//       proposer: "0x" + generaterandomstr_charset(40, "hex"),
+//       reward: generaterandomnumber(3, 10).toFixed(3),
+//     };
+//   }
+//   return blockList;
+// };
 
-let blockList = [
-  {
-    block: 64080901,
-    time: "2secs ago",
-    total: 4,
-    proposer: "0x386caaaaaaab7f9c8",
-    reward: 9.69347312322,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    total: 4,
-    proposer: "0x386caaaaaaab7f9c8",
-    reward: 9.69347312322,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    total: 4,
-    proposer: "0x386caaaaaaab7f9c8",
-    reward: 9.69347312322,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    total: 4,
-    proposer: "0x386caaaaaaab7f9c8",
-    reward: 9.69347312322,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    total: 4,
-    proposer: "0x386caaaaaaab7f9c8",
-    reward: 9.69347312322,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    total: 4,
-    proposer: "0x386caaaaaaab7f9c8",
-    reward: 9.69347312322,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    total: 4,
-    proposer: "0x386caaaaaaab7f9c8",
-    reward: 9.69347312322,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    total: 4,
-    proposer: "0x386caaaaaaab7f9c8",
-    reward: 9.69347312322,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    total: 4,
-    proposer: "0x386caaaaaaab7f9c8",
-    reward: 9.69347312322,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    total: 4,
-    proposer: "0x386caaaaaaab7f9c8",
-    reward: 9.69347312322,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    total: 4,
-    proposer: "0x386caaaaaaab7f9c8",
-    reward: 9.69347312322,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    total: 4,
-    proposer: "0x386caaaaaaab7f9c8",
-    reward: 9.69347312322,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    total: 4,
-    proposer: "0x386caaaaaaab7f9c8",
-    reward: 9.69347312322,
-  },
-];
+// let blockList = [
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     total: 4,
+//     proposer: "0x386caaaaaaab7f9c8",
+//     reward: 9.69347312322,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     total: 4,
+//     proposer: "0x386caaaaaaab7f9c8",
+//     reward: 9.69347312322,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     total: 4,
+//     proposer: "0x386caaaaaaab7f9c8",
+//     reward: 9.69347312322,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     total: 4,
+//     proposer: "0x386caaaaaaab7f9c8",
+//     reward: 9.69347312322,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     total: 4,
+//     proposer: "0x386caaaaaaab7f9c8",
+//     reward: 9.69347312322,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     total: 4,
+//     proposer: "0x386caaaaaaab7f9c8",
+//     reward: 9.69347312322,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     total: 4,
+//     proposer: "0x386caaaaaaab7f9c8",
+//     reward: 9.69347312322,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     total: 4,
+//     proposer: "0x386caaaaaaab7f9c8",
+//     reward: 9.69347312322,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     total: 4,
+//     proposer: "0x386caaaaaaab7f9c8",
+//     reward: 9.69347312322,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     total: 4,
+//     proposer: "0x386caaaaaaab7f9c8",
+//     reward: 9.69347312322,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     total: 4,
+//     proposer: "0x386caaaaaaab7f9c8",
+//     reward: 9.69347312322,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     total: 4,
+//     proposer: "0x386caaaaaaab7f9c8",
+//     reward: 9.69347312322,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     total: 4,
+//     proposer: "0x386caaaaaaab7f9c8",
+//     reward: 9.69347312322,
+//   },
+// ];

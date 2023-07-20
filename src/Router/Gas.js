@@ -553,3 +553,52 @@ const gasList = [
     // analytics,
   },
 ];
+
+const chartOpt = {
+  xAxis: {
+    type: "category",
+    boundaryGap: false,
+    axisLabel: {
+      interval: 5,
+      formatter: (value, index) => {
+        return `${new Date(value).getDate()}`;
+      },
+    },
+    data: new Array(100).fill("").map((v, i) => {
+      const date = new Date().setDate(new Date("2023,05,27").getDate() + i);
+      // console.log(new Date(date).getDate());
+      return new Date(date);
+    }),
+  },
+  yAxis: {
+    type: "value",
+    position: "right",
+    axisLabel: {
+      formatter: (value, index) => {
+        return `$${value.toFixed(2)}B`;
+      },
+    },
+  },
+  series: [
+    {
+      smooth: true,
+      data: new Array(100).fill("").map((_) => Math.random() * 6 + 0.2),
+      type: "bar",
+      itemStyle: {
+        color: "#1FC7D4",
+        borderRadius: 4,
+      },
+    },
+  ],
+  tooltip: {
+    padding: [10, 26],
+    formatter: "Avg Time : 금요일<br/>Gas Price : $201.53",
+    textStyle: {
+      fontSize: 10,
+      color: "#000",
+    },
+    borderColor: "#F6F6F6",
+    extraCssText: "box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);",
+  },
+};
+

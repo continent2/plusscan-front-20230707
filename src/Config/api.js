@@ -1,8 +1,15 @@
 
-const URL=`https://bcast1.net:37085`
+const URL=`https://plus8.co:37847`
 const API={
-	API_BLOCKS: `${URL}/blocks` // 
-	, API_TXS:	`${URL}/txs`
+	API_STATS: 		`${URL}/stats`,
+	API_SEARCH:		`${URL}/queries/search/`,
+
+	API_BLOCKS: 		`${URL}/blocks`,
+	API_LATEST_BLOCKS: `${URL}/queries/rows/blocks/_/_/0/10/timestamp/DESC`,
+
+	API_TXS: 			`${URL}/txs`,
+	API_LATEST_TXS: 	`${URL}/queries/rows/transactions/_/_/0/10/timestamp/DESC`,
+
 /** 	API_USERNAME_DUP : `${URL}/users/username`,
 	API_PROFILEIMAGE: `${URL}/users/update`,
 	API_PROFILEIMAGE_ONLY: `${URL}/users/user/profileimage`, // /:username
