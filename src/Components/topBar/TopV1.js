@@ -15,8 +15,8 @@ import PopupBg from "../../Components/PopupBg";
 import I_search from "../../Img/Icon/I_search.svg";
 import ProfPopup from "../../Components/header/ProfPopup";
 import { strDot } from "../../Util/common";
-import LogoImg from "../../Img/logo/LogoImg.svg";
-import LogoText from "../../Img/logo/LogoText.svg";
+// import LogoImg from "../../Img/logo/LogoImg.svg";
+// import LogoText from "../../Img/logo/LogoText.svg";
 import axios from "axios";
 import { API } from "../../Config/api";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
@@ -29,6 +29,8 @@ function TopBar({
   overCoinPopup,
   setLogin,
 }) {
+  const history = useHistory();
+
   const [search, setSearch] = useState("");
   const [placeHolder, setPlaceHolder] = useState("TxHash/주소/블록/토큰 검색");
   const [connectStatus, setConnectStatus] = useState(false);
@@ -66,9 +68,9 @@ function TopBar({
       <span className="leftBox">
 
         <div className="logoBox" onClick={() => window.location.replace("/")}>
-          <img src={LogoImg} alt="" />
+          {/* <img src={LogoImg} alt="" /> */}
 
-          <img src={LogoText} alt="" />
+          {/* <img src={LogoText} alt="" /> */}
         </div>
         <div className="searchBox">
           <input

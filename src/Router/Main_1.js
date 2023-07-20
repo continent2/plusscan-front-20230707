@@ -6,13 +6,9 @@ import E_chart3 from "../Img/example/E_chart3.png";
 import I_3dotWhite from "../Img/Icon/I_3dotWhite.svg";
 import I_hoverPolygon from "../Img/Icon/I_hoverPolygon.svg";
 import { strDot } from "../Util/common";
+import { useHistory } from "react-router";
 // import { generaterandomstr_charset, generaterandomint } from "../Util/common";
 import { API } from "../Config/api";
-import { strDot, generaterandomnumber
-, LOGGER } from "../Util/common"
-import {generaterandomstr_charset	, generaterandomint
-} from '../Util/common'
-import {API} from '../Config/api'
 import axios from "axios";
 
 // const RAND_TIME_OFFSET = 3;
