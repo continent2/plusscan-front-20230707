@@ -19,7 +19,7 @@ import { strDot } from "../../Util/common";
 // import LogoText from "../../Img/logo/LogoText.svg";
 import axios from "axios";
 import { API } from "../../Config/api";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useHistory } from "react-router-dom";
 
 function TopBar({
   store,
@@ -121,7 +121,7 @@ function TopBar({
               }
               else{
                 return (              
-                  <li key={index} onClick={() => history.push(v.url)}>
+                  <li style={{ cursor: 'pointer'}} key={index} onClick={() => history.push(v.url)}>
                     {v.label}
                   </li>
                   )
