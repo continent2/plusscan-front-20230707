@@ -15,8 +15,8 @@ import PopupBg from "../../Components/PopupBg";
 import I_search from "../../Img/Icon/I_search.svg";
 import ProfPopup from "../../Components/header/ProfPopup";
 import { strDot } from "../../Util/common";
-// import LogoImg from "../../Img/logo/LogoImg.svg";
-// import LogoText from "../../Img/logo/LogoText.svg";
+import LogoImg from "../../Img/logo/LogoImg.svg";
+import LogoText from "../../Img/logo/LogoText.svg";
 import axios from "axios";
 import { API } from "../../Config/api";
 import { useHistory } from "react-router-dom";
@@ -68,9 +68,9 @@ function TopBar({
       <span className="leftBox">
 
         <div className="logoBox" onClick={() => window.location.replace("/")}>
-          {/* <img src={LogoImg} alt="" /> */}
+          <img src={LogoImg} alt="" />
 
-          {/* <img src={LogoText} alt="" /> */}
+          <img src={LogoText} alt="" />
         </div>
         <div className="searchBox">
           <input
@@ -88,13 +88,13 @@ function TopBar({
               }else{
                 switch (resp.data.datatype) {
                   case 'block':
-                    history.push(`/block?number=${search}`);
+                    history.push(`/block/${search}`);
                     break;
                   case 'transaction':
-                    history.push(`/transactiondetails?hash=${search}`);
+                    history.push(`/transaction/${search}`);
                     break;
                   case 'token':
-                    history.push(`/token?token=${search}`);
+                    history.push(`/token/${search}`);
                     break;
                   default:
                     break;
@@ -183,7 +183,6 @@ const TopBarBox = styled.div`
   position: fixed;
   z-index: 30;
 
-
   .topBarBox{
     display: flex;
     justify-content: space-between;
@@ -199,6 +198,13 @@ const TopBarBox = styled.div`
     display: flex;
     align-items: center; 
     gap: 20px;
+
+    .logoBox {
+      display: flex;
+      align-items: center; 
+      gap: 10px;
+      cursor: pointer;
+    }
 
     .logoImg {
       display: inline-block;

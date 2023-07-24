@@ -6,13 +6,13 @@ import E_chart3 from "../Img/example/E_chart3.png";
 import I_3dotWhite from "../Img/Icon/I_3dotWhite.svg";
 import I_hoverPolygon from "../Img/Icon/I_hoverPolygon.svg";
 import { strDot } from "../Util/common";
-import { useHistory } from "react-router";
+import { useHistory } from "react-router-dom";
 // import { generaterandomstr_charset, generaterandomint } from "../Util/common";
 import { API } from "../Config/api";
 import axios from "axios";
 
 // const RAND_TIME_OFFSET = 3;
-function Home({ store }) {
+function Home() {
   const history = useHistory();
 
   const [chartPopup, setChartPopup] = useState(false);
@@ -31,7 +31,7 @@ function Home({ store }) {
 
     // 최신 블럭 리스트 조회
     axios.get(`${API.API_LATEST_BLOCKS}`).then((resp) => {
-      // LOGGER("vsiRhGy2pA", resp.data);
+      // console.log("vsiRhGy2pA", resp.data);
       if (resp.data.status === "OK") {
         setBlockList(resp.data.list);
       }
@@ -69,47 +69,39 @@ function Home({ store }) {
       <HomeBox onMouseMove={(e) => onChartPopupMove(e)}>
         <div className="innerBox">
           <ul className="headerBox">
-            <li className="priceBox">
+            <li className="priceBox" onClick={() => history.push("/dailyprice")}>
               <div className="innerBox">
                 <p className="title">PRICE</p>
-                <p className="data" onClick={() => history.push("/dailyprice")}>
+                <p className="data">
                   {stats.priceunitsymbol + String(stats.price)}
                 </p>
               </div>
             </li>
 
             <li className="transaction_n_gasBox">
-              <div className="innerBox">
+              <div className="innerBox" onClick={() => history.push("/transactionchart")}>
                 <p className="title">TRANSACTIONS</p>
-                <p
-                  className="data"
-                  onClick={() => history.push("/transactionshart")}
-                >
+                <p className="data">
                   {stats.counttx}
                 </p>
               </div>
-              <div className="innerBox">
+              <div className="innerBox" onClick={() => history.push("/gas")}>
                 <p className="title">GAS PRICE</p>
-                <p className="data" onClick={() => history.push("/gas")}>
+                <p className="data">
                 {stats.gasprice}
                 </p>
               </div>
             </li>
 
             <li className="difficulty_n_hashBox">
-            <div className="innerBox">
+              <div className="innerBox">
                 <p className="title">DIFFICULTY</p>
-                <p
-                  className="data"
-                  onClick={() => history.push("/transactionshart")}
-                >
-                  {stats.difficulty}
-                </p>
+                <p className="data">{stats.difficulty}</p>
               </div>
 
-              <div className="innerBox">
+              <div className="innerBox" onClick={() => history.push("/gas")}>
                 <p className="title">GAS PRICE</p>
-                <p className="data" onClick={() => history.push("/gas")}>
+                <p className="data">
                 {stats.gasprice}
                 </p>
               </div>
@@ -141,23 +133,28 @@ function Home({ store }) {
                   <span className="block">BLOCK</span>
                   <span className="time">TIME</span>
                   <span className="total">TOTAL TXS</span>
-                  <span className="proposer">HASH</span>
+                  <span className="hash">HASH</span>
                   <span className="reward">REWARD</span>
                 </li>
                 {blockList.map((cont, index) => {
                   if (index < 10)
                     return (
-                      <li key={index}>
-                        <span className="block">{cont.number}</span>
-                        <span className="time">{cont.timestamp}</span>
-                        <span className="total">{cont.gasUsed}</span>
-                        <span className="proposer">
-                          <span className="inner">
+                      <li key={cont.id} >
+                        <span className="block" onClick={()=>{
+                          history.push(`/block/${cont.number}`)
+                        }}>{cont.number}</span>
+                        <span className="time">{cont.createdat}</span>
+                        <span className="total tooltip">
+                          {cont.txcount}
+                          <span className="tooltiptext tooltip-bottom">Transactions in this Block</span>
+                        </span>
+                        <span className="hash">
+                          <span className="inner tooltip">
                             {strDot(cont.hash, 6, 6)}
+                            <span className="tooltiptext tooltip-bottom">{cont.hash}</span>
                           </span>
                         </span>
                         <span className="reward">
-													{cont.gasLimit}
                           {/**  strDot(cont.reward.toString(), 8, 0) */}
                         </span>
                       </li>
@@ -167,7 +164,9 @@ function Home({ store }) {
               </ul>
 
               <div className="btnBox">
-                <button className="allBtn" onClick={() => {}}>
+                <button className="allBtn" onClick={() => {
+                  history.push('/blocks');
+                }}>
                   view all
                 </button>
               </div>
@@ -185,20 +184,30 @@ function Home({ store }) {
                 {txlist.map(( elem , index) => {
                   if (index < 10)
                     return (
-                      <li key={index}>
-                        <span className="txHash">
+                      <li key={elem.id}>
+                        <span className="txHash" onClick={()=>{
+                          history.push(`/transaction/${elem.hash}`)
+                        }}>
                           <span className="inner">
                             {strDot(elem.hash, 6, 6)}
                           </span>
                         </span>
                         <span className="time">{ elem.createdat }</span> {/** `${RAND_TIME_OFFSET} secs ago` */}
                         <span className="from">
-                          <span className="inner">
+                          <span className="inner tooltip" onClick={()=>{
+                            history.push(`/address/${elem.from_}`)
+                          }}>
                             {strDot(elem.from_, 6, 6)}
+                            <span className="tooltiptext tooltip-bottom">{elem.from_}</span>
                           </span>
                         </span>
                         <span className="to">
-                          <span className="inner">{strDot(elem.to_, 6, 6)}</span>
+                          <span className="inner tooltip" onClick={()=>{
+                              history.push(`/address/${elem.to_}`)
+                            }}>
+                            {strDot(elem.to_, 6, 6)}
+                            <span className="tooltiptext tooltip-bottom">{elem.to_}</span>
+                          </span>
                         </span>
                       </li>
                     );
@@ -207,7 +216,9 @@ function Home({ store }) {
               </ul>
 
               <div className="btnBox">
-                <button className="allBtn" onClick={() => {}}>
+                <button className="allBtn" onClick={() => {
+                  history.push('/transactions');
+                }}>
                   view all
                 </button>
               </div>
@@ -284,6 +295,7 @@ const HomeBox = styled.div`
 
       .priceBox {
         width: 200px;
+        cursor: pointer;
         .innerBox {
           justify-content: center;
           align-items: center;
@@ -293,11 +305,13 @@ const HomeBox = styled.div`
       .transaction_n_gasBox {
         width: 270px;
         padding-left: 50px;
+        cursor: pointer;
       }
 
       .difficulty_n_hashBox {
         width: 270px;
         padding-left: 74px;
+        cursor: pointer;
       }
 
       .chartBox {
@@ -360,21 +374,29 @@ const HomeBox = styled.div`
             }
 
             span {
+              padding: 0 5px;
+
+              &.block {
+                cursor: pointer;
+              }
+
               &.block,
               &.time {
                 width: 128px;
               }
 
               &.time {
-                color: #d1d1d1;
+
               }
 
               &.total {
                 width: 112px;
+                cursor: pointer;
               }
 
-              &.proposer {
-                width: 172px;
+              &.hash {
+                width: 120px;
+                cursor: pointer;
               }
 
               .inner {
@@ -389,10 +411,17 @@ const HomeBox = styled.div`
 
               &.txHash {
                 width: 160px;
+                cursor: pointer;
               }
 
               &.from {
-                width: 148px;
+                width: 125px;
+                cursor: pointer;
+              }
+
+              &.to {
+                width: 125px;
+                cursor: pointer;
               }
             }
           }
