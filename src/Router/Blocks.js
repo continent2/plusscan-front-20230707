@@ -1,19 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import I_leftArrow from "../Img/Icon/I_leftArrow.svg";
 import I_rightArrow from "../Img/Icon/I_rightArrow.svg";
-import { strDot } from "../Util/common";
+// import { strDot } from "../Util/common";
+import { API } from "../Config/api";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
-function Blocks({ store }) {
+function Blocks() {
+  const history = useHistory();
+
   const [pageNum, setPageNum] = useState(1);
+  const [blockList, setBlockList] = useState([]);
+  const [pageCount, setPageCount] = useState(0);
+
+  const size = 25;
 
   function onClickPagePre() {
     if (pageNum > 1) setPageNum(pageNum - 1);
+    getBlockList(pageNum - 1);
   }
   function onClickPageNxt() {
     setPageNum(pageNum + 1);
+    getBlockList(pageNum + 1);
   }
+
+  const getBlockList = (page) => {
+    // 최신 블럭 리스트 조회
+    axios.get(`${API.API_BLOCKS}${(page - 1)* size}/${size}/timestamp/DESC`).then((resp) => {
+      // console.log("vsiRhGy2pA", resp.data);
+      if (resp.data.status === "OK") {
+        setBlockList(resp.data.list);
+        setPageCount(Math.ceil(resp.data.payload.count / size));
+      }
+    });
+  }
+
+  useEffect(()=>{
+    getBlockList(1);
+  },[])
 
   return (
     <BlocksBox>
@@ -22,18 +48,20 @@ function Blocks({ store }) {
 
         <ul className="blockList">
           <li className="header">
-            {headerList.map((header) => (
-              <span className={header}>{header}</span>
+            {headerList.map((header, index) => (
+              <span key={index} className={header}>{header}</span>
             ))}
           </li>
 
-          {blockList.map((cont, index) => (
-            <li key={index}>
-              <span className="block">{cont.block}</span>
-              <span className="time">{cont.time}</span>
-              <span className="totalTxs">{cont.totalTxs}</span>
+          {blockList.map((cont) => (
+            <li key={cont.id} className="item" onClick={()=> {
+              history.push(`/block/${cont.number}`);
+            }}>
+              <span className="block">{cont.number}</span>
+              <span className="time">{cont.createdat}</span>
+              <span className="totalTxs">{cont.txcount}</span>
               <span className="blockPropo">
-                <span className="inner">{strDot(cont.blockPropo, 6, 6)}</span>
+                {/* <span className="inner">{strDot(cont.blockPropo, 6, 6)}</span> */}
               </span>
 
               <span className="reward">{cont.reward}</span>
@@ -46,7 +74,7 @@ function Blocks({ store }) {
             <button className="preBtn" onClick={onClickPagePre}>
               <img src={I_leftArrow} alt="" />
             </button>
-            <span className="pageBox">Page {pageNum} of 999</span>
+            <span className="pageBox">Page {pageNum} of {pageCount}</span>
             <button className="nxtBtn" onClick={onClickPageNxt}>
               <img src={I_rightArrow} alt="" />
             </button>
@@ -86,6 +114,7 @@ const BlocksBox = styled.div`
         align-items: center;
         font-size: 14px;
         color: #373737;
+        cursor: pointer;
 
         &.header {
           color: #a2afd2;
@@ -125,6 +154,10 @@ const BlocksBox = styled.div`
           border-bottom: 1px solid #d1d1d1;
         }
       }
+
+      // li:hover {
+      //   background-color: gray;
+      // }
 
       .pageBtnBox {
         display: flex;
@@ -180,213 +213,213 @@ const headerList = [
   "size(byte)",
 ];
 
-const blockList = [
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-  {
-    block: 64080901,
-    time: "2secs ago",
-    totalTxs: 4,
-    blockPropo: "0x386caaaaaab7f9c8",
-    reward: 9.69347377777777,
-    size: 4009,
-  },
-];
+// const blockList = [
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+//   {
+//     block: 64080901,
+//     time: "2secs ago",
+//     totalTxs: 4,
+//     blockPropo: "0x386caaaaaab7f9c8",
+//     reward: 9.69347377777777,
+//     size: 4009,
+//   },
+// ];

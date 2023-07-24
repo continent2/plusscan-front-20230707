@@ -18,9 +18,8 @@ import HashRate from "./Router/HashRate";
 import TransactionsChart from "./Router/TransactionsChart";
 import Blocks from "./Router/Blocks";
 import Block from "./Router/Block";
-import TransactionsList from "./Router/TransactionsList";
-import TransactionDetails from "./Router/TransactionDetails";
-import Adress from "./Router/adress/Adress";
+import transaction from "./Router/Transaction";
+import Address from "./Router/Address";
 import Tokens from "./Router/Tokens";
 import Contract from "./Router/Contract";
 
@@ -48,25 +47,20 @@ function App({ store, setHeaderKinds }) {
         <Switch>
           <Route exact path="/" component={Main_1} />
           {/* <Route exact path="/landing" component={Landing} /> */}
-          <Route exact path="/main_1" component={Main_1} />
+          {/* <Route exact path="/main_1" component={Main_1} /> */}
           {/* <Route exact path="/main_2" component={Main_2} /> */}
           <Route exact path="/dailyprice" component={DailyPrice} />
-          <Route exact path="/transactions" component={Transactions} />
           <Route exact path="/gas" component={Gas} />
           <Route exact path="/mine" component={Mine} />
           <Route exact path="/hashrate" component={HashRate} />
-          <Route exact path="/transactionshart" component={TransactionsChart} />
+          <Route exact path="/transactionchart" component={TransactionsChart} />
           <Route exact path="/blocks" component={Blocks} />
-          <Route exact path="/block" component={Block} />
-          <Route exact path="/transactionslist" component={TransactionsList} />
-          <Route
-            exact
-            path="/transactiondetails"
-            component={TransactionDetails}
-          />
-          <Route exact path="/adress" component={Adress} />
+          <Route exact path="/block/:numberOrHash" component={Block} />
+          <Route exact path="/transactions" component={Transactions} />
+          <Route exact path="/transaction/:txHash" component={transaction} />
+          <Route exact path="/address/:address" component={Address} />
           <Route exact path="/tokens" component={Tokens} />
-          <Route exact path="/contract" component={Contract} />
+          <Route exact path="/contract/" component={Contract} />
         </Switch>
       </HashRouter>
     </AppBox>
@@ -76,6 +70,50 @@ function App({ store, setHeaderKinds }) {
 const AppBox = styled.div`
   background: #fff;
   display: flex;
+
+  .tooltip {
+    position: relative;
+    display: block;
+  }
+
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    position: absolute;
+    z-index: 1;
+  }
+
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
+
+  .tooltip .tooltiptext::after {
+    content: " ";
+    position: absolute;
+    border-style: solid;
+    border-width: 5px;
+  }
+
+  .tooltip .tooltip-bottom {
+    width: auto;
+    top: 150%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    padding: 5px 10px;
+  }
+  
+  .tooltip .tooltip-bottom::after {
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-color: transparent transparent black transparent;
+  }
 `;
 
 function mapStateToProps(state) {

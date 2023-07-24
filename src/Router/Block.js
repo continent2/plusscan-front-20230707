@@ -1,17 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { putCommaAtPrice } from "../Util/common";
+import { useHistory, useParams } from "react-router-dom";
+import { API } from "../Config/api";
+import axios from "axios";
 
 function Blocks({ store }) {
+  const { numberOrHash } = useParams();
+
   const [listCategory, setListCategory] = useState(0);
+  const [blockInfo, setBlockInfo] = useState({});
+
+  const getBlockInfo = () => {
+    console.log(numberOrHash);
+
+    // number
+    if(numberOrHash){
+      axios.get(`${API.API_BLOCK_INFO_NUMBER}${numberOrHash}`).then((resp) => {
+        console.log("nvsgfeVB2c", resp.data.respdata);
+        if (resp.data.status === "OK") {
+          setBlockInfo(resp.data.respdata)
+        }
+      });
+    }else{
+      // hash
+      axios.get(`${API.API_BLOCK_INFO_HASH}${numberOrHash}`).then((resp) => {
+        // console.log("nvsgfeVB2c", resp.data);
+        if (resp.data.status === "OK") {
+
+        }
+      });
+    }
+
+  }
+
+  useEffect(() => {
+    getBlockInfo();
+  }, [])
 
   return (
     <BlocksBox>
       <div className="innerBox">
         <div className="titleBox">
           <strong className="title">Block</strong>
-          <p className="idNum">#12792560</p>
+          <p className="idNum">#{blockInfo.number}</p>
         </div>
 
         <div className="contBox">
@@ -29,27 +62,27 @@ function Blocks({ store }) {
           <ul className="infoList">
             <li>
               <p className="key">블록 높이</p>
-              <strong className="value">12792560</strong>
+              <strong className="value">{blockInfo.number}</strong>
             </li>
 
             <li>
               <p className="key">타임스탬프</p>
               <p className="value">
-                9 mins ago &#40;Jul-09-2021 10:09:12 AM +UTC&#41;
+              {blockInfo.timestamp}
               </p>
             </li>
 
             <li>
               <p className="key">가격</p>
               <p className="value">
-                ${putCommaAtPrice(51022.31)} &#40;24.34 Test Token&#41;
+                {"가격"}
               </p>
             </li>
 
             <li>
               <p className="key">채굴자</p>
               <span className="value">
-                <p>67 transactions and</p>&nbsp;111&nbsp;
+                <p>{blockInfo.txcount} transactions</p>&nbsp; and &nbsp;
                 <p>contract internal transactions</p>&nbsp;in this block
               </span>
             </li>
@@ -57,56 +90,56 @@ function Blocks({ store }) {
             <li>
               <p className="key">Block Reward</p>
               <p className="value">
-                2.583414739945197192 Ether &#40;2 + 0.583414739945197192&#41;
+                {"리워드"}
               </p>
             </li>
 
             <li>
               <p className="key">Uncles Reward</p>
-              <p className="value">0</p>
+              <p className="value">{"Uncles Reward"}</p>
             </li>
 
             <li>
               <p className="key">난이도</p>
-              <p className="value">{putCommaAtPrice(6648066081405440)}</p>
+              <p className="value">{blockInfo.difficulty}</p>
             </li>
 
             <li>
               <p className="key">총 난이도</p>
               <p className="value">
-                {putCommaAtPrice(27293328585740915906591)}
+                {blockInfo.totalDifficulty}
               </p>
             </li>
 
             <li>
               <p className="key">크기</p>
-              <p className="value">{putCommaAtPrice(65765)} bytes</p>
+              <p className="value">{blockInfo.size} bytes</p>
             </li>
 
             <li>
               <p className="key">사용된 가스</p>
               <p className="value">
-                {putCommaAtPrice(14976498)} &#40;99.89%&#41;
+              {blockInfo.gasUsed} 
+              {/* &#40;99.89%&#41; */}
               </p>
             </li>
 
             <li>
               <p className="key">가스 제한</p>
-              <p className="value">{putCommaAtPrice(14976498)}</p>
+              <p className="value">{blockInfo.gasLimit}</p>
             </li>
 
             <li>
               <p className="key">추가 데이터</p>
               <p className="value">
-                010a03/geth/go1.16.5/linux
-                &#40;Hex:0xd883010a03846765746888676f312e31362e35856c696e7578&#41;
+                {"추가 데이터"}
               </p>
             </li>
 
             <li>
               <p className="key">Hash</p>
               <p className="value">
-                0xd5a9529df36405bff905d99a19b675c210ce619a3f1de549654cf39158442b84
+                {blockInfo.hash}
               </p>
             </li>
 
@@ -114,7 +147,7 @@ function Blocks({ store }) {
               <p className="key">상위 Hash</p>
               <span className="value">
                 <p>
-                  0x68cd2fb49c47499588fe9f9e4ca46eb0a59635e4d037921c163eeee12fc2119f
+                  {blockInfo.parentHash}
                 </p>
               </span>
             </li>
@@ -122,20 +155,20 @@ function Blocks({ store }) {
             <li>
               <p className="key">Sha3Uncles</p>
               <p className="value">
-                0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347
+                {blockInfo.sha3Uncles}
               </p>
             </li>
 
             <li>
               <p className="key">StateRoot</p>
               <p className="value">
-                0x2c66bb4688400d36b582c5223769d309a8ec3211fe28360197c52d5486700314
+                {blockInfo.stateRoot}
               </p>
             </li>
 
             <li>
               <p className="key">Nonce</p>
-              <p className="value">0x27d31ffd79001022</p>
+              <p className="value">{blockInfo.nonce}</p>
             </li>
           </ul>
         </div>

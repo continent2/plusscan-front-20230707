@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import I_leftArrow from "../../Img/Icon/I_leftArrow.svg";
 import I_rightArrow from "../../Img/Icon/I_rightArrow.svg";
+import { useParams } from "react-router-dom";
+import { API } from "../../Config/api";
+import axios from "axios";
 
 function Transactions() {
+  const { address } = useParams();
+
   const [pageNum, setPageNum] = useState(1);
+
+  const [txs, setTxs] = useState([]);
 
   function onClickPagePre() {
     if (pageNum > 1) setPageNum(pageNum - 1);
@@ -14,15 +21,30 @@ function Transactions() {
     setPageNum(pageNum + 1);
   }
 
+  const getTxsAddress = () => {
+    axios.get(`${API.API_TXS_ADDRESS}${address}/0/10/id/DESC`).then((resp) => {
+      console.log("nvsgfeVB2casdf", resp.data);
+      if (resp.data.status === "OK") {
+        setTxs(resp.data.list)
+      }
+    });
+  }
+
+  useEffect(()=>{
+    console.log(txs);
+    getTxsAddress();
+  },[])
+
+
   return (
     <TransactionsBox>
       <li className="header">
-        {headerList.map((header) => (
-          <span className={header}>{header}</span>
+        {headerList.map((header, index) => (
+          <span key={index} className={header}>{header}</span>
         ))}
       </li>
 
-      {adressList.map((cont, index) => {
+      {txs.map((cont, index) => {
         if (index < 10)
           return (
             <li key={index}>
@@ -192,7 +214,7 @@ const headerList = [
   "analytics",
 ];
 
-const adressList = [
+const addressList = [
   {
     rank: 1,
     address: "Metamask: Swap Router",

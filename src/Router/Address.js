@@ -1,23 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import I_paste from "../../Img/Icon/I_paste.svg";
-import I_qr from "../../Img/Icon/I_qr.svg";
-import { putCommaAtPrice } from "../../Util/common";
-import Transactions from "../../Components/adress/Transactions";
-import InternalTxns from "../../Components/adress/InternalTxns";
-import TokenTxns from "../../Components/adress/TokenTxns";
-import Contract from "../../Components/adress/Contract";
-import EventList from "../../Components/adress/EventList";
-import Analytics from "../../Components/adress/Analytics";
-import Info from "../../Components/adress/Info";
-import Comments from "../../Components/adress/Comments";
+import I_paste from "../Img/Icon/I_paste.svg";
+import I_qr from "../Img/Icon/I_qr.svg";
+import { putCommaAtPrice } from "../Util/common";
+import Transactions from "../Components/address/Transactions";
+import InternalTxns from "../Components/address/InternalTxns";
+import TokenTxns from "../Components/address/TokenTxns";
+import Contract from "../Components/address/Contract";
+import EventList from "../Components/address/EventList";
+import Analytics from "../Components/address/Analytics";
+import Info from "../Components/address/Info";
+import Comments from "../Components/address/Comments";
+import { useParams } from "react-router-dom";
+import { API } from "../Config/api";
+import axios from "axios";
 
-function Adress({ store }) {
+function Address({ store }) {
+  const { address } = useParams();
+
   const [listCategory, setListCategory] = useState(0);
 
+  const [holders, setHolders] = useState([]);
+
+  const getHolderAddress = () => {
+    axios.get(`${API.API_HOLDER_ADDRESS}${address}/0/10/id/DESC`).then((resp) => {
+      console.log("nvsgfeVB2c", resp.data);
+      if (resp.data.status === "OK") {
+        setHolders(resp.data.list)
+      }
+    });
+  }
+
+  useEffect(()=>{
+    console.log(address);
+    getHolderAddress();
+  },[])
+
   return (
-    <AdressBox>
+    <AddressBox>
       <div className="innerBox">
         <div className="titleBox">
           <strong className="title">Address</strong>
@@ -78,11 +99,11 @@ function Adress({ store }) {
           {listCategory === 7 && <Comments />}
         </div>
       </div>
-    </AdressBox>
+    </AddressBox>
   );
 }
 
-const AdressBox = styled.div`
+const AddressBox = styled.div`
   padding-top: 80px;
   display: flex;
   flex-direction: column;
@@ -242,7 +263,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Adress);
+export default connect(mapStateToProps, mapDispatchToProps)(Address);
 
 const categoryList = [
   "TRANSACTIONS",

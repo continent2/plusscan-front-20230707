@@ -1,20 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { putCommaAtPrice } from "../Util/common";
+// import { putCommaAtPrice } from "../Util/common";
 import I_paste from "../Img/Icon/I_paste.svg";
+import { useParams } from "react-router-dom";
+import { API } from "../Config/api";
+import axios from "axios";
 
 function Blocks({ store }) {
+  const { txHash } = useParams();
+
   const [listCategory, setListCategory] = useState(0);
-  const [data, setData] = useState("");
-  const [secret, setSecret] = useState("");
+  const [txInfo, setTxInfo] = useState({});
+
+  const getTxInfo = () => {
+    axios.get(`${API.API_TX_INFO}${txHash}`).then((resp) => {
+      console.log("nvsgfeVB2c", resp.data.respdata);
+      if (resp.data.status === "OK") {
+        setTxInfo(resp.data.respdata)
+      }
+    });
+  }
+
+  useEffect(() => {
+    getTxInfo();
+  }, [])
 
   return (
     <BlocksBox>
       <div className="innerBox">
         <div className="titleBox">
-          <strong className="title">Block</strong>
-          <p className="idNum">#12792560</p>
+          <strong className="title">Transaction</strong>
+          <p className="idNum">#{txInfo.hash}</p>
         </div>
 
         <div className="contBox">
@@ -31,79 +48,74 @@ function Blocks({ store }) {
 
           <ul className="infoList">
             <li>
-              <p className="key">트랜잭션 해시 </p>
+              <p className="key">트랜잭션 해시</p>
               <p className="value">
-                0x92ac49bd254de05bab8d89bb3afd53b8d7031d9966cc95d4154174ac789cc9cb
+                {txInfo.hash}
               </p>
             </li>
             <li>
               <p className="key">상태</p>
-              <p className="value">성공</p>
+              <p className="value">{txInfo.typecode}</p>
             </li>
             <li>
               <p className="key">블록</p>
-              <p className="value">12792739</p>
+              <p className="value">{txInfo.blockNumber}</p>
             </li>
             <li>
               <p className="key">타임스탬프</p>
               <span className="value">
-                <p>67 transactions and</p>&nbsp;111&nbsp;
-                <p>contract internal transactions</p>&nbsp;in this block
+                <p>{txInfo.timestamp}</p>
               </span>
             </li>
             <li>
               <p className="key">From</p>
               <p className="value">
-                0x9db0ddb5016a1d34fdf8df4c7a1671d25c60c116
-                <img src={I_paste} alt="" />
+                {txInfo.from_}
+                <img src={I_paste} alt="" onClick={() => navigator.clipboard.writeText(txInfo.from_).then(() => {
+                  alert("복사완료");
+                })} />
               </p>
             </li>
             <li>
               <p className="key">To</p>
               <p className="value">
-                0x690862fdc01a64a3e1e47a2aafaa3e9da326ae8b
-                <img src={I_paste} alt="" />
+                {txInfo.to_}
+                <img src={I_paste} alt="" onClick={() => navigator.clipboard.writeText(txInfo.to_).then(() => {
+                  alert("복사완료");
+                })} />
               </p>
             </li>
             <li>
               <p className="key">값</p>
-              <p className="value">0.0402 Test Token &#40;$84.10&#41;</p>
+              <p className="value">{txInfo.value}</p>
             </li>
             <li>
               <p className="key">거래 수수료</p>
-              <p className="value">0.000357 Test Token &#40;$0.75&#41;</p>
+              <p className="value">{"수수료"}</p>
             </li>
             <li>
               <p className="key">가스 가격</p>
-              <p className="value">0.000000017 Test Token &#40;17 Gwei&#41;</p>
+              <p className="value">{txInfo.gasPrice}</p>
             </li>
             <li>
               <p className="key">가스 제한</p>
-              <p className="value">{putCommaAtPrice(21000)}</p>
+              <p className="value">{"가스제한"}</p>
             </li>
             <li>
               <p className="key">거래에 사용된 가스</p>
-              <p className="value">{putCommaAtPrice(21000)} &#40;100%&#41;</p>
+              <p className="value">{txInfo.gas}</p>
             </li>
             <li>
               <p className="key">Nonce</p>
-              <p className="value">1002</p>
+              <p className="value">{txInfo.nonce}</p>
             </li>
             <li>
               <p className="key">입력 데이터</p>
-              <input
-                className="value"
-                value={data}
-                onChange={(e) => setData(e.target.avlue)}
-              ></input>
+              <p className="value">{"입력 데이터"}</p>
             </li>
             <li>
               <p className="key">비공개 메모</p>
-              <input
-                className="value"
-                value={secret}
-                onChange={(e) => setSecret(e.target.value)}
-              ></input>
+              <p className="value">{"비공개 메모"}</p>
             </li>
           </ul>
         </div>

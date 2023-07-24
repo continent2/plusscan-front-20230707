@@ -4,11 +4,21 @@ const API={
 	API_STATS: 		`${URL}/stats`,
 	API_SEARCH:		`${URL}/queries/search/`,
 
-	API_BLOCKS: 		`${URL}/blocks`,
-	API_LATEST_BLOCKS: `${URL}/queries/rows/blocks/_/_/0/10/timestamp/DESC`,
+	API_LATEST_BLOCKS: 		`${URL}/queries/rows/blocks/_/_/0/10/timestamp/DESC`,
+	API_BLOCKS: 			`${URL}/queries/rows/blocks/_/_/`,
+	API_BLOCK_INFO_NUMBER:	`${URL}/queries/singlerow/blocks/number/`,
+	API_BLOCK_INFO_HASH:    `${URL}/queries/singlerow/blocks/hash/`,
 
-	API_TXS: 			`${URL}/txs`,
 	API_LATEST_TXS: 	`${URL}/queries/rows/transactions/_/_/0/10/timestamp/DESC`,
+	API_TXS: 			`${URL}/queries/rows/transactions/_/_/`,
+	API_TX_INFO:    	`${URL}/queries/singlerow/transactions/hash/`,
+
+
+	API_TOKENS: 		`${URL}/queries/rows/tokens/_/_/`,
+
+	API_TXS_ADDRESS: `${URL}/queries/rows/transactions/from_/`,
+	API_HOLDER_ADDRESS: `${URL}/queries/rows/holders/holder/`
+
 
 /** 	API_USERNAME_DUP : `${URL}/users/username`,
 	API_PROFILEIMAGE: `${URL}/users/update`,
