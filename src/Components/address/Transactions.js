@@ -6,9 +6,12 @@ import I_rightArrow from "../../Img/Icon/I_rightArrow.svg";
 import { useParams } from "react-router-dom";
 import { API } from "../../Config/api";
 import axios from "axios";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function Transactions() {
   const { address } = useParams();
+  const history = useHistory();
+
 
   const [pageNum, setPageNum] = useState(1);
 
@@ -49,7 +52,9 @@ function Transactions() {
           return (
             <li key={index}>
               <span className="rank">{cont.rank}</span>
-              <span className="address">{cont.address}</span>
+              <span className="address">
+                <p onClick={() => history.push("/transactiondetails")}>{cont.address}</p>
+              </span>
               <span className="feeslast3hrs">{cont.feeslast3hrs}</span>
               <span className="used3hrs">
                 {cont.used3hrs}

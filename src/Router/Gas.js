@@ -1,29 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import I_leftArrow from "../Img/Icon/I_leftArrow.svg";
 import I_rightArrow from "../Img/Icon/I_rightArrow.svg";
-import I_3dot from "../Img/Icon/I_3dot.svg";
-import E_gasInfo from "../Img/example/E_gasInfo.png";
-import E_chart4 from "../Img/example/E_chart4.png";
+import {
+  D_gasRangeList,
+  D_prePriceList,
+  D_prePriceListHeader,
+} from "../Data/D_gas";
+import * as echarts from "echarts";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 function Gas({ store }) {
+  const chartRef = useRef();
+  const history = useHistory();
+
   const [pageNum, setPageNum] = useState(1);
-  const [chartPopup, setChartPopup] = useState(false);
   const [listCategory, setListCategory] = useState(0);
 
-  function onChartPopupMove(e) {
-    let x = e.screenX;
-    let y = e.screenY - 160;
+  useEffect(() => {
+    if (!chartRef.current) return;
 
-    let chartPopup;
-    if (document.querySelector("#ChartPopup")) {
-      chartPopup = document.querySelector("#ChartPopup");
-      chartPopup.style.left = x + "px";
-      chartPopup.style.top = y + "px";
-    }
-  }
-
+    const chart = echarts.init(chartRef.current);
+    chart.setOption(chartOpt);
+  }, [chartRef]);
   function onClickPagePre() {
     if (pageNum > 1) setPageNum(pageNum - 1);
   }
@@ -32,28 +32,72 @@ function Gas({ store }) {
   }
 
   return (
-    <GasBox onMouseMove={(e) => onChartPopupMove(e)}>
+    <GasBox>
       <div className="innerBox">
         <strong className="title">Gas Tracker</strong>
 
-        <div className="liveBox">
-          <div className="infoBox">
-            <img className="I_3dot" src={I_3dot} alt="" />
-            <img src={E_gasInfo} alt="" />
-          </div>
+        <section className="infoSec">
+          <article className="averageArea contArea">
+            <p className="dateTime">2023년 7월 9일 일요일 10:41:27 UTC</p>
 
-          <div className="chartBox">
-            <p className="title">평균시간 및 가스 가격</p>
-            <img
-              src={E_chart4}
-              alt=""
-              onMouseEnter={() => setChartPopup(true)}
-              onMouseLeave={() => setChartPopup(false)}
-            />
-          </div>
-        </div>
+            <ul className="rangeList">
+              {D_gasRangeList.map((v, i) => (
+                <li key={i}>
+                  <p className="name">{v.name}</p>
 
-        <div className="listBox">
+                  <p className="gas">{v.gas} gwei</p>
+
+                  <p className="infos">
+                    {`Base: ${v.base} | Priority: ${v.priority}`}
+                    <br />
+                    {`$${v.price} | ${v.time}`}
+                  </p>
+                </li>
+              ))}
+            </ul>
+
+            <div className="prePrice">
+              <div className="key">예상 거래 비용</div>
+
+              <div className="listBox">
+                <ul className="listHeader">
+                  {D_prePriceListHeader.map((v, i) => (
+                    <li key={i}>
+                      <p>{v}</p>
+                    </li>
+                  ))}
+                </ul>
+
+                <ul className="list">
+                  {D_prePriceList.map((v, i) => (
+                    <li key={i}>
+                      <div>
+                        <p>{v.action}</p>
+                      </div>
+                      <div>
+                        <p>${v.low}</p>
+                      </div>
+                      <div>
+                        <p>${v.average}</p>
+                      </div>
+                      <div>
+                        <p>${v.high}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </article>
+
+          <article className="chartArea contArea">
+            <p className="areaTitle">평균시간 및 가스 가격</p>
+
+            <div className="chartBox" ref={chartRef} />
+          </article>
+        </section>
+
+        <section className="listSec">
           <ul className="categoryList">
             {categoryList.map((category, index) => (
               <li key={index} onClick={() => setListCategory(index)}>
@@ -76,7 +120,11 @@ function Gas({ store }) {
                 return (
                   <li key={index}>
                     <span className="rank">{cont.rank}</span>
-                    <span className="address">{cont.address}</span>
+                    <span className="address">
+                      <p onClick={() => history.push("/contract")}>
+                        {cont.address}
+                      </p>
+                    </span>
                     <span className="feeslast3hrs">{cont.feeslast3hrs}</span>
                     <span className="used3hrs">
                       {cont.used3hrs}
@@ -107,15 +155,8 @@ function Gas({ store }) {
               </button>
             </div>
           </ul>
-        </div>
+        </section>
       </div>
-
-      {chartPopup && (
-        <ul id="ChartPopup" className="chartPopup">
-          <li>Avg Time : 금요일</li>
-          <li>Gas Price : $201.53</li>
-        </ul>
-      )}
     </GasBox>
   );
 }
@@ -139,43 +180,153 @@ const GasBox = styled.div`
       font-weight: 500;
     }
 
-    .liveBox {
-      margin-top: 25px;
+    .infoSec {
       display: flex;
       gap: 20px;
+      margin: 24px 0 0;
       height: 450px;
 
-      & > div {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 690px;
+      .contArea {
+        flex: 1;
         border: 1px solid #ebebeb;
-        box-shadow: 0px 3px 3px rgba(184, 184, 184, 0.25);
         border-radius: 20px;
+        box-shadow: 0px 3px 3px 0px rgba(184, 184, 184, 0.25);
 
-        &.infoBox {
-          gap: 10px;
-          padding: 50px 25px;
+        &.averageArea {
+          padding: 24px 34px 34px;
 
-          .I_3dot {
-            align-self: flex-end;
-            height: 3px;
+          .dateTime {
+            font-size: 14px;
+            font-weight: 500;
+            text-align: end;
+            color: #999;
+          }
+
+          .rangeList {
+            display: flex;
+            gap: 12px;
+            margin: 14px 0 0;
+
+            li {
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 10px;
+              padding: 16px 20px;
+              font-size: 14px;
+              font-weight: 500;
+              border: 1px solid rgba(238, 238, 238, 0.9333);
+              border-radius: 8px;
+
+              &:nth-of-type(2) {
+                .gas {
+                  color: #6979f5;
+                }
+              }
+
+              .name {
+                line-height: 19px;
+                color: #373737;
+              }
+
+              .gas {
+                font-size: 16px;
+                line-height: 22px;
+                color: #3bc28e;
+              }
+
+              .infos {
+                line-height: 19px;
+                text-align: center;
+                color: #999;
+              }
+            }
+          }
+
+          .prePrice {
+            margin: 20px 0 0;
+
+            .key {
+              font-size: 14px;
+              font-weight: 500;
+              color: #373737;
+            }
+
+            .listBox {
+              width: 100%;
+              margin: 12px 0 0;
+              font-size: 14px;
+
+              .listHeader {
+                display: flex;
+                align-items: center;
+                height: 44px;
+                padding: 0 10px;
+                background: #f2f2f2;
+
+                li {
+                  p {
+                    color: #a2afd2;
+                  }
+                }
+              }
+
+              .list {
+                height: 132px;
+                overflow-y: scroll;
+
+                li {
+                  display: flex;
+                  align-items: center;
+                  height: 44px;
+                  padding: 0 10px;
+                  border-bottom: 1px solid #ececec;
+                }
+              }
+
+              .listHeader li,
+              .list li div {
+                &:nth-of-type(1) {
+                  width: 346px;
+                }
+
+                &:nth-of-type(2) {
+                  width: 90px;
+                }
+
+                &:nth-of-type(3) {
+                  width: 90px;
+                }
+
+                &:nth-of-type(4) {
+                  flex: 1;
+                }
+              }
+            }
           }
         }
 
-        &.chartBox {
-          gap: 50px;
-          padding: 40px 0 46px 0;
+        &.chartArea {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding: 40px 50px 46px;
 
-          .title {
+          .areaTitle {
             font-size: 18px;
+          }
+
+          .chartBox {
+            width: 100%;
+            height: 290px;
+            margin: 50px 0 0;
           }
         }
       }
     }
 
-    .listBox {
+    .listSec {
       width: 1400px;
       padding: 17px 50px 20px 50px;
       border: 1px solid #d1d1d1;
@@ -327,7 +478,6 @@ const GasBox = styled.div`
   }
 
   .chartPopup {
-    position: fixed;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -337,9 +487,10 @@ const GasBox = styled.div`
     font-size: 10px;
     background: #fff;
     border: 1px solid #f7f7f7;
-    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
     border-radius: 5px;
-    z-index: 4;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+    position: fixed;
+    z-index: 30;
   }
 `;
 
@@ -601,4 +752,3 @@ const chartOpt = {
     extraCssText: "box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);",
   },
 };
-

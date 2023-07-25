@@ -22,6 +22,7 @@ import transaction from "./Router/Transaction";
 import Address from "./Router/Address";
 import Tokens from "./Router/Tokens";
 import Contract from "./Router/Contract";
+import Transfer from "./Router/Transfer";
 
 function App({ store, setHeaderKinds }) {
   return (
@@ -40,6 +41,11 @@ function App({ store, setHeaderKinds }) {
         href="https://fonts.googleapis.com/css2?family=Rubik&display=swap"
         rel="stylesheet"
       />
+      {/* <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@700&display=swap"
+        rel="stylesheet"
+      /> */}
+
       <GlobalStyle />
       <HashRouter>
         <RouterListen setHeaderKinds={setHeaderKinds} />
@@ -60,7 +66,8 @@ function App({ store, setHeaderKinds }) {
           <Route exact path="/transaction/:txHash" component={transaction} />
           <Route exact path="/address/:address" component={Address} />
           <Route exact path="/tokens" component={Tokens} />
-          <Route exact path="/contract/" component={Contract} />
+          <Route exact path="/contract" component={Contract} />
+          <Route exact path="/transfer" component={Transfer} />
         </Switch>
       </HashRouter>
     </AppBox>

@@ -64,9 +64,13 @@ function Blocks() {
                 {/* <span className="inner">{strDot(cont.blockPropo, 6, 6)}</span> */}
               </span>
 
-              <span className="reward">{cont.reward}</span>
+              <span className="reward">
+                <p>{cont.reward}</p>
+              </span>
 
-              <span className="size(byte)">{cont.size}</span>
+              <span className="size(byte)">
+                <p>{cont.size}</p>
+              </span>
             </li>
           ))}
 
