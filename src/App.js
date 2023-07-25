@@ -21,6 +21,7 @@ import Block from "./Router/Block";
 import transaction from "./Router/Transaction";
 import Address from "./Router/Address";
 import Tokens from "./Router/Tokens";
+import Token from "./Router/Token";
 import Contract from "./Router/Contract";
 import Transfer from "./Router/Transfer";
 
@@ -66,8 +67,8 @@ function App({ store, setHeaderKinds }) {
           <Route exact path="/transaction/:txHash" component={transaction} />
           <Route exact path="/address/:address" component={Address} />
           <Route exact path="/tokens" component={Tokens} />
-          <Route exact path="/contract" component={Contract} />
-          <Route exact path="/transfer" component={Transfer} />
+          <Route exact path="/token/:address" component={Token} />
+          <Route exact path="/contract/" component={Contract} />
         </Switch>
       </HashRouter>
     </AppBox>
@@ -108,7 +109,7 @@ const AppBox = styled.div`
   }
 
   .tooltip .tooltip-bottom {
-    width: auto;
+    width: auto !important;
     top: 150%;
     left: 50%;
     transform: translate(-50%, 0);

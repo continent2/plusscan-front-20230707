@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ListPagenation from "./ListPagenation";
+import ListPageNation from "./ListPageNation";
 import styled from "styled-components";
 import { D_transferList, D_transferListHeader } from "../../Data/D_transfer";
 import Copy from "../../Img/Icon/Copy.svg";
@@ -64,7 +64,7 @@ export default function TransferList() {
         </div>
       </TransferListArea>
 
-      <ListPagenation page={page} setPage={setPage} />
+      <ListPageNation page={page} setPage={setPage} />
     </>
   );
 }

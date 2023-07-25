@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ListPagenation from "./ListPagenation";
+import ListPagenation from "./ListPageNation";
 import styled from "styled-components";
 import { D_holdersList, D_holdersListHeader } from "../../Data/D_transfer";
 import Copy from "../../Img/Icon/Copy.svg";

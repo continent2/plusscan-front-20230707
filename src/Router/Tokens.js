@@ -67,7 +67,7 @@ function Tokens({ store, setHeaderKinds, setSlideKinds }) {
 
             {tokenList.map((cont, index) => (
               <li key={index} onClick={()=> {
-                // history.push(`/contract/${cont.address}`);
+                history.push(`/token/${cont.address}`);
               }}>
                 <span className="token">
                   <span className="tokenImg" />

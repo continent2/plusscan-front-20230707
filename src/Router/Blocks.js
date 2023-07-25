@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import I_leftArrow from "../Img/Icon/I_leftArrow.svg";
 import I_rightArrow from "../Img/Icon/I_rightArrow.svg";
-// import { strDot } from "../Util/common";
+import { strDot } from "../Util/common";
 import { API } from "../Config/api";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -29,7 +29,7 @@ function Blocks() {
   const getBlockList = (page) => {
     // 최신 블럭 리스트 조회
     axios.get(`${API.API_BLOCKS}${(page - 1)* size}/${size}/timestamp/DESC`).then((resp) => {
-      // console.log("vsiRhGy2pA", resp.data);
+      console.log("vsiRhGy2pA", resp.data);
       if (resp.data.status === "OK") {
         setBlockList(resp.data.list);
         setPageCount(Math.ceil(resp.data.payload.count / size));
@@ -60,17 +60,17 @@ function Blocks() {
               <span className="block">{cont.number}</span>
               <span className="time">{cont.createdat}</span>
               <span className="totalTxs">{cont.txcount}</span>
-              <span className="blockPropo">
-                {/* <span className="inner">{strDot(cont.blockPropo, 6, 6)}</span> */}
+              <span className="hash tooltip">
+                {strDot(cont.hash, 10, 10)}
+                <span className="tooltiptext tooltip-bottom">{cont.hash}</span>
               </span>
+              {/* <span className="blockPropo">
+                <span className="inner">{strDot(cont.blockPropo, 6, 6)}</span>
+              </span> */}
 
-              <span className="reward">
-                <p>{cont.reward}</p>
-              </span>
+              {/* <span className="reward">{cont.reward}</span> */}
 
-              <span className="size(byte)">
-                <p>{cont.size}</p>
-              </span>
+              <span className="size">{cont.size}</span>
             </li>
           ))}
 
@@ -123,17 +123,26 @@ const BlocksBox = styled.div`
         &.header {
           color: #a2afd2;
           text-transform: uppercase;
+          justify-content; space-between;
           padding: 20px 0;
           border-bottom: 1px solid #d1d1d1;
         }
 
         span {
-          width: 230px;
+          width: 250px;
 
           .inner {
             padding: 2px 4px;
             background: #ececec;
             border-radius: 2px;
+          }
+
+          .hash {
+            width: 200px;
+          }
+
+          .size(byte) {
+            width: 100px;
           }
 
           &:last-of-type {
@@ -144,7 +153,7 @@ const BlocksBox = styled.div`
         &:nth-of-type(n + 2) {
           .time,
           .txType {
-            color: #d1d1d1;
+            // color: #d1d1d1;
           }
         }
         &:nth-of-type(2) {
@@ -212,8 +221,9 @@ const headerList = [
   "block",
   "time",
   "totalTxs",
-  "blockProposer",
-  "reward",
+  // "blockProposer",
+  // "reward",
+  "block hash",
   "size(byte)",
 ];
 
