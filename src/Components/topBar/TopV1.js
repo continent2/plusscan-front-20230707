@@ -206,26 +206,25 @@ const TopBarBox = styled.div`
       cursor: pointer;
     }
 
-    .logoImg {
-      display: inline-block;
-      width: 40px;
-      height: 40px;
-      background: #101730;
-      border-radius: 5px;
+    .logoBox {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
     }
 
     .searchBox {
       display: flex;
       align-items: center;
+      gap: 6px;
       width: 540px;
       height: 40px;
-      border: 1px solid #c4c4c4;
-      border-radius: 25px;
+      overflow: hidden;
+      padding: 0 20px;
       font-size: 14px;
       line-height: 14px;
-      padding: 0 20px;
-      overflow: hidden;
-      gap: 6px;
+      border: 1px solid #c4c4c4;
+      border-radius: 25px;
 
       input {
         width: 100%;
@@ -247,14 +246,18 @@ const TopBarBox = styled.div`
   .rightBox {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 30px;
     position: relative;
 
     .categoryList {
       display: flex;
-      gap: 20px;
-      font-size: 20px;
-      line-height: 20px;
+      gap: 30px;
+
+      li {
+        font-size: 20px;
+        line-height: 20px;
+        cursor: pointer;
+      }
     }
 
     .chainBtn {

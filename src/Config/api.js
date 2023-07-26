@@ -11,10 +11,13 @@ const API={
 
 	API_LATEST_TXS: 	`${URL}/queries/rows/transactions/_/_/0/10/timestamp/DESC`,
 	API_TXS: 			`${URL}/queries/rows/transactions/_/_/`,
+	API_TXS_BLOCK: 		`${URL}/queries/rows/transactions/blockNumber/`,
 	API_TX_INFO:    	`${URL}/queries/singlerow/transactions/hash/`,
 
 
-	API_TOKENS: 		`${URL}/queries/rows/tokens/_/_/`,
+	API_TOKENS: 			`${URL}/queries/rows/tokens/_/_/`,
+	API_TOKEN_INFO_ADDRESS: `${URL}/queries/singlerow/tokens/address/`,
+	API_TOKEN_TXS_ADDRESS: `${URL}/queries/rows/transactions/contaddress/`,
 
 	API_TXS_ADDRESS: `${URL}/queries/rows/transactions/from_/`,
 	API_HOLDER_ADDRESS: `${URL}/queries/rows/holders/holder/`

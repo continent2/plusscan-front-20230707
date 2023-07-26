@@ -6,10 +6,11 @@ import I_rightArrow from "../Img/Icon/I_rightArrow.svg";
 import { strDot } from "../Util/common";
 import { API } from "../Config/api";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
-function Transactions() {
+export function Transactions() {
   const history = useHistory();
+  const { numberOrHash } = useParams();
 
   const [pageNum, setPageNum] = useState(1);
   const [txList, setTxList] = useState([]);
@@ -27,14 +28,34 @@ function Transactions() {
   }
 
   const getTxs = (page) => {
-    // 최신 트랜잭션 리스트 조회
-    axios.get(`${API.API_TXS}${(page - 1)* size}/${size}/timestamp/DESC`).then((resp) => {
-      // console.log("nvsgfeVB2c", resp.data);
-      if (resp.data.status === "OK") {
-        setTxList(resp.data.list);
-        setPageCount(Math.ceil(resp.data.payload.count / size));
-      }
-    });
+    // console.log(numberOrHash);
+    if(numberOrHash){
+      // 블럭 트랜잭션 리스트 조회
+      axios.get(`${API.API_TXS_BLOCK}${numberOrHash}/${(page - 1)* size}/${size}/timestamp/DESC`).then((resp) => {
+        // console.log("nvsgfeVB2c", resp.data);
+        if (resp.data.status === "OK") {
+          setTxList(resp.data.list);
+          if(resp.data.payload.count){
+            setPageCount(Math.ceil(resp.data.payload.count / size));
+          }else{
+            setPageCount(1);
+          }
+        }
+      });
+    }else{
+      // 최신 트랜잭션 리스트 조회
+      axios.get(`${API.API_TXS}${(page - 1)* size}/${size}/timestamp/DESC`).then((resp) => {
+        // console.log("nvsgfeVB2c", resp.data);
+        if (resp.data.status === "OK") {
+          setTxList(resp.data.list);
+          if(resp.data.payload.count){
+            setPageCount(Math.ceil(resp.data.payload.count / size));
+          }else{
+            setPageCount(1);
+          }
+        }
+      });
+    }
   }
 
   useEffect(()=>{

@@ -21,7 +21,9 @@ import Block from "./Router/Block";
 import transaction from "./Router/Transaction";
 import Address from "./Router/Address";
 import Tokens from "./Router/Tokens";
+import Token from "./Router/Token";
 import Contract from "./Router/Contract";
+import Transfer from "./Router/Transfer";
 
 function App({ store, setHeaderKinds }) {
   return (
@@ -40,6 +42,11 @@ function App({ store, setHeaderKinds }) {
         href="https://fonts.googleapis.com/css2?family=Rubik&display=swap"
         rel="stylesheet"
       />
+      {/* <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@700&display=swap"
+        rel="stylesheet"
+      /> */}
+
       <GlobalStyle />
       <HashRouter>
         <RouterListen setHeaderKinds={setHeaderKinds} />
@@ -60,6 +67,7 @@ function App({ store, setHeaderKinds }) {
           <Route exact path="/transaction/:txHash" component={transaction} />
           <Route exact path="/address/:address" component={Address} />
           <Route exact path="/tokens" component={Tokens} />
+          <Route exact path="/token/:address" component={Token} />
           <Route exact path="/contract/" component={Contract} />
         </Switch>
       </HashRouter>
@@ -101,7 +109,7 @@ const AppBox = styled.div`
   }
 
   .tooltip .tooltip-bottom {
-    width: auto;
+    width: auto !important;
     top: 150%;
     left: 50%;
     transform: translate(-50%, 0);
@@ -113,6 +121,36 @@ const AppBox = styled.div`
     left: 50%;
     margin-left: -5px;
     border-color: transparent transparent black transparent;
+  }
+
+  .pageBtnBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    height: 40px;
+    margin-top: 15px;
+
+    & > * {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: inherit;
+      background: #f0f0f0;
+      border-radius: 3px;
+    }
+
+    button {
+      width: 45px;
+
+      img {
+        opacity: 0.28;
+      }
+    }
+
+    span {
+      padding: 0 22px;
+    }
   }
 `;
 

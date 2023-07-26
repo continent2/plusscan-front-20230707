@@ -11,6 +11,7 @@ import { useHistory } from "react-router-dom";
 import { API } from "../Config/api";
 import axios from "axios";
 
+
 // const RAND_TIME_OFFSET = 3;
 function Home() {
   const history = useHistory();
@@ -119,6 +120,7 @@ function Home() {
                 className="imgBox"
                 onMouseEnter={() => setChartPopup(true)}
                 onMouseLeave={() => setChartPopup(false)}
+                onClick={() => history.push("/transactions")}
               >
                 <img className="chart" src={E_chart3} alt="" />
               </div>
@@ -181,7 +183,7 @@ function Home() {
                   <span className="from">FROM</span>
                   <span className="to">TO</span>
                 </li>
-                {txlist.map(( elem , index) => {
+                {txlist.map((elem, index) => {
                   if (index < 10)
                     return (
                       <li key={elem.id}>
@@ -192,7 +194,8 @@ function Home() {
                             {strDot(elem.hash, 6, 6)}
                           </span>
                         </span>
-                        <span className="time">{ elem.createdat }</span> {/** `${RAND_TIME_OFFSET} secs ago` */}
+                        <span className="time">{elem.createdat}</span>{" "}
+                        {/** `${RAND_TIME_OFFSET} secs ago` */}
                         <span className="from">
                           <span className="inner tooltip" onClick={()=>{
                             history.push(`/address/${elem.from_}`)
@@ -284,12 +287,10 @@ const HomeBox = styled.div`
         .innerBox {
           display: flex;
           flex-direction: column;
+          justify-content: center;
+          align-items: center;
           height: inherit;
           gap: 5px;
-
-          &:nth-of-type(n + 2) {
-            justify-content: flex-end;
-          }
         }
       }
 
@@ -304,13 +305,11 @@ const HomeBox = styled.div`
 
       .transaction_n_gasBox {
         width: 270px;
-        padding-left: 50px;
         cursor: pointer;
       }
 
       .difficulty_n_hashBox {
         width: 270px;
-        padding-left: 74px;
         cursor: pointer;
       }
 

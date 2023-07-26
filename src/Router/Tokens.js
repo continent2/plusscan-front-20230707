@@ -31,7 +31,7 @@ function Tokens({ store, setHeaderKinds, setSlideKinds }) {
   const getTokenList = (page) => {
     // 토큰 리스트 조회
     axios.get(`${API.API_TOKENS}${(page - 1)* size}/${size}/id/DESC`).then((resp) => {
-      console.log("nvsgfeVB2c", resp.data);
+      // console.log("nvsgfeVB2c", resp.data);
       if (resp.data.status === "OK") {
         setTokenList(resp.data.list);
         setPageCount(Math.ceil(resp.data.payload.count / size));
@@ -67,7 +67,7 @@ function Tokens({ store, setHeaderKinds, setSlideKinds }) {
 
             {tokenList.map((cont, index) => (
               <li key={index} onClick={()=> {
-                // history.push(`/contract/${cont.address}`);
+                history.push(`/token/${cont.address}`);
               }}>
                 <span className="token">
                   <span className="tokenImg" />

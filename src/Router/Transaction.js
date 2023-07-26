@@ -14,8 +14,9 @@ function Blocks({ store }) {
   const [txInfo, setTxInfo] = useState({});
 
   const getTxInfo = () => {
+    // console.log(txHash)
     axios.get(`${API.API_TX_INFO}${txHash}`).then((resp) => {
-      console.log("nvsgfeVB2c", resp.data.respdata);
+      console.log("qwer", resp.data.respdata);
       if (resp.data.status === "OK") {
         setTxInfo(resp.data.respdata)
       }
