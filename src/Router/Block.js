@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { putCommaAtPrice } from "../Util/common";
-import { useHistory, useParams } from "react-router-dom";
+// import { putCommaAtPrice } from "../Util/common";
+import { useParams } from "react-router-dom";
+import { Transactions } from "../Router/Transactions";
 import { API } from "../Config/api";
 import axios from "axios";
 
@@ -13,12 +14,10 @@ function Blocks({ store }) {
   const [blockInfo, setBlockInfo] = useState({});
 
   const getBlockInfo = () => {
-    console.log(numberOrHash);
-
     // number
     if(numberOrHash){
       axios.get(`${API.API_BLOCK_INFO_NUMBER}${numberOrHash}`).then((resp) => {
-        console.log("nvsgfeVB2c", resp.data.respdata);
+        // console.log("nvsgfeVB2c", resp.data.respdata);
         if (resp.data.status === "OK") {
           setBlockInfo(resp.data.respdata)
         }
@@ -40,7 +39,8 @@ function Blocks({ store }) {
   }, [])
 
   return (
-    <BlocksBox>
+    <>
+        <BlocksBox>
       <div className="innerBox">
         <div className="titleBox">
           <strong className="title">Block</strong>
@@ -173,7 +173,9 @@ function Blocks({ store }) {
           </ul>
         </div>
       </div>
+      <Transactions />
     </BlocksBox>
+    </>
   );
 }
 
@@ -188,7 +190,7 @@ const BlocksBox = styled.div`
     display: flex;
     flex-direction: column;
     gap: 26px;
-    padding: 110px 0 100px 0;
+    padding: 110px 0 0 0;
     width: 1400px;
 
     .titleBox {

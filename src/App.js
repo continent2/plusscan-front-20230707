@@ -122,6 +122,36 @@ const AppBox = styled.div`
     margin-left: -5px;
     border-color: transparent transparent black transparent;
   }
+
+  .pageBtnBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    height: 40px;
+    margin-top: 15px;
+
+    & > * {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: inherit;
+      background: #f0f0f0;
+      border-radius: 3px;
+    }
+
+    button {
+      width: 45px;
+
+      img {
+        opacity: 0.28;
+      }
+    }
+
+    span {
+      padding: 0 22px;
+    }
+  }
 `;
 
 function mapStateToProps(state) {

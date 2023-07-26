@@ -58,7 +58,7 @@ export default function HoldersList() {
         </div>
       </HoldersListArea>
 
-      <ListPagenation page={page} setPage={setPage} />
+      {/* <ListPagenation page={page} setPage={setPage} /> */}
     </>
   );
 }

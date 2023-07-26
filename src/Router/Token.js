@@ -4,15 +4,35 @@ import Plus from "../Img/coin/Plus.svg";
 import ChvrnUpGreen from "../Img/Icon/ChvrnUpGreen.svg";
 import Copy from "../Img/Icon/Copy.svg";
 import { D_tagList, D_transferCategoryList } from "../Data/D_transfer";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TransferList from "../Components/transfer/TransferList";
 import HoldersList from "../Components/transfer/HoldersList";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { API } from "../Config/api";
+import axios from "axios";
 
 export default function Token() {
   const history = useHistory();
+  const { address } = useParams();
 
-  const [category, setCateogry] = useState(D_transferCategoryList[0]);
+  const [category, setCategory] = useState(D_transferCategoryList[0]);
+
+  const [tokenInfo, setTokenInfo] = useState({});
+
+  const getTokenInfo = () => {
+    // console.log(address);
+
+    axios.get(`${API.API_TOKEN_INFO_ADDRESS}${address}`).then((resp) => {
+      // console.log("asdf", resp.data.respdata);
+      if (resp.data.status === "OK") {
+        setTokenInfo(resp.data.respdata)
+      }
+    });
+  }
+
+  useEffect(() => {
+    getTokenInfo();
+  }, [])
 
   return (
     <>
@@ -44,7 +64,7 @@ export default function Token() {
                     <p className="key">MAX TOTAL SUPPLY</p>
 
                     <div className="valueBox">
-                      <p>39,030,615,894.320966 USDT</p>
+                      <p>{tokenInfo.totalsupply}</p>
                     </div>
                   </li>
 
@@ -52,12 +72,12 @@ export default function Token() {
                     <p className="key">HOLDERS</p>
 
                     <div className="valueBox">
-                      <p>4,407,386</p>
+                      <p>{tokenInfo.countholders}</p>
 
-                      <div className="diffBox">
+                      {/* <div className="diffBox">
                         <img src={ChvrnUpGreen} alt="" />
                         <p className="green">0.014%</p>
-                      </div>
+                      </div> */}
                     </div>
                   </li>
 
@@ -65,7 +85,7 @@ export default function Token() {
                     <p className="key">TOTAL TRANSFERS</p>
 
                     <div className="valueBox">
-                      <p>191,921,458</p>
+                      <p>{"fee"}</p>
                     </div>
                   </li>
                 </ul>
@@ -135,7 +155,7 @@ export default function Token() {
                 <li
                   key={i}
                   className={`${v === category ? "on" : ""}`}
-                  onClick={() => setCateogry(v)}
+                  onClick={() => setCategory(v)}
                 >
                   <p>{v}</p>
                 </li>
@@ -143,8 +163,8 @@ export default function Token() {
             </ul>
           </article>
 
-          {/* {category === D_transferCategoryList[0] && <TransferList />}
-          {category === D_transferCategoryList[1] && <HoldersList />} */}
+          {category === D_transferCategoryList[0] && <TransferList />}
+          {category === D_transferCategoryList[1] && <HoldersList />}
         </section>
       </TokenBox>
     </>

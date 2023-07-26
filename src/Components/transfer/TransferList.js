@@ -1,21 +1,64 @@
-import { useState } from "react";
-import ListPageNation from "./ListPageNation";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { D_transferList, D_transferListHeader } from "../../Data/D_transfer";
 import Copy from "../../Img/Icon/Copy.svg";
-import ChartBlue from "../../Img/Icon/ChartBlue.svg";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+// import ChartBlue from "../../Img/Icon/ChartBlue.svg";
+import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { API } from "../../Config/api";
+import axios from "axios";
+import { strDot } from "../../Util/common";
+import I_leftArrow from "../../Img/Icon/I_leftArrow.svg";
+import I_rightArrow from "../../Img/Icon/I_rightArrow.svg";
 
 export default function TransferList() {
   const history = useHistory();
+  const { address } = useParams();
 
-  const [page, setPage] = useState(1);
+  const [pageNum, setPageNum] = useState(1);
+  const [pageCount, setPageCount] = useState(0);
+  const [txs, setTxs] = useState([]);
+  const [txCount, setTxCount] = useState(0);
+
+  const size = 10;
+  const D_transferListHeader = [
+    "Txn Hash",
+    "Method",
+    "Age",
+    "From",
+    "To",
+    "Quantity",
+  ];
+
+  function onClickPagePre() {
+    if (pageNum > 1) setPageNum(pageNum - 1);
+    getTxs(pageNum - 1);
+  }
+  function onClickPageNxt() {
+    setPageNum(pageNum + 1);
+    getTxs(pageNum + 1);
+  }
+
+  const getTxs= (page) => {
+    // console.log(address);
+
+    axios.get(`${API.API_TOKEN_TXS_ADDRESS}${address}/${(page - 1)* size}/${size}/timestamp/DESC`).then((resp) => {
+      // console.log("nvsgfeVB2c", resp.data);
+      if (resp.data.status === "OK") {
+        setTxs(resp.data.list)
+        setPageCount(Math.ceil(resp.data.payload.count / size));
+        setTxCount(resp.data.payload.count);
+      }
+    });
+  }
+
+  useEffect(() => {
+    getTxs(pageNum);
+  }, [])
 
   return (
     <>
       <TransferListArea>
         <div className="topBar">
-          <p className="count">191,921,458 transactions</p>
+          <p className="count">{txCount} transactions</p>
         </div>
 
         <div className="listCont">
@@ -26,14 +69,14 @@ export default function TransferList() {
           </ul>
 
           <ul className="list">
-            {D_transferList.map((v, i) => (
+            {txs.map((v, i) => (
               <li key={i}>
                 <div>
                   <p
                     className="hash"
                     onClick={() => history.push("/transactiondetails")}
                   >
-                    {v.txHash}
+                    {v.hash}
                   </p>
                 </div>
 
@@ -42,17 +85,27 @@ export default function TransferList() {
                 <div>{v.age}</div>
 
                 <div className="copy">
-                  <p>{v.from}</p>
+                <p className="tooltip">
+                  {strDot(v.from_, 6, 6)}
+                  <span className="tooltiptext tooltip-bottom">{v.from_}</span>
+                </p>
 
-                  <button className="copyBtn" onClick={() => {}}>
+                  <button className="copyBtn" onClick={() => navigator.clipboard.writeText(v.from_).then(() => {
+                  alert("복사완료");
+                })} >
                     <img src={Copy} alt="" />
                   </button>
                 </div>
 
                 <div className="copy">
-                  <p>{v.to}</p>
+                  <p className="tooltip">{strDot(v.to_, 6, 6)}
+                  
+                    <span className="tooltiptext tooltip-bottom">{v.to_}</span>
+                  </p>
 
-                  <button className="copyBtn" onClick={() => {}}>
+                  <button className="copyBtn" onClick={() => navigator.clipboard.writeText(v.to_).then(() => {
+                  alert("복사완료");
+                })} >
                     <img src={Copy} alt="" />
                   </button>
                 </div>
@@ -62,9 +115,16 @@ export default function TransferList() {
             ))}
           </ul>
         </div>
+        <div className="pageBtnBox">
+            <button className="preBtn" onClick={onClickPagePre}>
+              <img src={I_leftArrow} alt="" />
+            </button>
+            <span className="pageBox">Page {pageNum} of {pageCount}</span>
+            <button className="nxtBtn" onClick={onClickPageNxt}>
+              <img src={I_rightArrow} alt="" />
+            </button>
+        </div>
       </TransferListArea>
-
-      <ListPageNation page={page} setPage={setPage} />
     </>
   );
 }

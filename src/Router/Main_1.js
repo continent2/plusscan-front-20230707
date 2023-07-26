@@ -305,13 +305,11 @@ const HomeBox = styled.div`
 
       .transaction_n_gasBox {
         width: 270px;
-        padding-left: 50px;
         cursor: pointer;
       }
 
       .difficulty_n_hashBox {
         width: 270px;
-        padding-left: 74px;
         cursor: pointer;
       }
 
