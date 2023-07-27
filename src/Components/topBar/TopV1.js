@@ -84,6 +84,7 @@ function TopBar({
             // 검색 조회       
             axios.get(`${API.API_SEARCH + search}`).then((resp) => {
               if (resp.data.status === "ERR") {
+                setSearch("");
                 setPlaceHolder("검색결과가 없습니다");
               }else{
                 switch (resp.data.datatype) {
@@ -99,6 +100,7 @@ function TopBar({
                   default:
                     break;
                 }
+                window.location.reload();
               }
             });
           }} />

@@ -31,7 +31,7 @@ function Tokens({ store, setHeaderKinds, setSlideKinds }) {
   const getTokenList = (page) => {
     // 토큰 리스트 조회
     axios.get(`${API.API_TOKENS}${(page - 1)* size}/${size}/id/DESC`).then((resp) => {
-      // console.log("nvsgfeVB2c", resp.data);
+      console.log("nvsgfeVB2c", resp.data);
       if (resp.data.status === "OK") {
         setTokenList(resp.data.list);
         setPageCount(Math.ceil(resp.data.payload.count / size));
@@ -73,7 +73,9 @@ function Tokens({ store, setHeaderKinds, setSlideKinds }) {
                   <span className="tokenImg" />
                   {cont.token}
                 </span>
-                <span className="symbol">{cont.symbol}</span>
+                <span className="symbol">
+                  <img className="symbol-img" src={cont._urllogo} />
+                </span>
                 <span className="contractAddress">
                   <span className="inner">
                     {strDot(cont.address, 6, 6)}
@@ -140,6 +142,10 @@ const TokensBox = styled.div`
       padding: 0 50px 20px 50px;
       border: 1px solid #d1d1d1;
       border-radius: 20px;
+
+      .symbol-img {
+        width: 30px;
+      }
 
       li {
         display: flex;
@@ -266,244 +272,3 @@ const headerList = [
   "total supply",
   "total transfers",
 ];
-
-// const tokenList = [
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-//   {
-//     token: "Orbit Bridge Klaytn USD Tether",
-//     symbol: 4,
-//     contractAddress: "0x386caaaaaab7f9c8",
-//     totalSupply: 3300000000,
-//     totalTransfers: 1293694,
-//   },
-// ];
