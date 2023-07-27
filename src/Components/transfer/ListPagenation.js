@@ -1,4 +1,4 @@
-import styled from "styled-components";
+// import styled from "styled-components";
 // import { Component } from "react";
 import { ReactComponent as ArwLtSky } from "../../Img/Icon/ArwLtSky.svg";
 import { ReactComponent as ArwRtSky } from "../../Img/Icon/ArwRtSky.svg";
@@ -28,43 +28,43 @@ export default function ListPageNation({ page = 1, setPage }) {
   );
 }
 
-const ListPageNationBox = styled.nav`
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  gap: 10px;
-  height: 40px;
+// const ListPageNationBox = styled.nav`
+//   display: flex;
+//   justify-content: center;
+//   align-content: center;
+//   gap: 10px;
+//   height: 40px;
 
-  .arrBtn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 45px;
-    height: 100%;
-    background: #f0f0f0;
-    border-radius: 3px;
+//   .arrBtn {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     width: 45px;
+//     height: 100%;
+//     background: #f0f0f0;
+//     border-radius: 3px;
 
-    &:disabled {
-      svg {
-        path {
-          stroke: #b9b9b9;
-        }
-      }
-    }
-  }
+//     &:disabled {
+//       svg {
+//         path {
+//           stroke: #b9b9b9;
+//         }
+//       }
+//     }
+//   }
 
-  .currentBox {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 130px;
-    height: 100%;
-    background: #f0f0f0;
-    border-radius: 3px;
+//   .currentBox {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     width: 130px;
+//     height: 100%;
+//     background: #f0f0f0;
+//     border-radius: 3px;
 
-    p {
-      font-size: 14px;
-      color: #000;
-    }
-  }
-`;
+//     p {
+//       font-size: 14px;
+//       color: #000;
+//     }
+//   }
+// `;

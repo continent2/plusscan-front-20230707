@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import I_leftArrow from "../../Img/Icon/I_leftArrow.svg";
 import I_rightArrow from "../../Img/Icon/I_rightArrow.svg";
 import { useParams } from "react-router-dom";
+import { strDot } from "../../Util/common";
 import { API } from "../../Config/api";
 import axios from "axios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
@@ -14,28 +15,37 @@ function Transactions() {
 
 
   const [pageNum, setPageNum] = useState(1);
+  const [pageCount, setPageCount] = useState(0);
 
   const [txs, setTxs] = useState([]);
 
+  const size = 10;
+
   function onClickPagePre() {
     if (pageNum > 1) setPageNum(pageNum - 1);
+    getTxsAddress(pageNum - 1);
   }
   function onClickPageNxt() {
     setPageNum(pageNum + 1);
+    getTxsAddress(pageNum + 1);
   }
 
-  const getTxsAddress = () => {
-    axios.get(`${API.API_TXS_ADDRESS}${address}/0/10/id/DESC`).then((resp) => {
-      console.log("nvsgfeVB2casdf", resp.data);
+  const getTxsAddress = (page) => {
+    axios.get(`${API.API_TXS_ADDRESS}${address}/${(page - 1)* size}/${size}/id/DESC`).then((resp) => {
+      // console.log("nvsgfeVB2casdf", resp.data);
       if (resp.data.status === "OK") {
         setTxs(resp.data.list)
+        if(resp.data.payload.count){
+          setPageCount(Math.ceil(resp.data.payload.count / size));
+        }else{
+          setPageCount(1);
+        }
       }
     });
   }
 
   useEffect(()=>{
-    console.log(txs);
-    getTxsAddress();
+    getTxsAddress(1);
   },[])
 
 
@@ -53,7 +63,10 @@ function Transactions() {
             <li key={index}>
               <span className="rank">{cont.rank}</span>
               <span className="address">
-                <p onClick={() => history.push("/transactiondetails")}>{cont.address}</p>
+                <p className="tooltip" onClick={() => history.push(`/transaction/${cont.hash}`)}>
+                  {strDot(cont.hash, 20, 20)}
+                  <span className="tooltiptext tooltip-bottom">{cont.hash}</span>
+                </p>
               </span>
               <span className="feeslast3hrs">{cont.feeslast3hrs}</span>
               <span className="used3hrs">
@@ -79,7 +92,7 @@ function Transactions() {
         <button className="preBtn" onClick={onClickPagePre}>
           <img src={I_leftArrow} alt="" />
         </button>
-        <span className="pageBox">Page {pageNum} of 999</span>
+        <span className="pageBox">Page {pageNum} of {pageCount}</span>
         <button className="nxtBtn" onClick={onClickPageNxt}>
           <img src={I_rightArrow} alt="" />
         </button>
@@ -130,6 +143,7 @@ const TransactionsBox = styled.ul`
 
       &.address {
         width: 344px;
+        cursor: pointer;
       }
       &.feeslast3hrs {
         width: 260px;
@@ -217,167 +231,4 @@ const headerList = [
   "feeslast24hrs",
   "used24hrs",
   "analytics",
-];
-
-const addressList = [
-  {
-    rank: 1,
-    address: "Metamask: Swap Router",
-    feeslast3hrs: "$51,022.31 (24.34 Test Token)",
-    used3hrs: 8.19,
-    feeslast24hrs: "$51,022.31 (24.34 Test Token)",
-    used24hrs: 6.62,
-  },
-  {
-    rank: 1,
-    address: "Metamask: Swap Router",
-    feeslast3hrs: "$51,022.31 (24.34 Test Token)",
-    used3hrs: 8.19,
-    feeslast24hrs: "$51,022.31 (24.34 Test Token)",
-    used24hrs: 6.62,
-  },
-  {
-    rank: 1,
-    address: "Metamask: Swap Router",
-    feeslast3hrs: "$51,022.31 (24.34 Test Token)",
-    used3hrs: 8.19,
-    feeslast24hrs: "$51,022.31 (24.34 Test Token)",
-    used24hrs: 6.62,
-  },
-  {
-    rank: 1,
-    address: "Metamask: Swap Router",
-    feeslast3hrs: "$51,022.31 (24.34 Test Token)",
-    used3hrs: 8.19,
-    feeslast24hrs: "$51,022.31 (24.34 Test Token)",
-    used24hrs: 6.62,
-  },
-  {
-    rank: 1,
-    address: "Metamask: Swap Router",
-    feeslast3hrs: "$51,022.31 (24.34 Test Token)",
-    used3hrs: 8.19,
-    feeslast24hrs: "$51,022.31 (24.34 Test Token)",
-    used24hrs: 6.62,
-  },
-  {
-    rank: 1,
-    address: "Metamask: Swap Router",
-    feeslast3hrs: "$51,022.31 (24.34 Test Token)",
-    used3hrs: 8.19,
-    feeslast24hrs: "$51,022.31 (24.34 Test Token)",
-    used24hrs: 6.62,
-  },
-  {
-    rank: 1,
-    address: "Metamask: Swap Router",
-    feeslast3hrs: "$51,022.31 (24.34 Test Token)",
-    used3hrs: 8.19,
-    feeslast24hrs: "$51,022.31 (24.34 Test Token)",
-    used24hrs: 6.62,
-  },
-  {
-    rank: 1,
-    address: "Metamask: Swap Router",
-    feeslast3hrs: "$51,022.31 (24.34 Test Token)",
-    used3hrs: 8.19,
-    feeslast24hrs: "$51,022.31 (24.34 Test Token)",
-    used24hrs: 6.62,
-  },
-  {
-    rank: 1,
-    address: "Metamask: Swap Router",
-    feeslast3hrs: "$51,022.31 (24.34 Test Token)",
-    used3hrs: 8.19,
-    feeslast24hrs: "$51,022.31 (24.34 Test Token)",
-    used24hrs: 6.62,
-  },
-  {
-    rank: 1,
-    address: "Metamask: Swap Router",
-    feeslast3hrs: "$51,022.31 (24.34 Test Token)",
-    used3hrs: 8.19,
-    feeslast24hrs: "$51,022.31 (24.34 Test Token)",
-    used24hrs: 6.62,
-  },
-  {
-    rank: 1,
-    address: "Metamask: Swap Router",
-    feeslast3hrs: "$51,022.31 (24.34 Test Token)",
-    used3hrs: 8.19,
-    feeslast24hrs: "$51,022.31 (24.34 Test Token)",
-    used24hrs: 6.62,
-  },
-  {
-    rank: 1,
-    address: "Metamask: Swap Router",
-    feeslast3hrs: "$51,022.31 (24.34 Test Token)",
-    used3hrs: 8.19,
-    feeslast24hrs: "$51,022.31 (24.34 Test Token)",
-    used24hrs: 6.62,
-  },
-  {
-    rank: 1,
-    address: "Metamask: Swap Router",
-    feeslast3hrs: "$51,022.31 (24.34 Test Token)",
-    used3hrs: 8.19,
-    feeslast24hrs: "$51,022.31 (24.34 Test Token)",
-    used24hrs: 6.62,
-  },
-  {
-    rank: 1,
-    address: "Metamask: Swap Router",
-    feeslast3hrs: "$51,022.31 (24.34 Test Token)",
-    used3hrs: 8.19,
-    feeslast24hrs: "$51,022.31 (24.34 Test Token)",
-    used24hrs: 6.62,
-  },
-  {
-    rank: 1,
-    address: "Metamask: Swap Router",
-    feeslast3hrs: "$51,022.31 (24.34 Test Token)",
-    used3hrs: 8.19,
-    feeslast24hrs: "$51,022.31 (24.34 Test Token)",
-    used24hrs: 6.62,
-  },
-  {
-    rank: 1,
-    address: "Metamask: Swap Router",
-    feeslast3hrs: "$51,022.31 (24.34 Test Token)",
-    used3hrs: 8.19,
-    feeslast24hrs: "$51,022.31 (24.34 Test Token)",
-    used24hrs: 6.62,
-  },
-  {
-    rank: 1,
-    address: "Metamask: Swap Router",
-    feeslast3hrs: "$51,022.31 (24.34 Test Token)",
-    used3hrs: 8.19,
-    feeslast24hrs: "$51,022.31 (24.34 Test Token)",
-    used24hrs: 6.62,
-  },
-  {
-    rank: 1,
-    address: "Metamask: Swap Router",
-    feeslast3hrs: "$51,022.31 (24.34 Test Token)",
-    used3hrs: 8.19,
-    feeslast24hrs: "$51,022.31 (24.34 Test Token)",
-    used24hrs: 6.62,
-  },
-  {
-    rank: 1,
-    address: "Metamask: Swap Router",
-    feeslast3hrs: "$51,022.31 (24.34 Test Token)",
-    used3hrs: 8.19,
-    feeslast24hrs: "$51,022.31 (24.34 Test Token)",
-    used24hrs: 6.62,
-  },
-  {
-    rank: 1,
-    address: "Metamask: Swap Router",
-    feeslast3hrs: "$51,022.31 (24.34 Test Token)",
-    used3hrs: 8.19,
-    feeslast24hrs: "$51,022.31 (24.34 Test Token)",
-    used24hrs: 6.62,
-  },
 ];

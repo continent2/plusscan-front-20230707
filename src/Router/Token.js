@@ -1,18 +1,18 @@
 import styled from "styled-components";
-import TopV1 from "../Components/topBar/TopV1";
+// import TopV1 from "../Components/topBar/TopV1";
 import Plus from "../Img/coin/Plus.svg";
-import ChvrnUpGreen from "../Img/Icon/ChvrnUpGreen.svg";
+// import ChvrnUpGreen from "../Img/Icon/ChvrnUpGreen.svg";
 import Copy from "../Img/Icon/Copy.svg";
 import { D_tagList, D_transferCategoryList } from "../Data/D_transfer";
 import { useState, useEffect } from "react";
 import TransferList from "../Components/transfer/TransferList";
 import HoldersList from "../Components/transfer/HoldersList";
-import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { API } from "../Config/api";
 import axios from "axios";
 
 export default function Token() {
-  const history = useHistory();
+  // const history = useHistory();
   const { address } = useParams();
 
   const [category, setCategory] = useState(D_transferCategoryList[0]);

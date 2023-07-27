@@ -7,12 +7,10 @@ import { D_tagList, D_transferCategoryList } from "../Data/D_transfer";
 import { useState } from "react";
 import TransferList from "../Components/transfer/TransferList";
 import HoldersList from "../Components/transfer/HoldersList";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 export default function Transfer() {
-  const histry = useHistory();
 
-  const [category, setCateogry] = useState(D_transferCategoryList[0]);
+  const [category, setCategory] = useState(D_transferCategoryList[0]);
 
   return (
     <>
@@ -135,7 +133,7 @@ export default function Transfer() {
                 <li
                   key={i}
                   className={`${v === category ? "on" : ""}`}
-                  onClick={() => setCateogry(v)}
+                  onClick={() => setCategory(v)}
                 >
                   <p>{v}</p>
                 </li>

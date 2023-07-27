@@ -23,7 +23,6 @@ import Address from "./Router/Address";
 import Tokens from "./Router/Tokens";
 import Token from "./Router/Token";
 import Contract from "./Router/Contract";
-import Transfer from "./Router/Transfer";
 
 function App({ store, setHeaderKinds }) {
   return (
