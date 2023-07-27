@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import I_paste from "../Img/Icon/I_paste.svg";
-import I_qr from "../Img/Icon/I_qr.svg";
+// import I_qr from "../Img/Icon/I_qr.svg";
 import { putCommaAtPrice } from "../Util/common";
 import Transactions from "../Components/address/Transactions";
 import InternalTxns from "../Components/address/InternalTxns";
@@ -20,12 +20,105 @@ function Address({ store }) {
   const { address } = useParams();
 
   const [listCategory, setListCategory] = useState(0);
+  const [balance, setBalance] = useState(0);
+  const [txCount, setTxCount] = useState(0);
+
 
   const [holders, setHolders] = useState([]);
 
+  const getBalance = () => {
+    // axios.post(`https://plus8.co/`, {
+    //   headers: {
+    //     "Content-Type" : "application/json"
+    //   },
+    //   data: JSON.stringify(
+    //     {
+    //       jsonrpc: "2.0",
+    //       method: "eth_getBalance",
+    //       params: [address ,"latest"],
+    //       id: 1
+    //     }
+    //   )
+    // }).then((resp) => {
+    //   console.log(resp)
+    // }).catch((err)=>{
+    //   console.log(err)
+    // })
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      "method": "eth_getBalance",
+      "params": [
+        address,
+        "latest"
+      ],
+      "id": 1,
+      "jsonrpc": "2.0"
+    });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+
+    fetch("https://plus8.co/", requestOptions)
+      .then(response => response.text())
+      .then(result => setBalance(parseInt(JSON.parse(result).result, 16)))
+      .catch(error => console.log('error', error));
+  }
+
+  const getTxCount = () => {
+    // axios.post(`https://plus8.co`, {
+    //   headers: {
+    //     "Content-Type" : "application/json; charset=utf-8"
+    //   },
+    //   data: JSON.stringify(
+    //     {
+    //       jsonrpc: "2.0",
+    //       method: "eth_getTransactionCount",
+    //       params: [address, "latest"],
+    //       id: 1
+    //     }
+    //   )
+    // }).then((resp) => {
+    //   console.log(resp)
+    // }).catch((err)=>{
+    //   console.log(err)
+    // })
+    
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      "method": "eth_getTransactionCount",
+      "params": [
+        address,
+        "latest"
+      ],
+      "id": 1,
+      "jsonrpc": "2.0"
+    });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+
+    fetch("https://plus8.co/", requestOptions)
+      .then(response => response.text())
+      .then(result => setTxCount(parseInt(JSON.parse(result).result, 16)))
+      .catch(error => console.log('error', error));
+  }
+
   const getHolderAddress = () => {
     axios.get(`${API.API_HOLDER_ADDRESS}${address}/0/10/id/DESC`).then((resp) => {
-      console.log("nvsgfeVB2c", resp.data);
+      // console.log("nvsgfeVB2c", resp.data);
       if (resp.data.status === "OK") {
         setHolders(resp.data.list)
       }
@@ -33,8 +126,10 @@ function Address({ store }) {
   }
 
   useEffect(()=>{
-    console.log(address);
     getHolderAddress();
+
+    getBalance();
+    getTxCount();
   },[])
 
   return (
@@ -43,9 +138,11 @@ function Address({ store }) {
         <div className="titleBox">
           <strong className="title">Address</strong>
           <p className="idNum">
-            #12792560
-            <img src={I_paste} alt="" />
-            <img src={I_qr} alt="" />
+            {address}
+            <img style={{cursor: "pointer"}} src={I_paste} alt="" onClick={() => navigator.clipboard.writeText(address).then(() => {
+                  alert("복사완료");
+                })} />
+            {/* <img src={I_qr} alt="" /> */}
           </p>
         </div>
 
@@ -54,21 +151,21 @@ function Address({ store }) {
             <div className="topBar">
               <p className="title">개요</p>
               <span className="tether">
-                Tether: USDT Stablecoin
-                <span className="square" />
+                {/* Tether: USDT Stablecoin */}
+                {/* <span className="square" /> */}
               </span>
             </div>
 
             <ul className="infoList">
               <li>
-                <p className="key">밸런스</p>
-                <p className="value">1 wei</p>
+                <p className="key">Balance</p>
+                <p className="value">{balance} wei</p>
               </li>
               <li>
-                <p className="key">값</p>
+                <p className="key">Tx Count</p>
                 <span className="value">
-                  Less Than $0.01
-                  <p className="smallLetter">@ ${putCommaAtPrice(2094.64)}/ETH</p>
+                  {txCount}
+                  {/* <p className="smallLetter">@ ${putCommaAtPrice(2094.64)}/ETH</p> */}
                 </span>
               </li>
             </ul>

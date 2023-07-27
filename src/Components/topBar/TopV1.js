@@ -81,18 +81,23 @@ function TopBar({
             placeholder={placeHolder}
           />
           <img src={I_search} alt="" onClick={()=>{
+            if(search === ""){
+              return;
+            }
+
             // 검색 조회       
             axios.get(`${API.API_SEARCH + search}`).then((resp) => {
-              if (resp.data.status === "ERR") {
-                setSearch("");
-                setPlaceHolder("검색결과가 없습니다");
-              }else{
+              if (resp.data.status === "OK") {
+                console.log(resp.data)
                 switch (resp.data.datatype) {
                   case 'block':
                     history.push(`/block/${search}`);
                     break;
                   case 'transaction':
                     history.push(`/transaction/${search}`);
+                    break;
+                  case 'holder':
+                    history.push(`/address/${search}`);
                     break;
                   case 'token':
                     history.push(`/token/${search}`);
@@ -101,6 +106,9 @@ function TopBar({
                     break;
                 }
                 window.location.reload();
+              }else{
+                setSearch("");
+                setPlaceHolder("검색결과가 없습니다");
               }
             });
           }} />
