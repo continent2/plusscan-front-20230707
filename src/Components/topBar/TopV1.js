@@ -16,6 +16,7 @@ import I_search from "../../Img/Icon/I_search.svg";
 import ProfPopup from "../../Components/header/ProfPopup";
 import { strDot } from "../../Util/common";
 import LogoImg from "../../Img/logo/LogoImg.svg";
+import LogoPngImg from "../../Img/logo/PLUStoken.png";
 import LogoText from "../../Img/logo/LogoText.svg";
 import axios from "axios";
 import { API } from "../../Config/api";
@@ -68,7 +69,7 @@ function TopBar({
       <span className="leftBox">
 
         <div className="logoBox" onClick={() => window.location.replace("/")}>
-          <img src={LogoImg} alt="" />
+          <img className="logoImg" src={LogoPngImg} alt="" />
 
           <img src={LogoText} alt="" />
         </div>
@@ -212,15 +213,12 @@ const TopBarBox = styled.div`
     .logoBox {
       display: flex;
       align-items: center; 
-      gap: 10px;
+      gap: 15px;
       cursor: pointer;
-    }
 
-    .logoBox {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
+      .logoImg {
+        width: 40px;
+      }
     }
 
     .searchBox {
