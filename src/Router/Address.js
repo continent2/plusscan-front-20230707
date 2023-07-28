@@ -23,12 +23,11 @@ function Address({ store }) {
   const [balance, setBalance] = useState(0);
   const [txCount, setTxCount] = useState(0);
 
-
   const [holders, setHolders] = useState([]);
 
   const getAddressInfo = () => {
     axios.get(`${API.API_ADDRESS_INFO}${address}`).then((resp) => {
-      console.log("qwer", resp.data);
+      // console.log("qwer", resp.data);
       if (resp.data.status === "OK") {
         setBalance((Number(resp.data.balance) / 10**18).toLocaleString());
         setTxCount(resp.data.counttxs)
@@ -40,7 +39,15 @@ function Address({ store }) {
     axios.get(`${API.API_HOLDER_ADDRESS}${address}/0/10/id/DESC`).then((resp) => {
       // console.log("nvsgfeVB2c", resp.data);
       if (resp.data.status === "OK") {
-        setHolders(resp.data.list)
+
+        let arr = [];
+        for(let i = 0 ; i < resp.data.list.length; i++){
+          if(i > 1){
+            break;
+          }
+          arr.push(resp.data.list[i]);
+        }
+        setHolders(arr)
       }
     });
   }
@@ -48,7 +55,7 @@ function Address({ store }) {
   useEffect(()=>{
     getAddressInfo();
     getHolderAddress();
-  },[])
+  },[address])
 
   return (
     <AddressBox>
@@ -89,7 +96,21 @@ function Address({ store }) {
             </ul>
           </div>
 
-          <div className="blankBox"></div>
+          <div className="infoBox">
+            <div className="topBar">
+              <p className="title">Holders (Count: {holders.length})</p>
+            </div>
+
+            <ul className="infoList">
+              {
+                holders.map((holder, index) => (
+                  <li key={index}>
+                    <p className="value">{holder.holder}</p>
+                  </li>
+                )
+              )}
+            </ul>
+          </div>
         </div>
 
         <div className="listBox">

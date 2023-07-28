@@ -50,9 +50,13 @@ function Home() {
     //  setBlockList( initblocks() )
     //	setTxlist( inittxlist() )
     fetchLists();
-    setInterval((_) => {
+    const interval = setInterval((_) => {
       fetchLists();
     }, 30 * 1000);
+
+    return(() => {
+      clearInterval(interval);
+    });
   }, []);
 
   function onChartPopupMove(e) {

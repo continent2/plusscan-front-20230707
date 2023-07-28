@@ -16,16 +16,19 @@ function Blocks({ store }) {
   const getTxInfo = () => {
     // console.log(txHash)
     axios.get(`${API.API_TX_INFO}${txHash}`).then((resp) => {
-      console.log("qwer", resp.data.respdata);
+      // console.log("qwer", resp.data.respdata);
       if (resp.data.status === "OK") {
-        setTxInfo(resp.data.respdata)
+        setTxInfo({
+          ...resp.data.respdata,
+          gasLimit: Number(resp.data.respdata.gasPrice) * Number(resp.data.respdata.gas) / 10**18
+        })
       }
     });
   }
 
   useEffect(() => {
     getTxInfo();
-  }, [])
+  }, [txHash])
 
   return (
     <BlocksBox>
@@ -100,7 +103,9 @@ function Blocks({ store }) {
             </li>
             <li>
               <p className="key">가스 제한</p>
-              <p className="value">{"가스제한"}</p>
+              <p className="value">
+                {txInfo.gasLimit}
+              </p>
             </li>
             <li>
               <p className="key">거래에 사용된 가스</p>
@@ -119,7 +124,7 @@ function Blocks({ store }) {
               <p className="value">{"비공개 메모"}</p>
             </li> */}
             <li>
-              <p className="key">typestr</p>
+              <p className="key">Type</p>
               <p className="value">
                 {txInfo.typestr === "DEPL-C" && "Contract deploy"}  
                 {txInfo.typestr === "TX-C" && "Send Plus"}  

@@ -14,7 +14,6 @@ function Blocks({ store }) {
   const [blockInfo, setBlockInfo] = useState({});
 
   const getBlockInfo = () => {
-    console.log(Number(numberOrHash))
     // number
     if(numberOrHash.indexOf('0x') === -1){
       axios.get(`${API.API_BLOCK_INFO_NUMBER}${numberOrHash}`).then((resp) => {
@@ -26,7 +25,7 @@ function Blocks({ store }) {
     }else{
       // hash
       axios.get(`${API.API_BLOCK_INFO_HASH}${numberOrHash}`).then((resp) => {
-        console.log("nvsgfeVB2c", resp.data);
+        // console.log("nvsgfeVB2c", resp.data);
         if (resp.data.status === "OK") {
           setBlockInfo(resp.data.respdata)
         }
@@ -37,7 +36,7 @@ function Blocks({ store }) {
 
   useEffect(() => {
     getBlockInfo();
-  }, [])
+  }, [numberOrHash])
 
   return (
     <>

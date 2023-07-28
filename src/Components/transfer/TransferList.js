@@ -25,7 +25,7 @@ export default function TransferList() {
     "TIME",
     "FROM",
     "TO",
-    "TXTYPE",
+    "TYPE",
     "AMOUNT",
     "TXFEE"
   ];
@@ -55,7 +55,7 @@ export default function TransferList() {
 
   useEffect(() => {
     getTxs(1);
-  }, [])
+  }, [address])
 
   return (
     <>
@@ -116,9 +116,13 @@ export default function TransferList() {
                   </button>
                 </div>
 
-                <div>{v.typestr}</div>
+                <div>
+                  {v.typestr === "DEPL-C" && "Contract deploy"}  
+                  {v.typestr === "TX-C" && "Send Plus"}  
+                  {v.typestr === "TX-T" && "Send Token"}  
+                </div>
 
-                <div>{v.amountraw}</div>
+                <div>{v.amountdisp}</div>
 
                 <div>{v.quantity}</div>
               </li>
@@ -220,7 +224,7 @@ const TransferListArea = styled.article`
       }
 
       &:nth-of-type(6) {
-        width: 80px;
+        width: 130px;
       }
 
       &:nth-of-type(7) {

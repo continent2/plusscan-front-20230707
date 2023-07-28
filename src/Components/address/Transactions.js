@@ -8,6 +8,8 @@ import { strDot } from "../../Util/common";
 import { API } from "../../Config/api";
 import axios from "axios";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 function Transactions() {
   const { address } = useParams();
@@ -32,7 +34,7 @@ function Transactions() {
 
   const getTxsAddress = (page) => {
     axios.get(`${API.API_TXS_ADDRESS}${address}/${(page - 1)* size}/${size}/id/DESC`).then((resp) => {
-      console.log("nvsgfeVB2casdf", resp.data);
+      // console.log("nvsgfeVB2casdf", resp.data);
       if (resp.data.status === "OK") {
         setTxs(resp.data.list)
         if(resp.data.payload.count){
@@ -45,8 +47,9 @@ function Transactions() {
   }
 
   useEffect(()=>{
+    setTxs([]);
     getTxsAddress(1);
-  },[])
+  },[address])
 
 
   return (
@@ -61,21 +64,22 @@ function Transactions() {
         if (index < 10)
           return (
             <li key={index}>
-              <span className="rank">{cont.rank}</span>
+              <span className="direction">
+                {cont.receiver === address && <FontAwesomeIcon icon={faArrowLeft} />}  
+                {cont.receiver !== address && <FontAwesomeIcon icon={faArrowRight} />}  
+              </span>
               <span className="address">
-                <p className="tooltip" onClick={() => history.push(`/transaction/${cont.receiver}`)}>
+                <p className="tooltip" onClick={() => history.push(`/address/${cont.receiver}`)}>
                   {strDot(cont.receiver, 20, 20)}
                   <span className="tooltiptext tooltip-bottom">{cont.receiver}</span>
                 </p>
               </span>
-              <span className="arrow">
-                {cont.receiver === address && "<="}  
-                {cont.receiver !== address && "=>"}  
+              <span className="type">
+                {cont.typestr === "DEPL-C" && "Contract deploy"}  
+                {cont.typestr === "TX-C" && "Send Plus"}  
+                {cont.typestr === "TX-T" && "Send Token"}  
               </span>
-              <span className="typestr">
-                {cont.typestr}
-              </span>
-              <span className="amountdisp">
+              <span className="amount">
                 {cont.amountdisp}
               </span>
               <span className="timestamp">
@@ -146,17 +150,17 @@ const TransactionsBox = styled.ul`
         width: 344px;
         cursor: pointer;
       }
-      &.arrow {
-        width: 260px;
+      &.direction {
+        width: 150px;
       }
-      &.typestr {
-        width: 140px;
+      &.type {
+        width: 170px;
       }
-      &.amountdisp {
-        width: 140px;
+      &.amount {
+        width: 150px;
       }
       &.timestamp {
-        width: 140px;
+        width: 170px;
       }
       &.gas {
         flex: 1;
@@ -225,11 +229,10 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(Transactions);
 
 const headerList = [
-  "rank",
+  "direction",
   "address",
-  "arrow",
-  "typestr",
-  "amountdisp",
+  "type",
+  "amount",
   "timestamp",
   "gas",
 ];

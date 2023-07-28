@@ -92,7 +92,7 @@ function Tokens({ store, setHeaderKinds, setSlideKinds }) {
                 </span>
 
                 <span className="urlLogo">
-                  {cont._urllogo}
+                  {cont.countholders}
                 </span>
 
                 <span className="txCount">
@@ -279,7 +279,7 @@ const headerList = [
   "name",
   "symbol",
   "decimals",
-  "totalsupply / 10** decimals",
-  "url_logo",
+  "totalsupply",
+  "holders",
   "coutnttxs",
 ];

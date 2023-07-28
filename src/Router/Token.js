@@ -34,7 +34,7 @@ export default function Token() {
 
   useEffect(() => {
     getTokenInfo();
-  }, [])
+  }, [address])
 
   return (
     <>
@@ -85,6 +85,18 @@ export default function Token() {
                 <h2 className="thumbItemTitle">Other Info</h2>
 
                 <ul className="dataList">
+                <li>
+                    <p className="key">address</p>
+
+                    <div className="valueBox">
+                      <div className="linkBox">
+                        <p className="blue">
+                          {tokenInfo.address}
+                        </p>
+                      </div>
+                    </div>
+                  </li>
+
                   <li>
                     <p className="key">decimals</p>
 

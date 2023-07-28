@@ -34,7 +34,17 @@ export function Transactions() {
       axios.get(`${API.API_TXS_BLOCK}${numberOrHash}/${(page - 1)* size}/${size}/timestamp/DESC`).then((resp) => {
         // console.log("nvsgfeVB2c", resp.data);
         if (resp.data.status === "OK") {
-          setTxList(resp.data.list);
+          const list = resp.data.list;
+
+          let arr = [];
+          for(let i = 0; i < list.length; i++){
+            arr.push({
+              ...list[i],
+              gasLimit: Number(list[i].gasPrice) * Number(list[i].gas) / 10**18
+            });
+          }
+
+          setTxList(arr);
           if(resp.data.payload.count){
             setPageCount(Math.ceil(resp.data.payload.count / size));
           }else{
@@ -45,9 +55,19 @@ export function Transactions() {
     }else{
       // 최신 트랜잭션 리스트 조회
       axios.get(`${API.API_TXS}${(page - 1)* size}/${size}/timestamp/DESC`).then((resp) => {
-        // console.log("nvsgfeVB2c", resp.data);
+        console.log("nvsgfeVB2c", resp.data);
         if (resp.data.status === "OK") {
-          setTxList(resp.data.list);
+          const list = resp.data.list;
+
+          let arr = [];
+          for(let i = 0; i < list.length; i++){
+            arr.push({
+              ...list[i],
+              gasLimit: Number(list[i].gasPrice) * Number(list[i].gas) / 10**18
+            });
+          }
+
+          setTxList(arr);
           if(resp.data.payload.count){
             setPageCount(Math.ceil(resp.data.payload.count / size));
           }else{
@@ -60,7 +80,7 @@ export function Transactions() {
 
   useEffect(()=>{
     getTxs(pageNum);
-  },[])
+  },[numberOrHash])
 
   return (
     <TransactionsBox>
@@ -100,10 +120,14 @@ export function Transactions() {
                     <span className="tooltiptext tooltip-bottom">{cont.to_}</span>
                   </span>
                 </span>
-                <span className="txType">{cont.typestr}</span>
-                <span className="amount">{cont.value}</span>
+                <span className="type">
+                  {cont.typestr === "DEPL-C" && "Contract deploy"}  
+                  {cont.typestr === "TX-C" && "Send Plus"}  
+                  {cont.typestr === "TX-T" && "Send Token"}  
+                </span>
+                <span className="amount">{cont.amountdisp}</span>
                 <span className="txFee">
-                  {/* {strDot(cont.txFee.toString(), 8, 0)} */}
+                  {cont.gasLimit}
                 </span>
               </li>
             );
@@ -189,8 +213,8 @@ const TransactionsBox = styled.div`
             width: 120px;
             padding: 2px 4px;
           }
-          &.txType {
-            width: 100px;
+          &.type {
+            width: 150px;
           }
           &.amount {
             width: 200px;
@@ -202,7 +226,7 @@ const TransactionsBox = styled.div`
 
         &:nth-of-type(n + 2) {
           .time,
-          .txType {
+          .type {
             color: #d1d1d1;
           }
         }
@@ -269,300 +293,7 @@ const headerList = [
   "time",
   "from",
   "to",
-  "txType",
+  "type",
   "amount",
   "txFee",
 ];
-
-// const transactionList = [
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-//   {
-//     txHash: "0x386caaaaaab7f9c8",
-//     block: 64080901,
-//     time: "2secs ago",
-//     from: "0x386caaaaaab7f9c8",
-//     to: "0x386caaaaaab7f9c8",
-//     txType: "FeeaaaaaaaaaaaSmart Contract Execution",
-//     amount: 0,
-//     txFee: 0.0009801111,
-//   },
-// ];
