@@ -18,6 +18,8 @@ const API={
 	API_TOKENS: 			`${URL}/queries/rows/tokens/_/_/`,
 	API_TOKEN_INFO_ADDRESS: `${URL}/queries/singlerow/tokens/address/`,
 	API_TOKEN_TXS_ADDRESS: `${URL}/queries/rows/transactions/contaddress/`,
+	API_TOKEN_HOLDERS_ADDRESS: `${URL}/queries/rows/holders/token/
+	`,
 
 	API_TXS_ADDRESS: `${URL}/queries/rows/transactions/from_/`,
 	API_HOLDER_ADDRESS: `${URL}/queries/rows/holders/holder/`,

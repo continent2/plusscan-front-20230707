@@ -1,18 +1,64 @@
-// import { useState } from "react";
-// import ListPagenation from "./ListPageNation";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { D_holdersList, D_holdersListHeader } from "../../Data/D_transfer";
-import Copy from "../../Img/Icon/Copy.svg";
-import ChartBlue from "../../Img/Icon/ChartBlue.svg";
+// import Copy from "../../Img/Icon/Copy.svg";
+// import ChartBlue from "../../Img/Icon/ChartBlue.svg";
+import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { API } from "../../Config/api";
+import axios from "axios";
+// import { strDot } from "../../Util/common";
+import I_leftArrow from "../../Img/Icon/I_leftArrow.svg";
+import I_rightArrow from "../../Img/Icon/I_rightArrow.svg";
 
 export default function HoldersList() {
-  // const [page, setPage] = useState(1);
+  const history = useHistory();
+  const { address } = useParams();
+
+  const [pageNum, setPageNum] = useState(1);
+  const [pageCount, setPageCount] = useState(0);
+  const [holders, setHolders] = useState([]);
+  const [holderCount, setHolderCount] = useState(0);
+
+  const size = 10;
+
+  const D_holdersListHeader = [
+    "Address",
+    "Amount",
+    "Total Transfers",
+    "Total Receives",
+  ];
+
+  function onClickPagePre() {
+    if (pageNum > 1) setPageNum(pageNum - 1);
+    getHolders(pageNum - 1);
+  }
+  function onClickPageNxt() {
+    if(pageNum >= pageCount){
+      return;
+    }
+    setPageNum(pageNum + 1);
+    getHolders(pageNum + 1);
+  }
+
+  const getHolders = (page) => {
+    axios.get(`${API.API_TOKEN_HOLDERS_ADDRESS}${address}/${(page - 1)* size}/${size}/amountfloat/DESC`).then((resp) => {
+      console.log("nvsgfeVB2c", resp.data);
+      if (resp.data.status === "OK") {
+        setHolders(resp.data.list)
+        setPageCount(Math.ceil(resp.data.payload.count / size));
+        setHolderCount(resp.data.payload.count);
+      }
+    });
+  }
+
+  useEffect(() => {
+    getHolders(1);
+  }, [address])
 
   return (
     <>
       <HoldersListArea>
         <div className="topBar">
-          <p className="count">191,921,458 transactions</p>
+          <p className="count">{holderCount} Holders</p>
         </div>
 
         <div className="listCont">
@@ -23,42 +69,33 @@ export default function HoldersList() {
           </ul>
 
           <ul className="list">
-            {D_holdersList.map((v, i) => (
+            {holders.map((v, i) => (
               <li key={i}>
-                <div>{v.rank}</div>
+                <div className="address">{v.holder}</div>
 
-                <div className="address">
-                  <p>{v.address}</p>
-
-                  <button className="copyBtn" onClick={() => {}}>
-                    <img src={Copy} alt="" />
-                  </button>
+                <div className="amount">
+                 {v.amountdisp}
                 </div>
 
-                <div>{v.quantity}</div>
+                <div>{v.counttxs}</div>
 
                 <div className="percentage">
-                  <p>{v.percentage}%</p>
-
-                  <div className="percentBar">
-                    <div className="thumb" />
-                  </div>
-                </div>
-
-                <div>${v.value}</div>
-
-                <div>
-                  <button className="chartBtn" onClick={() => {}}>
-                    <img src={ChartBlue} alt="" />
-                  </button>
+                  {v.countrxs}
                 </div>
               </li>
             ))}
           </ul>
         </div>
+        <div className="pageBtnBox">
+            <button className="preBtn" onClick={onClickPagePre}>
+              <img src={I_leftArrow} alt="" />
+            </button>
+            <span className="pageBox">Page {pageNum} of {pageCount}</span>
+            <button className="nxtBtn" onClick={onClickPageNxt}>
+              <img src={I_rightArrow} alt="" />
+            </button>
+        </div>
       </HoldersListArea>
-
-      {/* <ListPagenation page={page} setPage={setPage} /> */}
     </>
   );
 }
@@ -100,18 +137,6 @@ const HoldersListArea = styled.article`
         color: #373737;
         border-bottom: 1px solid #ececec;
 
-        .address {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          color: #6979f5;
-
-          .copyBtn {
-            display: flex;
-            align-items: center;
-          }
-        }
-
         .percentage {
           display: flex;
           flex-direction: column;
@@ -137,19 +162,19 @@ const HoldersListArea = styled.article`
     .listHeader li,
     .list li div {
       &:nth-of-type(1) {
-        width: 66px;
+        width: 400px;
       }
 
       &:nth-of-type(2) {
-        width: 464px;
+        width: 200px;
       }
 
       &:nth-of-type(3) {
-        width: 208px;
+        width: 200px;
       }
 
       &:nth-of-type(4) {
-        width: 240px;
+        width: 200px;
       }
 
       &:nth-of-type(5) {

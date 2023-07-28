@@ -1,6 +1,6 @@
 export const D_tagList = ["ERC-20", "Stablecoin"];
 
-export const D_transferCategoryList = ["Tranfer", "Holders"];
+export const D_transferCategoryList = ["Transfer", "Holders"];
 
 export const D_transferListHeader = [
   "Txn Hash",
@@ -95,12 +95,10 @@ export const D_transferList = [
 ];
 
 export const D_holdersListHeader = [
-  "RANK",
   "Address",
-  "Quantity",
-  "Percentage",
-  "Value",
-  "Analytics",
+  "Amount",
+  "total transfers",
+  "total receives",
 ];
 
 export const D_holdersList = [
