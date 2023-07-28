@@ -29,8 +29,6 @@ jobs:
           script_stop: true
           script: |
             cd /home/ubuntu/scan-front
-            [ -e package-lock.json ] && rm package-lock.json
-            [ -e yarn.lock ] && rm yarn.lock
             git pull origin main
             npm i
             npm run build
