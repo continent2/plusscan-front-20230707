@@ -112,11 +112,19 @@ function Blocks({ store }) {
             </li>
             <li>
               <p className="key">입력 데이터</p>
-              <p className="value">{"입력 데이터"}</p>
+              <p className="value">{txInfo.input}</p>
             </li>
-            <li>
+            {/* <li>
               <p className="key">비공개 메모</p>
               <p className="value">{"비공개 메모"}</p>
+            </li> */}
+            <li>
+              <p className="key">typestr</p>
+              <p className="value">
+                {txInfo.typestr === "DEPL-C" && "Contract deploy"}  
+                {txInfo.typestr === "TX-C" && "Send Plus"}  
+                {txInfo.typestr === "TX-T" && "Send Token"}  
+              </p>
             </li>
           </ul>
         </div>
@@ -228,6 +236,7 @@ const BlocksBox = styled.div`
           }
 
           .value {
+            word-break: break-all;
             img {
               margin-left: 6px;
               cursor: pointer;
@@ -251,4 +260,8 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(mapStateToProps, mapDispatchToProps)(Blocks);
 
-const categoryList = ["overview", "state", "comments"];
+const categoryList = [
+  "overview",
+  //  "state",
+  //   "comments"
+  ];

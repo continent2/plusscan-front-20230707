@@ -21,11 +21,13 @@ export default function TransferList() {
   const size = 10;
   const D_transferListHeader = [
     "Txn Hash",
-    "Method",
-    "Age",
-    "From",
-    "To",
-    "Quantity",
+    "Block",
+    "TIME",
+    "FROM",
+    "TO",
+    "TXTYPE",
+    "AMOUNT",
+    "TXFEE"
   ];
 
   function onClickPagePre() {
@@ -33,13 +35,14 @@ export default function TransferList() {
     getTxs(pageNum - 1);
   }
   function onClickPageNxt() {
+    if(pageNum >= pageCount){
+      return;
+    }
     setPageNum(pageNum + 1);
     getTxs(pageNum + 1);
   }
 
   const getTxs= (page) => {
-    // console.log(address);
-
     axios.get(`${API.API_TOKEN_TXS_ADDRESS}${address}/${(page - 1)* size}/${size}/timestamp/DESC`).then((resp) => {
       // console.log("nvsgfeVB2c", resp.data);
       if (resp.data.status === "OK") {
@@ -51,7 +54,7 @@ export default function TransferList() {
   }
 
   useEffect(() => {
-    getTxs(pageNum);
+    getTxs(1);
   }, [])
 
   return (
@@ -80,9 +83,12 @@ export default function TransferList() {
                   </p>
                 </div>
 
-                <div>{v.method}</div>
+                <div>{v.blockNumber}</div>
 
-                <div>{v.age}</div>
+                <div>
+                  <span>{v.createdat.split('T')[0]}</span>&nbsp;&nbsp;
+                  <span>{v.createdat.split('T')[1].split('.')[0]}</span>
+                </div>
 
                 <div className="copy">
                 <p className="tooltip">
@@ -98,17 +104,21 @@ export default function TransferList() {
                 </div>
 
                 <div className="copy">
-                  <p className="tooltip">{strDot(v.to_, 6, 6)}
-                  
-                    <span className="tooltiptext tooltip-bottom">{v.to_}</span>
-                  </p>
+                    <p className="tooltip">{strDot(v.to_, 6, 6)}
+                    
+                      <span className="tooltiptext tooltip-bottom">{v.to_}</span>
+                    </p>
 
-                  <button className="copyBtn" onClick={() => navigator.clipboard.writeText(v.to_).then(() => {
-                  alert("복사완료");
-                })} >
+                    <button className="copyBtn" onClick={() => navigator.clipboard.writeText(v.to_).then(() => {
+                      alert("복사완료");
+                    })} >
                     <img src={Copy} alt="" />
                   </button>
                 </div>
+
+                <div>{v.typestr}</div>
+
+                <div>{v.amountraw}</div>
 
                 <div>{v.quantity}</div>
               </li>
@@ -190,27 +200,31 @@ const TransferListArea = styled.article`
     .listHeader li,
     .list li div {
       &:nth-of-type(1) {
-        width: 306px;
-      }
-
-      &:nth-of-type(2) {
-        width: 148px;
-      }
-
-      &:nth-of-type(3) {
         width: 230px;
       }
 
+      &:nth-of-type(2) {
+        width: 80px;
+      }
+
+      &:nth-of-type(3) {
+        width: 160px;
+      }
+
       &:nth-of-type(4) {
-        width: 256px;
+        width: 150px;
       }
 
       &:nth-of-type(5) {
-        width: 288px;
+        width: 150px;
       }
 
       &:nth-of-type(6) {
-        flex: 1;
+        width: 80px;
+      }
+
+      &:nth-of-type(7) {
+        width: 140px;
       }
     }
   }

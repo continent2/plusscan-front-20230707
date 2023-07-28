@@ -26,94 +26,14 @@ function Address({ store }) {
 
   const [holders, setHolders] = useState([]);
 
-  const getBalance = () => {
-    // axios.post(`https://plus8.co/`, {
-    //   headers: {
-    //     "Content-Type" : "application/json"
-    //   },
-    //   data: JSON.stringify(
-    //     {
-    //       jsonrpc: "2.0",
-    //       method: "eth_getBalance",
-    //       params: [address ,"latest"],
-    //       id: 1
-    //     }
-    //   )
-    // }).then((resp) => {
-    //   console.log(resp)
-    // }).catch((err)=>{
-    //   console.log(err)
-    // })
-
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    var raw = JSON.stringify({
-      "method": "eth_getBalance",
-      "params": [
-        address,
-        "latest"
-      ],
-      "id": 1,
-      "jsonrpc": "2.0"
+  const getAddressInfo = () => {
+    axios.get(`${API.API_ADDRESS_INFO}${address}`).then((resp) => {
+      console.log("qwer", resp.data);
+      if (resp.data.status === "OK") {
+        setBalance((Number(resp.data.balance) / 10**18).toLocaleString());
+        setTxCount(resp.data.counttxs)
+      }
     });
-
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow'
-    };
-
-    fetch("https://plus8.co/", requestOptions)
-      .then(response => response.text())
-      .then(result => setBalance(parseInt(JSON.parse(result).result, 16)))
-      .catch(error => console.log('error', error));
-  }
-
-  const getTxCount = () => {
-    // axios.post(`https://plus8.co`, {
-    //   headers: {
-    //     "Content-Type" : "application/json; charset=utf-8"
-    //   },
-    //   data: JSON.stringify(
-    //     {
-    //       jsonrpc: "2.0",
-    //       method: "eth_getTransactionCount",
-    //       params: [address, "latest"],
-    //       id: 1
-    //     }
-    //   )
-    // }).then((resp) => {
-    //   console.log(resp)
-    // }).catch((err)=>{
-    //   console.log(err)
-    // })
-    
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    var raw = JSON.stringify({
-      "method": "eth_getTransactionCount",
-      "params": [
-        address,
-        "latest"
-      ],
-      "id": 1,
-      "jsonrpc": "2.0"
-    });
-
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow'
-    };
-
-    fetch("https://plus8.co/", requestOptions)
-      .then(response => response.text())
-      .then(result => setTxCount(parseInt(JSON.parse(result).result, 16)))
-      .catch(error => console.log('error', error));
   }
 
   const getHolderAddress = () => {
@@ -126,10 +46,8 @@ function Address({ store }) {
   }
 
   useEffect(()=>{
+    getAddressInfo();
     getHolderAddress();
-
-    getBalance();
-    getTxCount();
   },[])
 
   return (
@@ -159,7 +77,7 @@ function Address({ store }) {
             <ul className="infoList">
               <li>
                 <p className="key">Balance</p>
-                <p className="value">{balance} wei</p>
+                <p className="value">{balance}</p>
               </li>
               <li>
                 <p className="key">Tx Count</p>
@@ -364,11 +282,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(Address);
 
 const categoryList = [
   "TRANSACTIONS",
-  "INTERNAL TXNS",
-  "TOKEN TXNS",
-  "CONTRACT",
-  "EVENT",
-  "ANALYTICS",
-  "INFO",
-  "COMMENTS",
+  // "INTERNAL TXNS",
+  // "TOKEN TXNS",
+  // "CONTRACT",
+  // "EVENT",
+  // "ANALYTICS",
+  // "INFO",
+  // "COMMENTS",
 ];

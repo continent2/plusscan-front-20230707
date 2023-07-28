@@ -1,8 +1,8 @@
 import styled from "styled-components";
 // import TopV1 from "../Components/topBar/TopV1";
-import Plus from "../Img/coin/Plus.svg";
+// import Plus from "../Img/coin/Plus.svg";
 // import ChvrnUpGreen from "../Img/Icon/ChvrnUpGreen.svg";
-import Copy from "../Img/Icon/Copy.svg";
+// import Copy from "../Img/Icon/Copy.svg";
 import { D_tagList, D_transferCategoryList } from "../Data/D_transfer";
 import { useState, useEffect } from "react";
 import TransferList from "../Components/transfer/TransferList";
@@ -16,6 +16,7 @@ export default function Token() {
   const { address } = useParams();
 
   const [category, setCategory] = useState(D_transferCategoryList[0]);
+  const [totalSupply, setTotalSupply] = useState(0);
 
   const [tokenInfo, setTokenInfo] = useState({});
 
@@ -25,7 +26,8 @@ export default function Token() {
     axios.get(`${API.API_TOKEN_INFO_ADDRESS}${address}`).then((resp) => {
       // console.log("asdf", resp.data.respdata);
       if (resp.data.status === "OK") {
-        setTokenInfo(resp.data.respdata)
+        setTokenInfo(resp.data.respdata);
+        setTotalSupply(Number(resp.data.respdata.totalsupply) / (10**resp.data.respdata.decimals));
       }
     });
   }
@@ -42,9 +44,9 @@ export default function Token() {
         <section className="thumbSec">
           <article className="titleBar">
             <div className="coinBox">
-              <img src={Plus} alt="" />
+              <img src={tokenInfo._urllogo} alt="" />
 
-              <h1>PLUS</h1>
+              <h1>{tokenInfo.name}</h1>
             </div>
 
             <ul className="tagList">
@@ -61,84 +63,36 @@ export default function Token() {
 
                 <ul className="dataList">
                   <li>
-                    <p className="key">MAX TOTAL SUPPLY</p>
+                    <p className="key">Max total supply</p>
 
                     <div className="valueBox">
-                      <p>{tokenInfo.totalsupply}</p>
+                      <p>{totalSupply}</p>
                     </div>
                   </li>
 
                   <li>
-                    <p className="key">HOLDERS</p>
+                    <p className="key">Total transfers</p>
 
                     <div className="valueBox">
-                      <p>{tokenInfo.countholders}</p>
-
-                      {/* <div className="diffBox">
-                        <img src={ChvrnUpGreen} alt="" />
-                        <p className="green">0.014%</p>
-                      </div> */}
-                    </div>
-                  </li>
-
-                  <li>
-                    <p className="key">TOTAL TRANSFERS</p>
-
-                    <div className="valueBox">
-                      <p>{"fee"}</p>
+                      <p>{tokenInfo.counttxs}</p>
                     </div>
                   </li>
                 </ul>
               </li>
 
-              <li>
-                <h2 className="thumbItemTitle">Market</h2>
-
-                <ul className="dataList">
-                  <li>
-                    <p className="key">PRICE</p>
-
-                    <div className="valueBox">
-                      <p>$1.00</p>
-
-                      <p>@ 0.000518 ETH</p>
-
-                      <p className="green">+0.21%</p>
-                    </div>
-                  </li>
-
-                  <li>
-                    <p className="key">FULLY DILUTED MARKET CAP</p>
-
-                    <div className="valueBox">
-                      <p>$39,069,646,510.22</p>
-                    </div>
-                  </li>
-
-                  <li>
-                    <p className="key">CIRCULATING SUPPLY MARKET CAP</p>
-
-                    <div className="valueBox">
-                      <p>$83,344,991,250.00</p>
-                    </div>
-                  </li>
-                </ul>
-              </li>
 
               <li>
                 <h2 className="thumbItemTitle">Other Info</h2>
 
                 <ul className="dataList">
                   <li>
-                    <p className="key">TOKEN CONTRACT (WITH 6 DECIMALS)</p>
+                    <p className="key">decimals</p>
 
                     <div className="valueBox">
                       <div className="linkBox">
                         <p className="blue">
-                          0xdAC17F958D2ee523a2206206994597C13D831ec7
+                          {tokenInfo.decimals}
                         </p>
-
-                        <img src={Copy} alt="" />
                       </div>
                     </div>
                   </li>
@@ -192,8 +146,12 @@ const TokenBox = styled.main`
 
       .coinBox {
         display: flex;
-        align-items: center;
+        align-items: flex-end;
         gap: 8px;
+
+        img {
+          width: 60px;
+        }
 
         h1 {
           font-size: 30px;

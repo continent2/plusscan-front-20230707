@@ -72,13 +72,13 @@ function Blocks({ store }) {
               {blockInfo.timestamp}
               </p>
             </li>
-
+{/* 
             <li>
               <p className="key">가격</p>
               <p className="value">
                 {"가격"}
               </p>
-            </li>
+            </li> */}
 
             <li>
               <p className="key">채굴자</p>

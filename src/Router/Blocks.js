@@ -29,7 +29,7 @@ function Blocks() {
   const getBlockList = (page) => {
     // 최신 블럭 리스트 조회
     axios.get(`${API.API_BLOCKS}${(page - 1)* size}/${size}/timestamp/DESC`).then((resp) => {
-      console.log("vsiRhGy2pA", resp.data);
+      // console.log("vsiRhGy2pA", resp.data);
       if (resp.data.status === "OK") {
         setBlockList(resp.data.list);
         setPageCount(Math.ceil(resp.data.payload.count / size));
@@ -58,7 +58,10 @@ function Blocks() {
               history.push(`/block/${cont.number}`);
             }}>
               <span className="block">{cont.number}</span>
-              <span className="time">{cont.createdat}</span>
+              <span className="time">
+                <span>{cont.createdat.split('T')[0]}</span>&nbsp;&nbsp;
+                <span>{cont.createdat.split('T')[1].split('.')[0]}</span>
+              </span>
               <span className="totalTxs">{cont.txcount}</span>
               <span className="hash tooltip">
                 {strDot(cont.hash, 10, 10)}

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import I_leftArrow from "../Img/Icon/I_leftArrow.svg";
 import I_rightArrow from "../Img/Icon/I_rightArrow.svg";
-import { putCommaAtPrice, strDot } from "../Util/common";
+// import { putCommaAtPrice, strDot } from "../Util/common";
 import { setHeaderKinds, setSlideKinds } from "../Util/store";
 // import LeftBar from "../Components/LeftBar";
 import { API } from "../Config/api";
@@ -24,6 +24,9 @@ function Tokens({ store, setHeaderKinds, setSlideKinds }) {
     getTokenList(pageNum - 1);
   }
   function onClickPageNxt() {
+    if(pageNum >= pageCount){
+      return;
+    }
     setPageNum(pageNum + 1);
     getTokenList(pageNum + 1);
   }
@@ -31,7 +34,7 @@ function Tokens({ store, setHeaderKinds, setSlideKinds }) {
   const getTokenList = (page) => {
     // 토큰 리스트 조회
     axios.get(`${API.API_TOKENS}${(page - 1)* size}/${size}/id/DESC`).then((resp) => {
-      console.log("nvsgfeVB2c", resp.data);
+      // console.log("nvsgfeVB2c", resp.data);
       if (resp.data.status === "OK") {
         setTokenList(resp.data.list);
         setPageCount(Math.ceil(resp.data.payload.count / size));
@@ -43,7 +46,7 @@ function Tokens({ store, setHeaderKinds, setSlideKinds }) {
     setHeaderKinds(2);
     setSlideKinds(3);
 
-    getTokenList(pageNum);
+    getTokenList(1);
   },[])
 
   return (
@@ -54,7 +57,7 @@ function Tokens({ store, setHeaderKinds, setSlideKinds }) {
           <div className="titleBar">
             <strong className="title">Tokens</strong>
             <p className="subtitle">
-              총 <strong>{tokenList.length}개</strong>의 대체 가능한 토큰이 등록되었습니다.
+              총 <strong>{tokenList.length}개</strong>의 토큰이 등록되었습니다.
             </p>
           </div>
 
@@ -70,24 +73,30 @@ function Tokens({ store, setHeaderKinds, setSlideKinds }) {
                 history.push(`/token/${cont.address}`);
               }}>
                 <span className="token">
-                  <span className="tokenImg" />
-                  {cont.token}
+                  {cont.name}
                 </span>
                 <span className="symbol">
                   <img className="symbol-img" src={cont._urllogo} />
                 </span>
-                <span className="contractAddress">
+                <span className="decimals">
+                  {/* <span className="inner">
+                    {strDot(cont.decimals, 6, 6)}
+                  </span>   */}
                   <span className="inner">
-                    {strDot(cont.address, 6, 6)}
+                    {cont.decimals}
                   </span>
                 </span>
 
                 <span className="totalSupply">
-                  {cont.totalsupply}
+                  {cont.totalsupply / 10**cont.decimals}
                 </span>
 
-                <span className="totalTransfers(byte)">
-                  {cont.totalTransfers}
+                <span className="urlLogo">
+                  {cont._urllogo}
+                </span>
+
+                <span className="txCount">
+                  {cont.counttxs}
                 </span>
               </li>
             ))}
@@ -175,9 +184,6 @@ const TokensBox = styled.div`
           }
 
           .inner {
-            padding: 2px 4px;
-            background: #ececec;
-            border-radius: 2px;
           }
 
           &:nth-of-type(1) {
@@ -189,11 +195,15 @@ const TokensBox = styled.div`
           }
 
           &:nth-of-type(3) {
-            width: 260px;
+            width: 200px;
           }
 
           &:nth-of-type(4) {
-            width: 336px;
+            width: 300px;
+          }
+
+          &:nth-of-type(5) {
+            width: 350px;
           }
 
           &:last-of-type {
@@ -266,9 +276,10 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(Tokens);
 
 const headerList = [
-  "block",
+  "name",
   "symbol",
-  "contract adress",
-  "total supply",
-  "total transfers",
+  "decimals",
+  "totalsupply / 10** decimals",
+  "url_logo",
+  "coutnttxs",
 ];

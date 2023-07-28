@@ -32,7 +32,7 @@ function Transactions() {
 
   const getTxsAddress = (page) => {
     axios.get(`${API.API_TXS_ADDRESS}${address}/${(page - 1)* size}/${size}/id/DESC`).then((resp) => {
-      // console.log("nvsgfeVB2casdf", resp.data);
+      console.log("nvsgfeVB2casdf", resp.data);
       if (resp.data.status === "OK") {
         setTxs(resp.data.list)
         if(resp.data.payload.count){
@@ -63,26 +63,27 @@ function Transactions() {
             <li key={index}>
               <span className="rank">{cont.rank}</span>
               <span className="address">
-                <p className="tooltip" onClick={() => history.push(`/transaction/${cont.hash}`)}>
-                  {strDot(cont.hash, 20, 20)}
-                  <span className="tooltiptext tooltip-bottom">{cont.hash}</span>
+                <p className="tooltip" onClick={() => history.push(`/transaction/${cont.receiver}`)}>
+                  {strDot(cont.receiver, 20, 20)}
+                  <span className="tooltiptext tooltip-bottom">{cont.receiver}</span>
                 </p>
               </span>
-              <span className="feeslast3hrs">{cont.feeslast3hrs}</span>
-              <span className="used3hrs">
-                {cont.used3hrs}
-                <div className="gageBox">
-                  <span className="gageBar" />
-                </div>
+              <span className="arrow">
+                {cont.receiver === address && "<="}  
+                {cont.receiver !== address && "=>"}  
               </span>
-              <span className="feeslast24hrs">{cont.feeslast24hrs}</span>
-              <span className="used24hrs">
-                {cont.used24hrs}
-                <div className="gageBox">
-                  <span className="gageBar" />
-                </div>
+              <span className="typestr">
+                {cont.typestr}
               </span>
-              <span className="analytics">{cont.analytics}</span>
+              <span className="amountdisp">
+                {cont.amountdisp}
+              </span>
+              <span className="timestamp">
+                {cont.timestamp}
+              </span>
+              <span className="gas">
+                {cont.gas}
+              </span>
             </li>
           );
         else return <></>;
@@ -145,19 +146,19 @@ const TransactionsBox = styled.ul`
         width: 344px;
         cursor: pointer;
       }
-      &.feeslast3hrs {
+      &.arrow {
         width: 260px;
       }
-      &.used3hrs {
-        width: 146px;
+      &.typestr {
+        width: 140px;
       }
-      &.feeslast24hrs {
-        width: 260px;
+      &.amountdisp {
+        width: 140px;
       }
-      &.used24hrs {
-        width: 124px;
+      &.timestamp {
+        width: 140px;
       }
-      &.analytics {
+      &.gas {
         flex: 1;
       }
     }
@@ -226,9 +227,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(Transactions);
 const headerList = [
   "rank",
   "address",
-  "feeslast3hrs",
-  "used3hrs",
-  "feeslast24hrs",
-  "used24hrs",
-  "analytics",
+  "arrow",
+  "typestr",
+  "amountdisp",
+  "timestamp",
+  "gas",
 ];

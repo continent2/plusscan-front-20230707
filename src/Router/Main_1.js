@@ -24,7 +24,7 @@ function Home() {
 
     // 최신 정보 조회
     axios.get(`${API.API_STATS}`).then((resp) => {
-      // LOGGER("vsiRhGy2pA", resp.data);
+      console.log("vsiRhGy2pA", resp.data);
       if (resp.data.status === "OK") {
         setStats(resp.data);
       }
@@ -101,9 +101,9 @@ function Home() {
               </div>
 
               <div className="innerBox" onClick={() => history.push("/gas")}>
-                <p className="title">GAS PRICE</p>
+                <p className="title">GAS USED</p>
                 <p className="data">
-                {stats.gasprice}
+                {stats.gasused}
                 </p>
               </div>
             </li>
@@ -136,7 +136,7 @@ function Home() {
                   <span className="time">TIME</span>
                   <span className="total">TOTAL TXS</span>
                   <span className="hash">HASH</span>
-                  <span className="reward">REWARD</span>
+                  {/* <span className="reward">REWARD</span> */}
                 </li>
                 {blockList.map((cont, index) => {
                   if (index < 10)
@@ -145,7 +145,10 @@ function Home() {
                         <span className="block" onClick={()=>{
                           history.push(`/block/${cont.number}`)
                         }}>{cont.number}</span>
-                        <span className="time">{cont.createdat}</span>
+                        <span className="time">
+                          <span>{cont.createdat.split('T')[0]}</span>
+                          <span>{cont.createdat.split('T')[1].split('.')[0]}</span>
+                        </span>
                         <span className="total tooltip">
                           {cont.txcount}
                           <span className="tooltiptext tooltip-bottom">Transactions in this Block</span>
@@ -190,11 +193,15 @@ function Home() {
                         <span className="txHash" onClick={()=>{
                           history.push(`/transaction/${elem.hash}`)
                         }}>
-                          <span className="inner">
-                            {strDot(elem.hash, 6, 6)}
+                          <span className="inner tooltip">
+                            {strDot(elem.hash, 9, 8)}
+                            <span className="tooltiptext tooltip-bottom">{elem.hash}</span>
                           </span>
                         </span>
-                        <span className="time">{elem.createdat}</span>{" "}
+                        <span className="time">
+                          <span>{elem.createdat.split('T')[0]}</span>
+                          <span>{elem.createdat.split('T')[1].split('.')[0]}</span>
+                        </span>{" "}
                         {/** `${RAND_TIME_OFFSET} secs ago` */}
                         <span className="from">
                           <span className="inner tooltip" onClick={()=>{
@@ -379,13 +386,12 @@ const HomeBox = styled.div`
                 cursor: pointer;
               }
 
-              &.block,
-              &.time {
+              &.block{
                 width: 128px;
               }
 
               &.time {
-
+                width: 200px;
               }
 
               &.total {

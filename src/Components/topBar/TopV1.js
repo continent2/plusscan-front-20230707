@@ -15,7 +15,7 @@ import PopupBg from "../../Components/PopupBg";
 import I_search from "../../Img/Icon/I_search.svg";
 import ProfPopup from "../../Components/header/ProfPopup";
 import { strDot } from "../../Util/common";
-import LogoImg from "../../Img/logo/LogoImg.svg";
+// import LogoImg from "../../Img/logo/LogoImg.svg";
 import LogoPngImg from "../../Img/logo/PLUStoken.png";
 import LogoText from "../../Img/logo/LogoText.svg";
 import axios from "axios";

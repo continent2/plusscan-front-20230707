@@ -20,7 +20,9 @@ const API={
 	API_TOKEN_TXS_ADDRESS: `${URL}/queries/rows/transactions/contaddress/`,
 
 	API_TXS_ADDRESS: `${URL}/queries/rows/transactions/from_/`,
-	API_HOLDER_ADDRESS: `${URL}/queries/rows/holders/holder/`
+	API_HOLDER_ADDRESS: `${URL}/queries/rows/holders/holder/`,
+
+	API_ADDRESS_INFO: `${URL}/web3/address-activity/`
 
 
 /** 	API_USERNAME_DUP : `${URL}/users/username`,

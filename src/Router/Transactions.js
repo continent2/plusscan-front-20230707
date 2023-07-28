@@ -84,7 +84,10 @@ export function Transactions() {
                   </span>
                 </span>
                 <span className="block">{cont.blockNumber}</span>
-                <span className="time">{cont.createdat}</span>
+                <span className="time">
+                  <span>{cont.createdat.split('T')[0]}</span>&nbsp;&nbsp;
+                  <span>{cont.createdat.split('T')[1].split('.')[0]}</span>
+                </span>
                 <span className="from">
                   <span className="inner tooltip">
                     {strDot(cont.from_, 6, 6)}
