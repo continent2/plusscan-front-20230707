@@ -33,3 +33,4 @@ jobs:
             npm i
             npm run build
             cp build/* /var/www/html/plusscan.co -R
+            rm *lock*
