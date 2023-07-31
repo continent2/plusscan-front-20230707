@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import Footer from "./Footer";
-import E_chart3 from "../Img/example/E_chart3.png";
 import I_3dotWhite from "../Img/Icon/I_3dotWhite.svg";
 import I_hoverPolygon from "../Img/Icon/I_hoverPolygon.svg";
 import { strDot } from "../Util/common";
 import { useHistory } from "react-router-dom";
-// import { generaterandomstr_charset, generaterandomint } from "../Util/common";
 import { API } from "../Config/api";
 import axios from "axios";
+import ReactEcharts from "echarts-for-react"; 
 
 
 // const RAND_TIME_OFFSET = 3;
@@ -20,12 +19,41 @@ function Home() {
   const [stats, setStats] = useState({});
   const [blockList, setBlockList] = useState([]);
   const [txlist, setTxlist] = useState([]);
+
+
+  const [option, setOption] = useState({
+    xAxis: {
+      type: 'category',
+      data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [
+      {
+        data: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        type: 'line',
+        smooth: true,
+        symbol: 'none',
+      }
+    ]
+  } );
+
   const fetchLists = (_) => {
 
     // 최신 정보 조회
     axios.get(`${API.API_STATS}`).then((resp) => {
       console.log("vsiRhGy2pA", resp.data);
       if (resp.data.status === "OK") {
+        setOption({
+          ...option,
+          series:[{
+            data: resp.data.atxdaily,
+            type: 'line',
+            smooth: true,
+            symbol: 'none',
+          }]
+        })
         setStats(resp.data);
       }
     });
@@ -46,9 +74,8 @@ function Home() {
       }
     });
   };
+
   useEffect((_) => {
-    //  setBlockList( initblocks() )
-    //	setTxlist( inittxlist() )
     fetchLists();
     const interval = setInterval((_) => {
       fetchLists();
@@ -115,19 +142,12 @@ function Home() {
             <li className="chartBox">
               <div className="titleBar">
                 <p className="title">Transactions &#40;14days&#41;</p>
-                <button className="moreBtn" onClick={() => {}}>
+                {/* <button className="moreBtn" onClick={() => {}}>
                   <img src={I_3dotWhite} alt="" />
-                </button>
+                </button> */}
               </div>
 
-              <div
-                className="imgBox"
-                onMouseEnter={() => setChartPopup(true)}
-                onMouseLeave={() => setChartPopup(false)}
-                onClick={() => history.push("/transactions")}
-              >
-                <img className="chart" src={E_chart3} alt="" />
-              </div>
+              <ReactEcharts option={option} />
             </li>
           </ul>
 
@@ -273,7 +293,7 @@ const HomeBox = styled.div`
 
     .headerBox {
       display: flex;
-      height: 200px;
+      height: 300px;
       border: 1px solid #d1d1d1;
       border-radius: 15px;
       padding: 20px 0;
@@ -327,6 +347,7 @@ const HomeBox = styled.div`
       .chartBox {
         flex: 1;
         padding: 0 25px 0 90px;
+        height: 250px;
 
         .titleBar {
           display: flex;
@@ -345,7 +366,7 @@ const HomeBox = styled.div`
 
         .chart {
           width: 406px;
-          object-fit: cover;
+
         }
       }
     }

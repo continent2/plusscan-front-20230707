@@ -40,7 +40,7 @@ export function Transactions() {
           for(let i = 0; i < list.length; i++){
             arr.push({
               ...list[i],
-              gasLimit: Number(list[i].gasPrice) * Number(list[i].gas) / 10**18
+              txFee: Number(list[i].gasPrice) * Number(list[i].gas) / 10**18
             });
           }
 
@@ -63,7 +63,7 @@ export function Transactions() {
           for(let i = 0; i < list.length; i++){
             arr.push({
               ...list[i],
-              gasLimit: Number(list[i].gasPrice) * Number(list[i].gas) / 10**18
+              txFee: Number(list[i].gasPrice) * Number(list[i].gas) / 10**18
             });
           }
 
@@ -127,7 +127,7 @@ export function Transactions() {
                 </span>
                 <span className="amount">{cont.amountdisp}</span>
                 <span className="txFee">
-                  {cont.gasLimit}
+                  {cont.txFee}
                 </span>
               </li>
             );

@@ -42,11 +42,22 @@ export default function TransferList() {
     getTxs(pageNum + 1);
   }
 
-  const getTxs= (page) => {
+  const getTxs = (page) => {
     axios.get(`${API.API_TOKEN_TXS_ADDRESS}${address}/${(page - 1)* size}/${size}/timestamp/DESC`).then((resp) => {
       // console.log("nvsgfeVB2c", resp.data);
       if (resp.data.status === "OK") {
-        setTxs(resp.data.list)
+        const list = resp.data.list;
+
+        let arr = [];
+        for(let i = 0; i < list.length; i++){
+          arr.push({
+            ...list[i],
+            txFee: Number(list[i].gasPrice) * Number(list[i].gas) / 10**18
+          });
+        }
+
+
+        setTxs(arr)
         setPageCount(Math.ceil(resp.data.payload.count / size));
         setTxCount(resp.data.payload.count);
       }
@@ -124,7 +135,7 @@ export default function TransferList() {
 
                 <div>{v.amountdisp}</div>
 
-                <div>{v.quantity}</div>
+                <div>{v.txFee}</div>
               </li>
             ))}
           </ul>
