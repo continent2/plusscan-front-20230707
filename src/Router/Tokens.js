@@ -77,7 +77,9 @@ function Tokens({ store, setHeaderKinds, setSlideKinds }) {
                   {cont.name}
                 </span>
                 <span className="symbol">
-                  <img className="symbol-img" src={cont._urllogo ? cont._urllogo : emptyToken} />
+                  <img className="symbol-img" src={cont._urllogo ? cont._urllogo : emptyToken} onError={(e)=>{
+                    e.target.src = emptyToken;
+                  }} />
                 </span>
                 <span className="decimals">
                   {/* <span className="inner">
