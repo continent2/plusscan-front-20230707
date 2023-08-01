@@ -15,6 +15,7 @@ import Comments from "../Components/address/Comments";
 import { useParams } from "react-router-dom";
 import { API } from "../Config/api";
 import axios from "axios";
+import emptyToken from "../Img/Icon/empty-token.png";
 
 function Address({ store }) {
   const { address } = useParams();
@@ -37,7 +38,7 @@ function Address({ store }) {
 
   const getHolderAddress = () => {
     axios.get(`${API.API_HOLDER_ADDRESS}${address}/0/10/id/DESC`).then((resp) => {
-      // console.log("nvsgfeVB2c", resp.data);
+      console.log("nvsgfeVB2c", resp.data);
       if (resp.data.status === "OK") {
 
         let arr = [];
@@ -55,7 +56,17 @@ function Address({ store }) {
   useEffect(()=>{
     getAddressInfo();
     getHolderAddress();
-  },[address])
+  },[address]);
+
+
+  const headers = [
+    'symbol',
+    'name',
+    'address',
+    'amount',
+    'counttxs',
+    'countrxs'
+  ]
 
   return (
     <AddressBox>
@@ -96,19 +107,43 @@ function Address({ store }) {
             </ul>
           </div>
 
-          <div className="infoBox">
-            <div className="topBar">
-              <p className="title">Holders (Count: {holders.length})</p>
-            </div>
+          <div className="list">
+            <ul className="listHeader">
+              {headers.map((v, i) => (
+                <li key={i}>{v}</li>
+              ))}
+            </ul>
 
-            <ul className="infoList">
-              {
-                holders.map((holder, index) => (
-                  <li key={index}>
-                    <p className="value">{holder.holder}</p>
-                  </li>
-                )
-              )}
+            <ul className="holderList">
+              {holders.map((cont, index) => (
+                <li key={index}>
+                  <span className="symbol">
+                    <img className="symbol-img" src={cont.tokeninfo._urllogo ? cont.tokeninfo._urllogo : emptyToken} onError={(e)=>{
+                      e.target.src = emptyToken;
+                    }} />
+                  </span>
+
+                  <span className="name">
+                    {cont.tokeninfo.name}
+                  </span>
+
+                  <span className="address">
+                    {cont.tokeninfo.address}
+                  </span>
+
+                  <span className="amount">
+                    {cont.amountdisp}
+                  </span>
+
+                  <span className="txCount">
+                    {cont.counttxs}
+                  </span>
+
+                  <span className="trxCount">
+                    {cont.countrxs}
+                  </span>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
@@ -152,6 +187,101 @@ const AddressBox = styled.div`
     gap: 20px;
     padding: 110px 0 86px 0;
     width: 1400px;
+
+
+    .symbol-img {
+      width: 20px;
+    }
+
+    .listHeader {
+      display: flex;
+    }
+
+    .list {
+      gap: 10px;
+      padding: 20px 50px;
+      font-size: 14px;
+    }
+
+    .listHeader li,
+    .li span {
+
+      &:nth-of-type(1) {
+        width: 90px;
+      }
+
+      &:nth-of-type(2) {
+        width: 90px;
+      }
+
+      &:nth-of-type(3) {
+        width: 90px;
+      }
+
+      &:nth-of-type(4) {
+        width: 90px;
+      }
+
+      &:nth-of-type(5) {
+        width: 90px;
+      }
+
+      &:nth-of-type(6) {
+        width: 90px;
+      }
+
+      &:nth-of-type(7) {
+        width: 90px;
+      }
+    }
+
+    .holderList {
+      display: flex;
+      padding-top: 10px;
+      flex-direction: column;
+      gap: 10px;
+      border-top: 1px solid #d1d1d1;
+
+      li {
+        display: flex;
+      }
+
+      li span {
+      &:nth-of-type(1) {
+        width: 90px;
+      }
+
+      &:nth-of-type(2) {
+        width: 90px;
+      }
+
+      &:nth-of-type(3) {
+        width: 90px;
+        padding-right: 15px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      &:nth-of-type(4) {
+        width: 90px;
+        padding-right: 15px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      &:nth-of-type(5) {
+        width: 90px;
+      }
+
+      &:nth-of-type(6) {
+        width: 90px;
+      }
+
+      &:nth-of-type(7) {
+        width: 90px;
+      }
+      }
+    }
 
     .titleBox {
       display: flex;
