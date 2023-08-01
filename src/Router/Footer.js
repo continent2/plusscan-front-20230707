@@ -11,7 +11,7 @@ function Footer({ store }) {
       <div className="leftBox">
         <strong className="serviceName">Blockchain Explorer</strong>
         <p className="copyright">&copy; 2021 Blockchain Explorer</p>
-        <p className="copyright">updated 2023-07-31 17:23</p>
+        <p className="copyright">updated 2023-08-01 12:17</p>
       </div>
 
       <ul className="infoList">
