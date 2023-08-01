@@ -139,7 +139,9 @@ function Home() {
               </div>
             </li>
 
-            <li className="chartBox">
+            <li className="chartBox" onClick={() => {
+                history.push('/transactions')
+              }}>
               <div className="titleBar">
                 <p className="title">Transactions &#40;14days&#41;</p>
                 {/* <button className="moreBtn" onClick={() => {}}>

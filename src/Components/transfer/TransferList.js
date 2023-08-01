@@ -88,7 +88,6 @@ export default function TransferList() {
                 <div>
                   <p
                     className="hash"
-                    onClick={() => history.push("/transactiondetails")}
                   >
                     {v.hash}
                   </p>
