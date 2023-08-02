@@ -9,11 +9,14 @@ import { useHistory } from "react-router-dom";
 import { API } from "../Config/api";
 import axios from "axios";
 import ReactEcharts from "echarts-for-react"; 
-
+import { useRecoilState } from "recoil";
+import { loadingState } from "../recoil/status";
 
 // const RAND_TIME_OFFSET = 3;
-function Home() {
+function Home({store}) {
   const history = useHistory();
+
+  const [loading, setLoading] = useRecoilState(loadingState);
 
   const [chartPopup, setChartPopup] = useState(false);
   const [stats, setStats] = useState({});
@@ -40,10 +43,10 @@ function Home() {
   } );
 
   const fetchLists = (_) => {
-
+    setLoading(true);
     // 최신 정보 조회
     axios.get(`${API.API_STATS}`).then((resp) => {
-      console.log("vsiRhGy2pA", resp.data);
+      // console.log("vsiRhGy2pA", resp.data);
       if (resp.data.status === "OK") {
         setOption({
           ...option,
@@ -55,6 +58,7 @@ function Home() {
           }]
         })
         setStats(resp.data);
+        setLoading(false);
       }
     });
 
@@ -63,6 +67,7 @@ function Home() {
       // console.log("vsiRhGy2pA", resp.data);
       if (resp.data.status === "OK") {
         setBlockList(resp.data.list);
+        setLoading(false);
       }
     });
 
@@ -71,11 +76,13 @@ function Home() {
       // LOGGER("nvsgfeVB2c", resp.data);
       if (resp.data.status === "OK") {
         setTxlist(resp.data.list);
+        setLoading(false);
       }
     });
   };
 
   useEffect((_) => {
+    setLoading(true);
     fetchLists();
     const interval = setInterval((_) => {
       fetchLists();
@@ -519,9 +526,9 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {
-    // SetTopBar: toggle => dispatch(setTopBar(toggle)),
-  };
+  // return {
+  //   setLoading: toggle => dispatch(setLoading(toggle)),
+  // };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
 

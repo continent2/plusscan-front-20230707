@@ -107,7 +107,6 @@ export const {
   setCoinPopup,
   overCoinPopup,
   setLanguagePopup,
-
   setLogin,
   setHeaderKinds,
   setChain,

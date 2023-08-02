@@ -6,9 +6,13 @@ import { useParams } from "react-router-dom";
 import { Transactions } from "../Router/Transactions";
 import { API } from "../Config/api";
 import axios from "axios";
+import { useRecoilState } from "recoil";
+import { loadingState } from "../recoil/status";
 
 function Blocks({ store }) {
   const { numberOrHash } = useParams();
+
+  const [loading, setLoading] = useRecoilState(loadingState);
 
   const [listCategory, setListCategory] = useState(0);
   const [blockInfo, setBlockInfo] = useState({});
@@ -20,6 +24,7 @@ function Blocks({ store }) {
         // console.log("nvsgfeVB2c", resp.data.respdata);
         if (resp.data.status === "OK") {
           setBlockInfo(resp.data.respdata)
+          setLoading(false);
         }
       });
     }else{
@@ -28,6 +33,7 @@ function Blocks({ store }) {
         // console.log("nvsgfeVB2c", resp.data);
         if (resp.data.status === "OK") {
           setBlockInfo(resp.data.respdata)
+          setLoading(false);
         }
       });
     }
@@ -35,6 +41,7 @@ function Blocks({ store }) {
   }
 
   useEffect(() => {
+    setLoading(true);
     getBlockInfo();
   }, [numberOrHash])
 

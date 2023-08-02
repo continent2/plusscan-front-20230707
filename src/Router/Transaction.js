@@ -6,9 +6,13 @@ import I_paste from "../Img/Icon/I_paste.svg";
 import { useParams } from "react-router-dom";
 import { API } from "../Config/api";
 import axios from "axios";
+import { useRecoilState } from "recoil";
+import { loadingState } from "../recoil/status";
 
 function Blocks({ store }) {
   const { txHash } = useParams();
+
+  const [loading, setLoading] = useRecoilState(loadingState);
 
   const [listCategory, setListCategory] = useState(0);
   const [txInfo, setTxInfo] = useState({});
@@ -22,11 +26,13 @@ function Blocks({ store }) {
           ...resp.data.respdata,
           gasLimit: Number(resp.data.respdata.gasPrice) * Number(resp.data.respdata.gas) / 10**18
         })
+        setLoading(false);
       }
     });
   }
 
   useEffect(() => {
+    setLoading(true);
     getTxInfo();
   }, [txHash])
 
@@ -76,7 +82,7 @@ function Blocks({ store }) {
               <p className="value">
                 {txInfo.from_}
                 <img src={I_paste} alt="" onClick={() => navigator.clipboard.writeText(txInfo.from_).then(() => {
-                  alert("복사완료");
+                  alert("복사되었습니다");
                 })} />
               </p>
             </li>
@@ -85,7 +91,7 @@ function Blocks({ store }) {
               <p className="value">
                 {txInfo.to_}
                 <img src={I_paste} alt="" onClick={() => navigator.clipboard.writeText(txInfo.to_).then(() => {
-                  alert("복사완료");
+                  alert("복사되었습니다");
                 })} />
               </p>
             </li>

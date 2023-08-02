@@ -8,10 +8,14 @@ import axios from "axios";
 import { strDot } from "../../Util/common";
 import I_leftArrow from "../../Img/Icon/I_leftArrow.svg";
 import I_rightArrow from "../../Img/Icon/I_rightArrow.svg";
+import { useRecoilState } from "recoil";
+import { loadingState } from "../../recoil/status";
 
 export default function TransferList() {
   const history = useHistory();
   const { address } = useParams();
+
+  const [loading, setLoading] = useRecoilState(loadingState);
 
   const [pageNum, setPageNum] = useState(1);
   const [pageCount, setPageCount] = useState(0);
@@ -60,11 +64,13 @@ export default function TransferList() {
         setTxs(arr)
         setPageCount(Math.ceil(resp.data.payload.count / size));
         setTxCount(resp.data.payload.count);
+        setLoading(false);
       }
     });
   }
 
   useEffect(() => {
+    setLoading(true);
     getTxs(1);
   }, [address])
 
@@ -107,7 +113,7 @@ export default function TransferList() {
                 </p>
 
                   <button className="copyBtn" onClick={() => navigator.clipboard.writeText(v.from_).then(() => {
-                  alert("복사완료");
+                  alert("복사되었습니다");
                 })} >
                     <img src={Copy} alt="" />
                   </button>
@@ -120,7 +126,7 @@ export default function TransferList() {
                     </p>
 
                     <button className="copyBtn" onClick={() => navigator.clipboard.writeText(v.to_).then(() => {
-                      alert("복사완료");
+                      alert("복사되었습니다");
                     })} >
                     <img src={Copy} alt="" />
                   </button>

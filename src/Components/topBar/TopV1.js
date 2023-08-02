@@ -21,6 +21,9 @@ import LogoText from "../../Img/logo/LogoText.svg";
 import axios from "axios";
 import { API } from "../../Config/api";
 import { useHistory } from "react-router-dom";
+import loading from "../../Img/gif/loading.gif";
+import { useRecoilValue } from "recoil";
+import { loadingState } from "../../recoil/status";
 
 function TopBar({
   store,
@@ -35,6 +38,8 @@ function TopBar({
   const [search, setSearch] = useState("");
   const [placeHolder, setPlaceHolder] = useState("TxHash/주소/블록/토큰 검색");
   const [connectStatus, setConnectStatus] = useState(false);
+
+  const isLoading = useRecoilValue(loadingState);
 
   const getConnection = () => {
     axios.post(`https://plus8.co`, {
@@ -65,14 +70,14 @@ function TopBar({
 
   const handleKeyPress = e => {
     if(e.key === 'Enter'){
-      if(search === ""){
+      if(search === "" || search.length < 3){
+        setPlaceHolder("SORRY, NO RESULTS FOUND");
         return;
       }
 
       // 검색 조회       
       axios.get(`${API.API_SEARCH + search}`).then((resp) => {
         if (resp.data.status === "OK") {
-          console.log(resp.data)
           switch (resp.data.datatype) {
             case 'block':
               history.push(`/block/${search}`);
@@ -92,7 +97,7 @@ function TopBar({
           window.location.reload();
         }else{
           setSearch("");
-          setPlaceHolder("검색결과가 없습니다");
+          setPlaceHolder("SORRY, NO RESULTS FOUND");
         }
       });
     }
@@ -118,7 +123,8 @@ function TopBar({
             placeholder={placeHolder}
           />
           <img src={I_search} alt="" onClick={()=>{
-                  if(search === ""){
+                  if(search === "" || search.length < 3){
+                    setPlaceHolder("SORRY, NO RESULTS FOUND");
                     return;
                   }
             
@@ -145,11 +151,16 @@ function TopBar({
                       window.location.reload();
                     }else{
                       setSearch("");
-                      setPlaceHolder("검색결과가 없습니다");
+                      setPlaceHolder("SORRY, NO RESULTS FOUND");
                     }
                   });
           }} />
         </div>
+
+        <img style={{
+          width: '30px',
+          display: `${isLoading ? 'inline' : 'none'}`
+        }} src={loading} />
       </span>
 
       <span className="rightBox">

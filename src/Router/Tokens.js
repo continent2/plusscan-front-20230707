@@ -10,9 +10,13 @@ import { API } from "../Config/api";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import emptyToken from "../Img/Icon/empty-token.png";
+import { useRecoilState } from "recoil";
+import { loadingState } from "../recoil/status";
 
 function Tokens({ store, setHeaderKinds, setSlideKinds }) {
   const history = useHistory();
+
+  const [loading, setLoading] = useRecoilState(loadingState);
 
   const [pageNum, setPageNum] = useState(1);
   const [tokenList, setTokenList] = useState([]);
@@ -35,15 +39,17 @@ function Tokens({ store, setHeaderKinds, setSlideKinds }) {
   const getTokenList = (page) => {
     // 토큰 리스트 조회
     axios.get(`${API.API_TOKENS}${(page - 1)* size}/${size}/id/DESC`).then((resp) => {
-      console.log("nvsgfeVB2c", resp.data);
+      // console.log("nvsgfeVB2c", resp.data);
       if (resp.data.status === "OK") {
         setTokenList(resp.data.list);
         setPageCount(Math.ceil(resp.data.payload.count / size));
+        setLoading(false);
       }
     });
   }
 
   useEffect(()=>{
+    setLoading(true);
     setHeaderKinds(2);
     setSlideKinds(3);
 

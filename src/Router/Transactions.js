@@ -7,10 +7,14 @@ import { strDot } from "../Util/common";
 import { API } from "../Config/api";
 import axios from "axios";
 import { useHistory, useParams } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { loadingState } from "../recoil/status";
 
 export function Transactions() {
   const history = useHistory();
   const { numberOrHash } = useParams();
+
+  const [loading, setLoading] = useRecoilState(loadingState);
 
   const [pageNum, setPageNum] = useState(1);
   const [txList, setTxList] = useState([]);
@@ -47,9 +51,11 @@ export function Transactions() {
           setTxList(arr);
           if(resp.data.payload.count){
             setPageCount(Math.ceil(resp.data.payload.count / size));
+        
           }else{
             setPageCount(1);
           }
+          setLoading(false);
         }
       });
     }else{
@@ -73,12 +79,15 @@ export function Transactions() {
           }else{
             setPageCount(1);
           }
+          
+          setLoading(false);
         }
       });
     }
   }
 
   useEffect(()=>{
+    setLoading(true);
     getTxs(pageNum);
   },[numberOrHash])
 

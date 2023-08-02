@@ -8,10 +8,14 @@ import axios from "axios";
 // import { strDot } from "../../Util/common";
 import I_leftArrow from "../../Img/Icon/I_leftArrow.svg";
 import I_rightArrow from "../../Img/Icon/I_rightArrow.svg";
+import { useRecoilState } from "recoil";
+import { loadingState } from "../../recoil/status";
 
 export default function HoldersList() {
   const history = useHistory();
   const { address } = useParams();
+
+  const [ loading, setLoading] = useRecoilState(loadingState);
 
   const [pageNum, setPageNum] = useState(1);
   const [pageCount, setPageCount] = useState(0);
@@ -46,11 +50,13 @@ export default function HoldersList() {
         setHolders(resp.data.list)
         setPageCount(Math.ceil(resp.data.payload.count / size));
         setHolderCount(resp.data.payload.count);
+        setLoading(false);
       }
     });
   }
 
   useEffect(() => {
+    setLoading(true)
     getHolders(1);
   }, [address])
 

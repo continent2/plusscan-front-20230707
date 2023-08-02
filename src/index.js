@@ -4,10 +4,14 @@ import { Provider } from 'react-redux';
 import App from './App';
 import store from './Util/store';
 import reportWebVitals from './reportWebVitals';
+import { RecoilRoot } from "recoil";
+
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <RecoilRoot>
+      <App />
+    </RecoilRoot>
   </Provider>,
   document.getElementById('root')
 );

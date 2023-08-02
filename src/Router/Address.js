@@ -16,9 +16,13 @@ import { useParams } from "react-router-dom";
 import { API } from "../Config/api";
 import axios from "axios";
 import emptyToken from "../Img/Icon/empty-token.png";
+import { useRecoilState } from "recoil";
+import { loadingState } from "../recoil/status";
 
 function Address({ store }) {
   const { address } = useParams();
+
+  const [loading, setLoading] = useRecoilState(loadingState);
 
   const [listCategory, setListCategory] = useState(0);
   const [balance, setBalance] = useState(0);
@@ -37,6 +41,7 @@ function Address({ store }) {
   }
 
   const getHolderAddress = () => {
+    setLoading(true);
     axios.get(`${API.API_HOLDER_ADDRESS}${address}/0/10/id/DESC`).then((resp) => {
       console.log("nvsgfeVB2c", resp.data);
       if (resp.data.status === "OK") {
@@ -49,11 +54,13 @@ function Address({ store }) {
           arr.push(resp.data.list[i]);
         }
         setHolders(arr)
+        setLoading(false);
       }
     });
   }
 
   useEffect(()=>{
+    setLoading(true);
     getAddressInfo();
     getHolderAddress();
   },[address]);
@@ -76,7 +83,7 @@ function Address({ store }) {
           <p className="idNum">
             {address}
             <img style={{cursor: "pointer"}} src={I_paste} alt="" onClick={() => navigator.clipboard.writeText(address).then(() => {
-                  alert("복사완료");
+                  alert("복사되었습니다");
                 })} />
             {/* <img src={I_qr} alt="" /> */}
           </p>

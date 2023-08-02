@@ -10,10 +10,14 @@ import HoldersList from "../Components/transfer/HoldersList";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { API } from "../Config/api";
 import axios from "axios";
+import { useRecoilState } from "recoil";
+import { loadingState } from "../recoil/status";
 
 export default function Token() {
   // const history = useHistory();
   const { address } = useParams();
+
+  const [loading, setLoading] = useRecoilState(loadingState);
 
   const [category, setCategory] = useState(D_transferCategoryList[0]);
   const [totalSupply, setTotalSupply] = useState(0);
@@ -28,11 +32,13 @@ export default function Token() {
       if (resp.data.status === "OK") {
         setTokenInfo(resp.data.respdata);
         setTotalSupply(Number(resp.data.respdata.totalsupply) / (10**resp.data.respdata.decimals));
+        setLoading(false);
       }
     });
   }
 
   useEffect(() => {
+    setLoading(true);
     getTokenInfo();
   }, [address])
 

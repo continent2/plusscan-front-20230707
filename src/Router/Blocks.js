@@ -7,9 +7,13 @@ import { strDot } from "../Util/common";
 import { API } from "../Config/api";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { loadingState } from "../recoil/status";
 
 function Blocks() {
   const history = useHistory();
+
+  const [loading, setLoading] = useRecoilState(loadingState);
 
   const [pageNum, setPageNum] = useState(1);
   const [blockList, setBlockList] = useState([]);
@@ -33,11 +37,13 @@ function Blocks() {
       if (resp.data.status === "OK") {
         setBlockList(resp.data.list);
         setPageCount(Math.ceil(resp.data.payload.count / size));
+        setLoading(false);
       }
     });
   }
 
   useEffect(()=>{
+    setLoading(true);
     getBlockList(1);
   },[])
 
