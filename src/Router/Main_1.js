@@ -150,7 +150,7 @@ function Home({store}) {
                 history.push('/transactions')
               }}>
               <div className="titleBar">
-                <p className="title">Transactions &#40;14days&#41;</p>
+                <p className="title">Transactions &#40;LAST 14 days&#41;</p>
                 {/* <button className="moreBtn" onClick={() => {}}>
                   <img src={I_3dotWhite} alt="" />
                 </button> */}
@@ -166,7 +166,7 @@ function Home({store}) {
               <ul className="blockList">
                 <li className="header">
                   <span className="block">BLOCK</span>
-                  <span className="time">TIME</span>
+                  <span className="time">TIME (UTC)</span>
                   <span className="total">TOTAL TXS</span>
                   <span className="hash">HASH</span>
                   {/* <span className="reward">REWARD</span> */}
@@ -215,7 +215,7 @@ function Home({store}) {
               <ul className="transactionList">
                 <li className="header">
                   <span className="txHash">TX HASH</span>
-                  <span className="time">TIME</span>
+                  <span className="time">TIME (UTC)</span>
                   <span className="from">FROM</span>
                   <span className="to">TO</span>
                 </li>

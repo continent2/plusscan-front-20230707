@@ -1,5 +1,7 @@
 
-const URL=`https://plus8.co:37847`
+// const URL=`https://plus8.co:37847`
+// const URL=`https://pluscan.online:37847`
+const URL=`https://scan.pluscan.online:37847`
 const API={
 	API_STATS: 		`${URL}/stats`,
 	API_SEARCH:		`${URL}/queries/search/`,
@@ -18,8 +20,7 @@ const API={
 	API_TOKENS: 			`${URL}/queries/rows/tokens/_/_/`,
 	API_TOKEN_INFO_ADDRESS: `${URL}/queries/singlerow/tokens/address/`,
 	API_TOKEN_TXS_ADDRESS: `${URL}/queries/rows/transactions/contaddress/`,
-	API_TOKEN_HOLDERS_ADDRESS: `${URL}/queries/rows/holders/token/
-	`,
+	API_TOKEN_HOLDERS_ADDRESS: `${URL}/queries/rows/holders/token/`,
 
 	API_TXS_ADDRESS: `${URL}/queries/rows/transactions/from_/`,
 	API_HOLDER_ADDRESS: `${URL}/queries/rows/holders/holder/`,
@@ -55,7 +56,8 @@ const API={
 	API_PAYMEANS: `${URL}/pays/paymeans`,
 */	
 }
-
+const URL_ETH_NODE =  'http://pluscan.online:30413'
 export {
-	API
+	API, 
+	URL_ETH_NODE
 }

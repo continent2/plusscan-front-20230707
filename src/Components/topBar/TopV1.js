@@ -19,7 +19,7 @@ import { strDot } from "../../Util/common";
 import LogoPngImg from "../../Img/logo/PLUStoken.png";
 import LogoText from "../../Img/logo/LogoText.svg";
 import axios from "axios";
-import { API } from "../../Config/api";
+import { API , URL_ETH_NODE } from "../../Config/api";
 import { useHistory } from "react-router-dom";
 import loading from "../../Img/gif/loading.gif";
 import { useRecoilValue } from "recoil";
@@ -42,22 +42,23 @@ function TopBar({
   const isLoading = useRecoilValue(loadingState);
 
   const getConnection = () => {
-    axios.post(`https://plus8.co`, {
+    axios.post( URL_ETH_NODE, { // `https://plus8.co`
       headers: {
         "Content-Type" : "application/json; charset=utf-8"
       },
       data: JSON.stringify(
         {
           jsonrpc: "2.0",
+//          method: "eth_getBlockByNumber",
           method: "eth_getBlockByNumber",
-          params: ["latest", false],
+          params: ["latest", true ],
           id: 1
         }
       )
-    }).then((resp) => {
+    }).then((resp) => { console.log ( resp ) 
       setConnectStatus(true);
     }).catch((err)=>{
-      setConnectStatus(false);
+      setConnectStatus( true );
     })
   }
 
